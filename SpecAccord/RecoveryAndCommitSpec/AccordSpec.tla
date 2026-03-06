@@ -287,7 +287,7 @@ HandlePreAcceptOK(p, id) ==
                     LET D == UNION { m.body.Dq : m \in largestFastQuorum }
                     IN
                     /\ ApplyCommit(p,p,0,id,initTimestamp[id],D,StablePhase,cmd[p][id])               
-                    /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(p, q, 0, id, initTimestamp[id], D, StablePhase, Bottom) : q \in Proc \ {p} }
+                    /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(p, q, 0, id, initTimestamp[id], D, StablePhase, cmd[p][id]) : q \in Proc \ {p} }
                     /\ UNCHANGED bal
             ELSE     
                 /\  LET D == UNION { m.body.Dq : m \in quorumOfMessages }
