@@ -434,8 +434,8 @@ HandleRecover(m) ==
                         )}}
                 IN
                 IF S # {}
-                THEN msgs' = msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],TRUE,W)}
-                ELSE msgs' = msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],FALSE,W)}
+                THEN msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],TRUE,W)}) \ {m} 
+                ELSE msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],FALSE,W)}) \ {m}
     /\ UNCHANGED << submitted, initCoord, initTimestamp, dep, abal, ts, phase, recovered, Cvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal  >>
 
 (***************************************************************************)
