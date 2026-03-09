@@ -1,7 +1,7 @@
 TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
 Warning: Please run the Java VM which executes TLC with a throughput optimized garbage collector by passing the "-XX:+UseParallelGC" property.
 (Use the -nowarning option to disable this warning.)
-Running breadth-first search Model-Checking with fp 40 and seed -8686408402567441712 with 50 workers on 72 cores with 30208MB heap and 64MB offheap memory [pid: 418656] (Linux 6.12.69+deb13-cloud-amd64 amd64, Debian 21.0.10 x86_64, MSBDiskFPSet, DiskStateQueue).
+Running breadth-first search Model-Checking with fp 70 and seed 4917846141228499849 with 50 workers on 72 cores with 30208MB heap and 64MB offheap memory [pid: 478890] (Linux 6.12.69+deb13-cloud-amd64 amd64, Debian 21.0.10 x86_64, MSBDiskFPSet, DiskStateQueue).
 Parsing file /home/alexandre.siret/AccordTLASpec/SpecAccord/RecoveryAndCommitSpec/AccordSpec.tla
 Parsing file /tmp/TLC.tla
 Parsing file /tmp/Naturals.tla
@@ -12,38 +12,13 @@ Semantic processing of module Sequences
 Semantic processing of module FiniteSets
 Semantic processing of module TLC
 Semantic processing of module AccordSpec
-Starting... (2026-03-09 11:59:28)
+Starting... (2026-03-09 15:07:23)
 Computing initial states...
-Finished computing initial states: 1 distinct state generated at 2026-03-09 11:59:28.
-Progress(11) at 2026-03-09 11:59:31: 288,701 states generated (288,701 s/min), 124,615 distinct states found (124,615 ds/min), 99,448 states left on queue.
-Progress(13) at 2026-03-09 12:00:31: 9,689,249 states generated (9,400,548 s/min), 3,466,628 distinct states found (3,342,013 ds/min), 2,630,436 states left on queue.
-Progress(13) at 2026-03-09 12:01:31: 19,861,859 states generated (10,172,610 s/min), 6,847,707 distinct states found (3,381,079 ds/min), 5,134,118 states left on queue.
-Progress(14) at 2026-03-09 12:02:31: 29,650,227 states generated (9,788,368 s/min), 10,159,491 distinct states found (3,311,784 ds/min), 7,582,073 states left on queue.
-Progress(14) at 2026-03-09 12:03:31: 39,766,744 states generated (10,116,517 s/min), 13,501,828 distinct states found (3,342,337 ds/min), 10,048,881 states left on queue.
-Progress(14) at 2026-03-09 12:04:31: 49,732,046 states generated (9,965,302 s/min), 16,786,818 distinct states found (3,284,990 ds/min), 12,452,982 states left on queue.
-Progress(14) at 2026-03-09 12:05:31: 59,609,343 states generated (9,877,297 s/min), 19,957,122 distinct states found (3,170,304 ds/min), 14,774,113 states left on queue.
-Progress(14) at 2026-03-09 12:06:31: 70,195,425 states generated (10,586,082 s/min), 23,258,500 distinct states found (3,301,378 ds/min), 17,156,177 states left on queue.
-Progress(14) at 2026-03-09 12:07:31: 80,455,413 states generated (10,259,988 s/min), 26,537,107 distinct states found (3,278,607 ds/min), 19,529,293 states left on queue.
-Progress(14) at 2026-03-09 12:08:31: 89,792,362 states generated (9,336,949 s/min), 29,615,488 distinct states found (3,078,381 ds/min), 21,759,920 states left on queue.
-Progress(15) at 2026-03-09 12:09:31: 100,017,758 states generated (10,225,396 s/min), 32,925,058 distinct states found (3,309,570 ds/min), 24,146,788 states left on queue.
-Progress(15) at 2026-03-09 12:10:31: 109,998,249 states generated (9,980,491 s/min), 36,136,324 distinct states found (3,211,266 ds/min), 26,480,321 states left on queue.
-Progress(15) at 2026-03-09 12:11:31: 120,224,582 states generated (10,226,333 s/min), 39,420,650 distinct states found (3,284,326 ds/min), 28,879,130 states left on queue.
-Progress(15) at 2026-03-09 12:12:31: 130,600,108 states generated (10,375,526 s/min), 42,739,074 distinct states found (3,318,424 ds/min), 31,281,846 states left on queue.
-Progress(15) at 2026-03-09 12:13:31: 140,596,231 states generated (9,996,123 s/min), 45,983,753 distinct states found (3,244,679 ds/min), 33,646,117 states left on queue.
-Progress(15) at 2026-03-09 12:14:31: 151,179,177 states generated (10,582,946 s/min), 49,251,716 distinct states found (3,267,963 ds/min), 35,998,919 states left on queue.
-Progress(15) at 2026-03-09 12:15:31: 161,657,136 states generated (10,477,959 s/min), 52,553,090 distinct states found (3,301,374 ds/min), 38,369,238 states left on queue.
-Progress(15) at 2026-03-09 12:16:31: 172,146,453 states generated (10,489,317 s/min), 55,928,190 distinct states found (3,375,100 ds/min), 40,795,906 states left on queue.
-Progress(15) at 2026-03-09 12:17:31: 182,741,186 states generated (10,594,733 s/min), 59,262,340 distinct states found (3,334,150 ds/min), 43,180,396 states left on queue.
-Progress(15) at 2026-03-09 12:18:31: 192,823,263 states generated (10,082,077 s/min), 62,440,834 distinct states found (3,178,494 ds/min), 45,456,751 states left on queue.
-Progress(15) at 2026-03-09 12:19:31: 203,588,873 states generated (10,765,610 s/min), 65,807,748 distinct states found (3,366,914 ds/min), 47,895,256 states left on queue.
-Progress(15) at 2026-03-09 12:20:31: 213,928,704 states generated (10,339,831 s/min), 69,084,549 distinct states found (3,276,801 ds/min), 50,258,854 states left on queue.
-Progress(15) at 2026-03-09 12:21:31: 224,761,762 states generated (10,833,058 s/min), 72,361,344 distinct states found (3,276,795 ds/min), 52,587,463 states left on queue.
-Progress(15) at 2026-03-09 12:22:31: 235,626,439 states generated (10,864,677 s/min), 75,711,875 distinct states found (3,350,531 ds/min), 54,989,650 states left on queue.
-Progress(15) at 2026-03-09 12:23:31: 246,554,373 states generated (10,927,934 s/min), 78,964,098 distinct states found (3,252,223 ds/min), 57,285,130 states left on queue.
-Progress(15) at 2026-03-09 12:24:31: 257,234,345 states generated (10,679,972 s/min), 82,183,557 distinct states found (3,219,459 ds/min), 59,572,170 states left on queue.
-Progress(15) at 2026-03-09 12:25:31: 267,932,299 states generated (10,697,954 s/min), 85,457,147 distinct states found (3,273,590 ds/min), 61,877,581 states left on queue.
-Progress(15) at 2026-03-09 12:26:31: 278,775,576 states generated (10,843,277 s/min), 88,769,923 distinct states found (3,312,776 ds/min), 64,251,941 states left on queue.
-Progress(15) at 2026-03-09 12:27:31: 288,984,041 states generated (10,208,465 s/min), 92,013,953 distinct states found (3,244,030 ds/min), 66,563,698 states left on queue.
+Finished computing initial states: 1 distinct state generated at 2026-03-09 15:07:24.
+Progress(12) at 2026-03-09 15:07:27: 248,567 states generated (248,567 s/min), 110,703 distinct states found (110,703 ds/min), 79,098 states left on queue.
+Progress(15) at 2026-03-09 15:08:27: 9,213,857 states generated (8,965,290 s/min), 3,354,205 distinct states found (3,243,502 ds/min), 2,352,083 states left on queue.
+Progress(16) at 2026-03-09 15:09:27: 18,742,014 states generated (9,528,157 s/min), 6,615,152 distinct states found (3,260,947 ds/min), 4,618,886 states left on queue.
+Progress(16) at 2026-03-09 15:10:27: 28,609,272 states generated (9,867,258 s/min), 9,908,336 distinct states found (3,293,184 ds/min), 6,900,809 states left on queue.
 Error: Invariant Agreement is violated.
 Error: The behavior up to this point is:
 State 1: <Initial predicate>
@@ -66,64 +41,92 @@ State 1: <Initial predicate>
 /\ recovered = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ initCoord = <<0, 0>>
 
-State 2: <StartRecover line 400, col 5 to line 408, col 126 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<1, 1>>, <<1, 1>>>>
+State 2: <Submit line 223, col 5 to line 239, col 103 of module AccordSpec>
+/\ phase = <<<<2, 1>>, <<1, 1>>, <<1, 1>>>>
 /\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
 /\ bal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
 /\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
 /\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {}
-/\ cmd = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 8, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 0]] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 2, body |-> [id |-> 1, c |-> 1]],
+  [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+  [ type |-> 2,
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
    <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
    <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
 /\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
-/\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<0, 0>>
+/\ recovered = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initCoord = <<1, 0>>
 
-State 3: <Next line 627, col 8 to line 632, col 27 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<1, 1>>, <<1, 1>>>>
+State 3: <StartRecover line 400, col 5 to line 409, col 126 of module AccordSpec>
+/\ phase = <<<<2, 1>>, <<1, 1>>, <<1, 1>>>>
 /\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
 /\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
 /\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {}
-/\ cmd = <<<<0, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [ type |-> 9,
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 2, body |-> [id |-> 1, c |-> 1]],
+  [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+  [ type |-> 2,
     from |-> 1,
     to |-> 1,
-    body |->
-        [ b |-> 1,
-          id |-> 1,
-          tq |-> [id |-> 0, t |-> 0],
-          phaseq |-> 1,
-          abalq |-> 0,
-          cq |-> bottom,
-          depq |-> {},
-          rejectq |-> FALSE,
-          Wq |-> {} ] ] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [type |-> 8, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, c |-> 1]],
+  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 1]],
+  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 1]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
    <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
    <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
 /\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<0, 0>>
+/\ initCoord = <<1, 0>>
 
-State 4: <Submit line 223, col 5 to line 239, col 103 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<2, 1>>, <<1, 1>>>>
+State 4: <Next line 628, col 8 to line 633, col 27 of module AccordSpec>
+/\ phase = <<<<2, 1>>, <<2, 1>>, <<1, 1>>>>
+/\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
+/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<bottom, bottom>>>>
+/\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+  [ type |-> 2,
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [type |-> 8, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, c |-> 1]],
+  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 1]],
+  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 1]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+/\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initCoord = <<1, 0>>
+
+State 5: <Next line 628, col 8 to line 633, col 27 of module AccordSpec>
+/\ phase = <<<<2, 1>>, <<2, 1>>, <<1, 1>>>>
 /\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
 /\ bal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
@@ -132,268 +135,193 @@ State 4: <Submit line 223, col 5 to line 239, col 103 of module AccordSpec>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
 /\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ submitted = {1}
-/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<bottom, bottom>>>>
+/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<bottom, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 2, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+  [ type |-> 2,
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
   [ type |-> 2,
     from |-> 2,
-    to |-> 2,
+    to |-> 1,
     body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 0]],
+  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 1]],
+  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 1]],
   [ type |-> 9,
     from |-> 1,
     to |-> 1,
     body |->
         [ b |-> 1,
           id |-> 1,
-          tq |-> [id |-> 0, t |-> 0],
-          phaseq |-> 1,
+          tq |-> [id |-> 1, t |-> 1],
+          phaseq |-> 2,
           abalq |-> 0,
-          cq |-> bottom,
+          cq |-> 1,
           depq |-> {},
           rejectq |-> FALSE,
           Wq |-> {} ] ] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
    <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
    <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
 /\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 0>>
+/\ initCoord = <<1, 0>>
 
-State 5: <Submit line 223, col 5 to line 239, col 103 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<2, 1>>, <<1, 2>>>>
+State 6: <Next line 628, col 8 to line 633, col 27 of module AccordSpec>
+/\ phase = <<<<2, 1>>, <<2, 1>>, <<1, 1>>>>
 /\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<0, 0>>>>
 /\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
 /\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
 /\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<bottom, 2>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<bottom, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 2, to |-> 3, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
   [ type |-> 2,
-    from |-> 2,
-    to |-> 2,
+    from |-> 1,
+    to |-> 1,
     body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
   [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 0]],
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 1]],
   [ type |-> 9,
     from |-> 1,
     to |-> 1,
     body |->
         [ b |-> 1,
           id |-> 1,
-          tq |-> [id |-> 0, t |-> 0],
-          phaseq |-> 1,
+          tq |-> [id |-> 1, t |-> 1],
+          phaseq |-> 2,
           abalq |-> 0,
-          cq |-> bottom,
+          cq |-> 1,
+          depq |-> {},
+          rejectq |-> FALSE,
+          Wq |-> {} ] ],
+  [ type |-> 9,
+    from |-> 2,
+    to |-> 1,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          tq |-> [id |-> 1, t |-> 1],
+          phaseq |-> 2,
+          abalq |-> 0,
+          cq |-> 1,
           depq |-> {},
           rejectq |-> FALSE,
           Wq |-> {} ] ] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
    <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 0, t |-> 0], [id |-> 2, t |-> 1]>> >>
+   <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
 /\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
+/\ initCoord = <<1, 0>>
 
-State 6: <Next line 627, col 8 to line 632, col 27 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<2, 1>>, <<2, 2>>>>
+State 7: <HandleRecoverOK line 447, col 5 to line 529, col 68 of module AccordSpec>
+/\ phase = <<<<2, 1>>, <<2, 1>>, <<1, 1>>>>
 /\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<0, 0>>>>
+/\ postWaitingFlag = <<<<TRUE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<1, 2>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<bottom, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
   [ type |-> 2,
-    from |-> 2,
-    to |-> 2,
+    from |-> 1,
+    to |-> 1,
     body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
   [ type |-> 2,
-    from |-> 3,
-    to |-> 2,
-    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 2], Dq |-> {}] ],
-  [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 0]],
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 1]],
   [ type |-> 9,
     from |-> 1,
     to |-> 1,
     body |->
         [ b |-> 1,
           id |-> 1,
-          tq |-> [id |-> 0, t |-> 0],
-          phaseq |-> 1,
+          tq |-> [id |-> 1, t |-> 1],
+          phaseq |-> 2,
           abalq |-> 0,
-          cq |-> bottom,
+          cq |-> 1,
+          depq |-> {},
+          rejectq |-> FALSE,
+          Wq |-> {} ] ],
+  [ type |-> 9,
+    from |-> 2,
+    to |-> 1,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          tq |-> [id |-> 1, t |-> 1],
+          phaseq |-> 2,
+          abalq |-> 0,
+          cq |-> 1,
           depq |-> {},
           rejectq |-> FALSE,
           Wq |-> {} ] ] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
    <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+   <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
+/\ initCoord = <<1, 0>>
 
-State 7: <HandlePreAcceptOK line 271, col 5 to line 300, col 126 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<3, 1>>, <<2, 2>>>>
+State 8: <Next line 628, col 8 to line 633, col 27 of module AccordSpec>
+/\ phase = <<<<2, 1>>, <<2, 1>>, <<1, 1>>>>
 /\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ postWaitingFlag = <<<<TRUE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<1, 2>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<1, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
   [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
-  [ type |-> 3,
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
     from |-> 2,
     to |-> 1,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [ type |-> 3,
-    from |-> 2,
-    to |-> 3,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [type |-> 4, from |-> 2, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {}]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 0]],
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
   [ type |-> 9,
     from |-> 1,
     to |-> 1,
     body |->
         [ b |-> 1,
           id |-> 1,
-          tq |-> [id |-> 0, t |-> 0],
-          phaseq |-> 1,
+          tq |-> [id |-> 1, t |-> 1],
+          phaseq |-> 2,
           abalq |-> 0,
-          cq |-> bottom,
+          cq |-> 1,
           depq |-> {},
           rejectq |-> FALSE,
-          Wq |-> {} ] ] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
-/\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
-
-State 8: <Next line 627, col 8 to line 632, col 27 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<3, 1>>, <<3, 2>>>>
-/\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<1, 2>>>>
-/\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
-  [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
-  [ type |-> 3,
-    from |-> 2,
-    to |-> 1,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [type |-> 4, from |-> 2, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {}]],
-  [type |-> 4, from |-> 3, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {2}]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [type |-> 8, from |-> 1, to |-> 3, body |-> [b |-> 1, id |-> 1, c |-> 0]],
+          Wq |-> {} ] ],
   [ type |-> 9,
-    from |-> 1,
+    from |-> 2,
     to |-> 1,
     body |->
         [ b |-> 1,
           id |-> 1,
-          tq |-> [id |-> 0, t |-> 0],
-          phaseq |-> 1,
+          tq |-> [id |-> 1, t |-> 1],
+          phaseq |-> 2,
           abalq |-> 0,
-          cq |-> bottom,
-          depq |-> {},
-          rejectq |-> FALSE,
-          Wq |-> {} ] ] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
-/\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
-
-State 9: <Next line 627, col 8 to line 632, col 27 of module AccordSpec>
-/\ phase = <<<<1, 1>>, <<3, 1>>, <<3, 2>>>>
-/\ abal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
-/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<1, 2>>>>
-/\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
-  [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
-  [ type |-> 3,
-    from |-> 2,
-    to |-> 1,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [type |-> 4, from |-> 2, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {}]],
-  [type |-> 4, from |-> 3, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {2}]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]],
-  [ type |-> 9,
-    from |-> 1,
-    to |-> 1,
-    body |->
-        [ b |-> 1,
-          id |-> 1,
-          tq |-> [id |-> 0, t |-> 0],
-          phaseq |-> 1,
-          abalq |-> 0,
-          cq |-> bottom,
+          cq |-> 1,
           depq |-> {},
           rejectq |-> FALSE,
           Wq |-> {} ] ],
@@ -403,146 +331,129 @@ State 9: <Next line 627, col 8 to line 632, col 27 of module AccordSpec>
     body |->
         [ b |-> 1,
           id |-> 1,
-          tq |-> [id |-> 1, t |-> 2],
-          phaseq |-> 3,
+          tq |-> [id |-> 0, t |-> 0],
+          phaseq |-> 1,
           abalq |-> 0,
-          cq |-> 1,
+          cq |-> bottom,
           depq |-> {},
           rejectq |-> FALSE,
           Wq |-> {} ] ] }
-/\ ts = << <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
+/\ initCoord = <<1, 0>>
 
-State 10: <HandleRecoverOK line 446, col 5 to line 528, col 68 of module AccordSpec>
-/\ phase = <<<<3, 1>>, <<3, 1>>, <<3, 2>>>>
+State 9: <HandleRecoverOK line 447, col 5 to line 529, col 68 of module AccordSpec>
+/\ phase = <<<<3, 1>>, <<2, 1>>, <<1, 1>>>>
 /\ abal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
-/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ postWaitingFlag = <<<<TRUE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<1, 2>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<1, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
   [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
   [ type |-> 3,
     from |-> 1,
     to |-> 2,
     body |->
-        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 0, D |-> {}] ],
   [ type |-> 3,
     from |-> 1,
     to |-> 3,
     body |->
-        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [ type |-> 3,
-    from |-> 2,
-    to |-> 1,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [type |-> 4, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {1}]],
-  [type |-> 4, from |-> 2, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {}]],
-  [type |-> 4, from |-> 3, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {2}]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]] }
-/\ ts = << <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 0, D |-> {}] ],
+  [type |-> 4, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {}]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
+/\ initCoord = <<1, 0>>
 
-State 11: <Next line 627, col 8 to line 632, col 27 of module AccordSpec>
-/\ phase = <<<<3, 1>>, <<3, 1>>, <<3, 2>>>>
+State 10: <Next line 628, col 8 to line 633, col 27 of module AccordSpec>
+/\ phase = <<<<3, 1>>, <<2, 1>>, <<3, 1>>>>
 /\ abal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
-/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ postWaitingFlag = <<<<TRUE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
 /\ dep = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<1, 2>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<0, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
   [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
   [ type |-> 3,
     from |-> 1,
     to |-> 2,
     body |->
-        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [ type |-> 3,
-    from |-> 2,
-    to |-> 1,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [type |-> 4, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {1}]],
-  [type |-> 4, from |-> 2, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {}]],
-  [type |-> 4, from |-> 3, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {2}]],
-  [type |-> 4, from |-> 3, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {2}]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]] }
-/\ ts = << <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 0, D |-> {}] ],
+  [type |-> 4, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {}]],
+  [type |-> 4, from |-> 3, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {1}]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
+/\ initCoord = <<1, 0>>
 
-State 12: <HandleAcceptOK line 328, col 5 to line 340, col 129 of module AccordSpec>
-/\ phase = <<<<4, 1>>, <<3, 1>>, <<3, 2>>>>
+State 11: <HandleAcceptOK line 328, col 5 to line 340, col 129 of module AccordSpec>
+/\ phase = <<<<4, 1>>, <<2, 1>>, <<3, 1>>>>
 /\ abal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
-/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ dep = <<<<{1, 2}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<1, 2>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ postWaitingFlag = <<<<TRUE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ dep = <<<<{1}, {}>>, <<{}, {}>>, <<{}, {}>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<0, bottom>>, <<1, bottom>>, <<0, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
   [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
   [ type |-> 3,
     from |-> 1,
     to |-> 2,
     body |->
-        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [ type |-> 3,
-    from |-> 2,
-    to |-> 1,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [type |-> 4, from |-> 2, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {}]],
-  [type |-> 4, from |-> 3, to |-> 2, body |-> [b |-> 0, id |-> 1, Dq |-> {2}]],
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 0, D |-> {}] ],
   [ type |-> 5,
     from |-> 1,
     to |-> 2,
     body |->
         [ b |-> 1,
           id |-> 1,
-          t |-> [id |-> 1, t |-> 2],
-          c |-> 1,
-          D |-> {1, 2},
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 0,
+          D |-> {1},
           phaseq |-> 4 ] ],
   [ type |-> 5,
     from |-> 1,
@@ -550,99 +461,232 @@ State 12: <HandleAcceptOK line 328, col 5 to line 340, col 129 of module AccordS
     body |->
         [ b |-> 1,
           id |-> 1,
-          t |-> [id |-> 1, t |-> 2],
-          c |-> 1,
-          D |-> {1, 2},
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 0,
+          D |-> {1},
+          phaseq |-> 4 ] ],
+  [type |-> 6, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+/\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initCoord = <<1, 0>>
+
+State 12: <Next line 628, col 8 to line 633, col 27 of module AccordSpec>
+/\ phase = <<<<4, 1>>, <<3, 1>>, <<3, 1>>>>
+/\ abal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ postWaitingFlag = <<<<TRUE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ dep = <<<<{1}, {}>>, <<{}, {}>>, <<{}, {}>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<0, bottom>>, <<0, bottom>>, <<0, bottom>>>>
+/\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+  [ type |-> 2,
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [type |-> 4, from |-> 2, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {1}]],
+  [ type |-> 5,
+    from |-> 1,
+    to |-> 2,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 0,
+          D |-> {1},
+          phaseq |-> 4 ] ],
+  [ type |-> 5,
+    from |-> 1,
+    to |-> 3,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 0,
+          D |-> {1},
+          phaseq |-> 4 ] ],
+  [type |-> 6, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+/\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initCoord = <<1, 0>>
+
+State 13: <Next line 628, col 8 to line 633, col 27 of module AccordSpec>
+/\ phase = <<<<4, 1>>, <<4, 1>>, <<3, 1>>>>
+/\ abal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ postWaitingFlag = <<<<TRUE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ dep = <<<<{1}, {}>>, <<{1}, {}>>, <<{}, {}>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<0, bottom>>, <<0, bottom>>, <<0, bottom>>>>
+/\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+  [ type |-> 2,
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [type |-> 4, from |-> 2, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {1}]],
+  [ type |-> 5,
+    from |-> 1,
+    to |-> 3,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 0,
+          D |-> {1},
           phaseq |-> 4 ] ],
   [type |-> 6, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]] }
-/\ ts = << <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+  [type |-> 6, from |-> 2, to |-> 1, body |-> [b |-> 1, id |-> 1]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
+/\ initCoord = <<1, 0>>
 
-State 13: <HandleAcceptOK line 328, col 5 to line 340, col 129 of module AccordSpec>
-/\ phase = <<<<4, 1>>, <<4, 1>>, <<3, 2>>>>
-/\ abal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
-/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 2, t |-> 1]>>
-/\ bal = <<<<1, 0>>, <<0, 0>>, <<1, 0>>>>
+State 14: <HandlePostWaiting line 536, col 5 to line 580, col 107 of module AccordSpec>
+/\ phase = <<<<3, 1>>, <<4, 1>>, <<3, 1>>>>
+/\ abal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
 /\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
-/\ Wvar = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ dep = <<<<{1, 2}, {}>>, <<{2}, {}>>, <<{}, {}>>>>
-/\ recoveryAttemptBal = <<<<0, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ submitted = {1, 2}
-/\ cmd = <<<<1, bottom>>, <<1, bottom>>, <<1, 2>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ dep = <<<<{}, {}>>, <<{1}, {}>>, <<{}, {}>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<0, bottom>>, <<0, bottom>>>>
 /\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
-/\ msgs = { [type |-> 1, from |-> 2, to |-> 1, body |-> [id |-> 1, c |-> 1]],
-  [type |-> 1, from |-> 3, to |-> 1, body |-> [id |-> 2, c |-> 2]],
-  [type |-> 1, from |-> 3, to |-> 2, body |-> [id |-> 2, c |-> 2]],
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
   [ type |-> 2,
-    from |-> 3,
-    to |-> 3,
-    body |-> [id |-> 2, tq |-> [id |-> 2, t |-> 1], Dq |-> {}] ],
-  [ type |-> 3,
     from |-> 1,
-    to |-> 2,
-    body |->
-        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [ type |-> 3,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
     from |-> 2,
     to |-> 1,
-    body |->
-        [b |-> 0, id |-> 1, t |-> [id |-> 1, t |-> 2], c |-> 1, D |-> {}] ],
-  [ type |-> 5,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 3,
     from |-> 1,
     to |-> 2,
     body |->
-        [ b |-> 1,
-          id |-> 1,
-          t |-> [id |-> 1, t |-> 2],
-          c |-> 1,
-          D |-> {1, 2},
-          phaseq |-> 4 ] ],
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 1, D |-> {}] ],
+  [ type |-> 3,
+    from |-> 1,
+    to |-> 3,
+    body |->
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 1, D |-> {}] ],
+  [type |-> 4, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {}]],
+  [type |-> 4, from |-> 2, to |-> 1, body |-> [b |-> 1, id |-> 1, Dq |-> {1}]],
   [ type |-> 5,
     from |-> 1,
     to |-> 3,
     body |->
         [ b |-> 1,
           id |-> 1,
-          t |-> [id |-> 1, t |-> 2],
-          c |-> 1,
-          D |-> {1, 2},
-          phaseq |-> 4 ] ],
-  [ type |-> 5,
-    from |-> 2,
-    to |-> 1,
-    body |->
-        [ b |-> 0,
-          id |-> 1,
-          t |-> [id |-> 1, t |-> 2],
-          c |-> 1,
-          D |-> {2},
-          phaseq |-> 4 ] ],
-  [ type |-> 5,
-    from |-> 2,
-    to |-> 3,
-    body |->
-        [ b |-> 0,
-          id |-> 1,
-          t |-> [id |-> 1, t |-> 2],
-          c |-> 1,
-          D |-> {2},
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 0,
+          D |-> {1},
           phaseq |-> 4 ] ],
   [type |-> 6, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1]],
-  [type |-> 6, from |-> 2, to |-> 2, body |-> [b |-> 0, id |-> 1]],
-  [type |-> 8, from |-> 1, to |-> 2, body |-> [b |-> 1, id |-> 1, c |-> 0]] }
-/\ ts = << <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 0, t |-> 0]>>,
-   <<[id |-> 1, t |-> 2], [id |-> 2, t |-> 1]>> >>
-/\ Cvar = <<<<bottom, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+  [type |-> 6, from |-> 2, to |-> 1, body |-> [b |-> 1, id |-> 1]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
 /\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
-/\ initCoord = <<2, 3>>
+/\ initCoord = <<1, 0>>
 
-289611375 states generated, 92210617 distinct states found, 66703721 states left on queue.
-The depth of the complete state graph search is 15.
-The average outdegree of the complete state graph is 4 (minimum is 0, the maximum 18 and the 95th percentile is 7).
-Finished in 28min 18s at (2026-03-09 12:27:46)
+State 15: <HandleAcceptOK line 328, col 5 to line 340, col 129 of module AccordSpec>
+/\ phase = <<<<4, 1>>, <<4, 1>>, <<3, 1>>>>
+/\ abal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ initTimestamp = <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>
+/\ bal = <<<<1, 0>>, <<1, 0>>, <<1, 0>>>>
+/\ postWaitingFlag = <<<<FALSE, FALSE>>, <<FALSE, FALSE>>, <<FALSE, FALSE>>>>
+/\ Wvar = <<<<{}, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ dep = <<<<{1}, {}>>, <<{1}, {}>>, <<{}, {}>>>>
+/\ recoveryAttemptBal = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ submitted = {1}
+/\ cmd = <<<<1, bottom>>, <<0, bottom>>, <<0, bottom>>>>
+/\ Dvar = <<<<{}, {}>>, <<{}, {}>>, <<{}, {}>>>>
+/\ msgs = { [type |-> 1, from |-> 1, to |-> 3, body |-> [id |-> 1, c |-> 1]],
+  [ type |-> 2,
+    from |-> 1,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 2,
+    from |-> 2,
+    to |-> 1,
+    body |-> [id |-> 1, tq |-> [id |-> 1, t |-> 1], Dq |-> {}] ],
+  [ type |-> 3,
+    from |-> 1,
+    to |-> 2,
+    body |->
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 1, D |-> {}] ],
+  [ type |-> 3,
+    from |-> 1,
+    to |-> 3,
+    body |->
+        [b |-> 1, id |-> 1, t |-> [id |-> 1, t |-> 1], c |-> 1, D |-> {}] ],
+  [ type |-> 5,
+    from |-> 1,
+    to |-> 2,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 1,
+          D |-> {1},
+          phaseq |-> 4 ] ],
+  [ type |-> 5,
+    from |-> 1,
+    to |-> 3,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 0,
+          D |-> {1},
+          phaseq |-> 4 ] ],
+  [ type |-> 5,
+    from |-> 1,
+    to |-> 3,
+    body |->
+        [ b |-> 1,
+          id |-> 1,
+          t |-> [id |-> 1, t |-> 1],
+          c |-> 1,
+          D |-> {1},
+          phaseq |-> 4 ] ],
+  [type |-> 6, from |-> 1, to |-> 1, body |-> [b |-> 1, id |-> 1]],
+  [type |-> 6, from |-> 2, to |-> 1, body |-> [b |-> 1, id |-> 1]] }
+/\ ts = << <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>>,
+   <<[id |-> 1, t |-> 1], [id |-> 0, t |-> 0]>> >>
+/\ Cvar = <<<<1, bottom>>, <<bottom, bottom>>, <<bottom, bottom>>>>
+/\ recovered = <<<<1, 0>>, <<0, 0>>, <<0, 0>>>>
+/\ initCoord = <<1, 0>>
+
+30320400 states generated, 10478257 distinct states found, 7301673 states left on queue.
+The depth of the complete state graph search is 16.
+The average outdegree of the complete state graph is 3 (minimum is 0, the maximum 13 and the 95th percentile is 6).
+Finished in 03min 16s at (2026-03-09 15:10:39)
