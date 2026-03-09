@@ -398,6 +398,7 @@ HandleStable(m) ==
 
 StartRecover(p,id) ==
     /\ recovered[p][id] < NumberOfRecoveryAttempts
+    /\ cmd[p][id] # Bottom
     /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = FALSE] 
     /\ recovered' = [recovered EXCEPT ![p][id] = recovered[p][id] + 1]
     \* Ballots owned by p are of the form k*N + p.
