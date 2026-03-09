@@ -519,7 +519,8 @@ HandleRecoverOK(p, id) ==
                             /\ Dvar' = [Dvar EXCEPT  ![p][id] = D]
                             /\ recoveryAttemptBal' = [recoveryAttemptBal EXCEPT ![p][id] = bal[p][id]]
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = TRUE]
-                            /\ UNCHANGED <<bal, cmd, abal, ts, dep, phase, msgs>>
+                            /\ msgs' = msgs \ quorumOfMessages
+                            /\ UNCHANGED <<bal, cmd, abal, ts, dep, phase>>
                 ELSE  
                     /\ ApplyAccept(p,p,bal[p][id],id,ts[p][id],dep[p][id],Nop)
                     /\  LET Dq == { id2 \in Id : (Conflicts(cmd'[p][id2], cmd'[p][id]) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
