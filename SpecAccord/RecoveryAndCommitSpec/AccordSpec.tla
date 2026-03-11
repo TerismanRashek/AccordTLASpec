@@ -11,8 +11,7 @@ VARIABLES
     msgs,           \* multiset of network messages
     submitted,      \* set of submitted command ids
     initCoord,      \* initCoord[id] = process that submitted id
-    initTimestamp,  \* initTimestamp[id] = timestamp assigned by the coordinator when id is submitted
-
+    initTimestamp,
     recovered,       \* var to limit amount of recovery attempts started
     Wvar,
     Cvar,
@@ -20,7 +19,8 @@ VARIABLES
     postWaitingFlag,
     recoveryAttemptBal
 
-vars == << bal, phase, cmd, dep, ts, abal, msgs, submitted, initCoord, initTimestamp, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar >>
+vars == << bal, phase, cmd, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar >>
+
 
 
 CONSTANTS 
@@ -33,14 +33,45 @@ CONSTANTS
     Nop,
     NumberOfRecoveryAttempts
 
+\*Phases
+(* Initial = 1
+   PreAccepted = 2
+   Accepted = 3
+   Committed = 4
+   Stable = 5 *)
+CONSTANTS 
+    InitialPhase, PreAcceptedPhase, AcceptedPhase, CommittedPhase, StablePhase
+
 ASSUME E<=F
 
+Init == 
+    /\ bal = [p \in Proc |-> [id \in Id |-> 0]]
+    /\ phase = [p \in Proc |-> [id \in Id |-> InitialPhase]]
+    /\ cmd = [p \in Proc |-> [id \in Id |-> Bottom]]
+    /\ dep = [p \in Proc |-> [id \in Id |-> {}]]
+    /\ ts = [p \in Proc |-> [id \in Id |-> [t |-> 0, id |-> 0]]] 
+    /\ abal = [p \in Proc |-> [id \in Id |-> 0]]
+    /\ msgs = {}
+    /\ submitted = {}
+    /\ initCoord = [id \in Id |-> NoProc]
+    /\ recovered = [p \in Proc |-> [id \in Id |-> 0]]
+    /\ Wvar = [p \in Proc |-> [id \in Id |-> {}]]
+    /\ Cvar = [p \in Proc |-> [id \in Id |-> Bottom]]
+    /\ Dvar = [p \in Proc |-> [id \in Id |-> {}]]
+    /\ postWaitingFlag = [p \in Proc |-> [id \in Id |-> FALSE]]
+    /\ recoveryAttemptBal = [p \in Proc |-> [id \in Id |-> 0]]
+    /\ initTimestamp = <<[id |-> 1, t |-> 0], [id |-> 2, t |-> 2]>>
+
+
 N == Cardinality(Proc)
+
+
 
 Max(a, b) == IF a > b THEN a ELSE b
 
 LessThanTs(ts1,ts2) ==
-    IF ts1.id = 0 \/ ts2.id = 0 THEN FALSE
+    IF ts1.id = 0 THEN TRUE
+    ELSE IF ts2.id = 0 THEN FALSE
     ELSE IF ts1.t < ts2.t THEN TRUE
     ELSE IF ts1.t > ts2.t THEN FALSE
     ELSE ts1.id < ts2.id
@@ -52,34 +83,31 @@ MaxTsInSet(S) ==
     CHOOSE ts1 \in S : \A ts2 \in S :
                             ts2 # ts1 => LessThanTs(ts2, ts1)
 
-Conflicts(c1, c2) ==
-    IF c1 = Bottom \/ c2 = Bottom THEN
-        FALSE
-    ELSE IF c1 = Nop \/ c2 = Nop THEN
-        TRUE
-    ELSE
-        c1 # c2
 
-ConflictingIds(p, c) ==
-    { id \in Id :
-        /\ Conflicts(cmd[p][id], c)
-    }
+ConflictingPayload(id1, id2) ==
+    id1 # id2
+
+Conflicts(p, idGettingChecked, id2) ==
+    IF cmd[p][id2] = Bottom THEN
+        FALSE
+    ELSE
+        ConflictingPayload(idGettingChecked, id2)
+
 
 IsQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - F
 IsFastQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - E
 
 
+SeenIds(p) ==
+    {id \in Id : 
+        \/ cmd[p][id] # Bottom
+        \/ \E id2 \in Id : id \in dep[p][id2]}
+
+
+
 
 ASSUME N >= Max(2*E+F+1, 2*F+1)
 
-\*Phases
-(* Initial = 1
-   PreAccepted = 2
-   Accepted = 3
-   Committed = 4
-   Stable = 5 *)
-CONSTANTS 
-    InitialPhase, PreAcceptedPhase, AcceptedPhase, CommittedPhase, StablePhase
 
 \* Message types
 (* 1 = PreAccept
@@ -181,7 +209,7 @@ ApplyPreAccept(p, q, id, c, finalTs) ==
 
 ApplyAccept(p,q,b,id,t,D,c) ==
     /\  bal[p][id] <= b
-    /\  (bal[p][id] = 0 => phase[p][id] = PreAcceptedPhase)
+    /\  (b = 0 => phase[p][id] = PreAcceptedPhase)
     /\  IF b > 0 THEN cmd'  = [cmd  EXCEPT ![p][id] = c] ELSE UNCHANGED cmd
     /\  bal'  = [bal  EXCEPT ![p][id] = b]
     /\  abal' = [abal EXCEPT ![p][id] = b]
@@ -196,7 +224,7 @@ ApplyCommit(p,q,b,id,t,D,phaseq,c) ==
     /\ abal' = [abal EXCEPT ![p][id] = b]
     /\ ts'   = [ts  EXCEPT ![p][id] = t]
     /\ dep' = [dep EXCEPT ![p][id] = D]
-    /\ phase' = [phase EXCEPT ![p][id] = CommittedPhase]
+    /\ phase' = [phase EXCEPT ![p][id] = phaseq]
 
 ApplyStable(p,q,b,id) ==
     /\ bal[p][id] = b
@@ -222,20 +250,23 @@ ApplyRecover(p, q, b, id, c) ==
 Submit(p, id) ==
     /\  id \notin submitted
     /\  LET c == id \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these integer Ids.
-        IN
-        /\ submitted' = submitted \cup {id}
-        /\ initCoord' = [initCoord EXCEPT ![id] = p]
-        /\ ts' = [ts EXCEPT ![p][id] = [t |-> 1, id |-> id]]
-        /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [t |-> 1, id |-> id]]
-        /\  LET setOfConflictingTs == {ts1 \in { ts[p][id2] : id2 \in Id} : ts1.id # 0 /\ Conflicts(cmd[p][ts1.id], c)}
-                D == { id2 \in Id : (Conflicts(cmd[p][id2], c) /\ LessThanTs(initTimestamp'[id2], initTimestamp'[id]) ) }
+            earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = p /\ LessThanTs(initTimestamp[id1],initTimestamp[id])}}
+        IN 
+        /\ LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
             IN
-            /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
+            /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [id |-> id, t |-> initTimestampVal]]
+            /\ submitted' = submitted \cup {id}
+            /\ initCoord' = [initCoord EXCEPT ![id] = p]
+            /\ ts' = [ts EXCEPT ![p][id] = initTimestamp[id]]
+            /\  LET setOfConflictingTs == {ts1 \in { ts[p][id2] : id2 \in Id} : ts1.id # 0 /\ Conflicts(p, id, ts1.id)}
+                    D == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
                 IN
-                /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> id])
+                /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
                     IN
-                    /\ msgs' = msgs \cup { PreAcceptMsg(p, q, id, c) : q \in Proc \ {p} } \cup {PreAcceptOKMsg(p,p,id,finalTs,D)}
-                    /\ ApplyPreAccept(p,p,id,c,finalTs)
+                    /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> id])
+                        IN
+                        /\ msgs' = msgs \cup { PreAcceptMsg(p, q, id, c) : q \in Proc \ {p} } \cup {PreAcceptOKMsg(p,p,id,finalTs,D)}
+                        /\ ApplyPreAccept(p,p,id,c,finalTs)
     /\ UNCHANGED << bal, dep, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar >> 
 
 (***************************************************************************)
@@ -249,8 +280,8 @@ HandlePreAccept(m) ==
             id == m.body.id
             c  == m.body.c
         IN 
-        /\  LET setOfConflictingTs == {ts1 \in { ts[p][id2] : id2 \in Id} : ts1.id # 0 /\  Conflicts(cmd[p][ts1.id], c)}
-                D == { id2 \in Id : (Conflicts(cmd[p][id2], c) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
+        /\  LET setOfConflictingTs == {ts1 \in { ts[p][id2] : id2 \in Id} : ts1.id # 0 /\  Conflicts(p, id, ts1.id)}
+                D == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
             IN
             /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
                 IN
@@ -259,7 +290,7 @@ HandlePreAccept(m) ==
                     IN
                     /\ ApplyPreAccept(p,q,id,c,finalTs)
                     /\ msgs' = (msgs \cup { PreAcceptOKMsg(p, q, id, finalTs, D) }) \ {m}
-    /\ UNCHANGED << bal, dep, abal, submitted, initCoord, initTimestamp, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar  >>
+    /\ UNCHANGED << bal, dep, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, Cvar, Dvar, Wvar>>
 
 
 (***************************************************************************)
@@ -293,11 +324,11 @@ HandlePreAcceptOK(p, id) ==
                 /\  LET D == UNION { m.body.Dq : m \in quorumOfMessages }
                         t == MaxTsInSet({ m.body.tq : m \in quorumOfMessages })
                     IN
-                    LET Dq == { id2 \in Id : (Conflicts(cmd[p][id2], cmd[p][id]) /\ MaxTs(initTimestamp[id2], t) = t) }
+                    LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ MaxTs(initTimestamp[id2], t) = t) }
                     IN 
                     /\ ApplyAccept(p,p,0,id,t,D,cmd[p][id])
                     /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(p, q, 0, id, t, D, cmd[p][id]) : q \in Proc \ {p} } \cup {AcceptOKMsg(p,p,0,id,Dq)}
-    /\ UNCHANGED <<  submitted, initCoord, initTimestamp, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar  >>
+    /\ UNCHANGED <<  submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar, initTimestamp  >>
        
 
 (***************************************************************************)
@@ -315,10 +346,10 @@ HandleAccept(m) ==
             c  == m.body.c
         IN
         /\  ApplyAccept(p,q,b,id,t,D,c)
-        /\  LET Dq == { id2 \in Id : (Conflicts(cmd'[p][id2], c) /\ MaxTs(initTimestamp[id2], t) = t) }
+        /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ MaxTs(initTimestamp[id2], t) = t) }
             IN
             /\ msgs' = (msgs \cup { AcceptOKMsg(p, q, b, id, Dq) }) \ {m}
-    /\ UNCHANGED << submitted, initCoord, initTimestamp, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar  >>
+    /\ UNCHANGED << submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar, initTimestamp  >>
 
 (***************************************************************************)
 (* 33–35 HandleAcceptOk                                                    *)
@@ -337,7 +368,7 @@ HandleAcceptOK(p, id) ==
             IN
             /\ msgs' = (msgs \cup {CommitMsg(p, q, bal[p][id], id, ts[p][id], D, CommittedPhase, cmd[p][id]) : q \in Proc \ {p} } \cup {CommitOkMsg(p,p,bal[p][id],id)}) \ quorumOfMessages
             /\ ApplyCommit(p,p, bal[p][id], id, ts[p][id], D, CommittedPhase, cmd[p][id])
-    /\ UNCHANGED << bal, submitted, initCoord, initTimestamp, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar >>
+    /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar, initTimestamp >>
 
 (***************************************************************************)
 (* 36–44 HandleCommit                                                      *)
@@ -356,7 +387,7 @@ HandleCommit(m) ==
        IN
        /\ ApplyCommit(p,q,b,id,t,D,phaseq,c)
        /\ IF phaseq = CommittedPhase THEN msgs' = (msgs \cup { CommitOkMsg(p, q, b, id) } ) \ {m} ELSE msgs' = msgs \ {m}
-       /\ UNCHANGED << bal, submitted, initCoord, initTimestamp, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar >>
+       /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar, initTimestamp >>
 
 
 
@@ -375,7 +406,7 @@ HandleCommitOK(p, id) ==
         /\ IsQuorumSized(quorumOfMessages)
         /\ msgs' = (msgs \cup {StableMsg(p, q, bal[p][id], id) : q \in Proc \ {p} }) \ quorumOfMessages
         /\ ApplyStable(p,p,bal[p][id],id)
-    /\ UNCHANGED << bal, cmd, dep, ts, abal, submitted, initCoord, initTimestamp, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar >>
+    /\ UNCHANGED << bal, cmd, dep, ts, abal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar, initTimestamp >>
 
 (***************************************************************************)
 (* 48–50 HandleStable                                                      *)
@@ -390,7 +421,7 @@ HandleStable(m) ==
         IN
         /\ ApplyStable(p,q,b,id)
         /\ msgs' = msgs \ {m}
-        /\ UNCHANGED << bal, submitted, initCoord, initTimestamp, dep, abal, cmd, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar >>
+        /\ UNCHANGED << bal, submitted, initCoord, dep, abal, cmd, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar, initTimestamp >>
 
 (***************************************************************************)
 (* 51–54 StartRecover                                                      *)
@@ -398,6 +429,7 @@ HandleStable(m) ==
 
 StartRecover(p,id) ==
     /\ recovered[p][id] < NumberOfRecoveryAttempts
+    /\ id \in SeenIds(p)
     /\ cmd[p][id] # Bottom
     /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = FALSE] 
     /\ recovered' = [recovered EXCEPT ![p][id] = recovered[p][id] + 1]
@@ -406,7 +438,7 @@ StartRecover(p,id) ==
         IN
         IF phase[p][id] # InitialPhase THEN msgs' = msgs \cup { RecoverMsg(p,q,b,id,cmd[p][id]) : q \in Proc }
         ELSE msgs' = msgs \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc }
-    /\ UNCHANGED <<bal, phase, cmd, dep, ts, abal, submitted, initCoord, initTimestamp, Wvar, recoveryAttemptBal, Cvar, Dvar>>
+    /\ UNCHANGED <<bal, phase, cmd, dep, ts, abal, submitted, initCoord, Wvar, recoveryAttemptBal, Cvar, Dvar, initTimestamp>>
 
 (***************************************************************************)
 (* 55–68 HandleRecover                                                     *)
@@ -422,22 +454,22 @@ HandleRecover(m) ==
         IN 
         /\  ApplyRecover(p, q, b, id, c)
         /\  LET D == IF phase[p][id] # InitialPhase THEN dep[p][id]
-                     ELSE {id2 \in Id : (Conflicts(cmd[p][id2], c) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
+                     ELSE {id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
             IN
-            /\  LET S == {id2 \in Id : (id2 # id /\ Conflicts(id2, id) /\ cmd[p][id2] # Nop /\ id \notin dep[p][id2]
+            /\  LET S == {id2 \in SeenIds(p) : (id2 # id /\ Conflicts(p, id, id2) /\ cmd[p][id2] # Nop /\ id \notin dep[p][id2]
                         /\(   (phase[p][id2] \in {CommittedPhase, StablePhase} /\ LessThanTs(initTimestamp[id], ts[p][id2]))  
                             \/ (   phase[p][id2] = AcceptedPhase   /\   LessThanTs( initTimestamp[id] ,  initTimestamp[id2])) 
                             )          ) 
                         }
-                    W == {<<id3,abal[p][id3]>> : id3 \in { id2 \in Id : (id2 # id /\ Conflicts(id2, id) /\ cmd[p][id2] # Nop /\ id \notin dep[p][id2] 
+                    W == {<<id3,abal[p][id3]>> : id3 \in { id2 \in SeenIds(p) : (id2 # id /\ Conflicts(p, id, id2) /\ cmd[p][id2] # Nop /\ id \notin dep[p][id2] 
                         /\ phase[p][id2] = AcceptedPhase /\ LessThanTs(initTimestamp[id2],initTimestamp[id])
                         /\ LessThanTs(initTimestamp[id],ts[p][id2])
                         )}}
                 IN
                 IF S # {}
-                THEN msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],TRUE,W)}) \ {m} 
-                ELSE msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],FALSE,W)}) \ {m}
-    /\ UNCHANGED << submitted, initCoord, initTimestamp, dep, abal, ts, phase, recovered, Cvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal  >>
+                THEN msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd'[p][id],ts[p][id],D,phase[p][id],TRUE,W)}) \ {m} 
+                ELSE msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],cmd'[p][id],ts[p][id],D,phase[p][id],FALSE,W)}) \ {m}
+    /\ UNCHANGED << submitted, initCoord, dep, abal, ts, phase, recovered, Cvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal, initTimestamp  >>
 
 (***************************************************************************)
 (* 69–85 HandleRecoverOK                                                   *)
@@ -474,7 +506,7 @@ HandleRecoverOK(p, id) ==
                         /\  LET n == CHOOSE n \in U :
                                         n.body.phaseq = CommittedPhase
                             IN
-                            LET Dq == { id2 \in Id : (Conflicts(cmd[p][id2], cmd[p][id]) /\ LessThanTs(initTimestamp[id2], n.body.tq) ) }
+                            LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], n.body.tq) ) }
                             IN 
                             /\ msgs' = (msgs \cup {CommitMsg(p, q, bal[p][id], id, n.body.tq, n.body.depq, n.body.phaseq, n.body.cq) : q \in Proc \ {p} } \cup {CommitOkMsg(p,p,bal[p][id],id)}) \ quorumOfMessages
                             /\ ApplyCommit(p, p, bal[p][id], id, n.body.tq, n.body.depq, n.body.phaseq, n.body.cq)
@@ -486,7 +518,7 @@ HandleRecoverOK(p, id) ==
                                 n.body.phaseq = AcceptedPhase
                             IN
                             /\  ApplyAccept(p,p,bal[p][id],id,n.body.tq,n.body.depq,n.body.cq)
-                            /\  LET Dq == { id2 \in Id : (Conflicts(cmd[p][id2], cmd[p][id]) /\ LessThanTs(initTimestamp[id2], n.body.tq) ) }
+                            /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], n.body.tq) ) }
                                 IN 
                                 /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(p,q,bal[p][id],id,n.body.tq,n.body.depq,n.body.cq) : q \in Proc \ {p} } \cup {AcceptOKMsg(p,p,bal[p][id],id,Dq)}
                                 /\ UNCHANGED <<Cvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag>> 
@@ -502,7 +534,7 @@ HandleRecoverOK(p, id) ==
                             LET n == CHOOSE n \in rejects : TRUE
                             IN
                             /\ ApplyAccept(p,p,bal[p][id],id,n.body.tq,n.body.depq,Nop)                
-                            /\  LET Dq == { id2 \in Id : (Conflicts(cmd[p][id2], cmd[p][id]) /\ LessThanTs(initTimestamp[id2], n.body.tq) ) }
+                            /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], n.body.tq) ) }
                                 IN  
                                 /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(p,q,bal[p][id],id,n.body.tq,n.body.depq,Nop) : q \in Proc \ {p} } \cup {AcceptOKMsg(p,p,bal[p][id],id,Dq)}
                                 /\ UNCHANGED <<Cvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag>> 
@@ -523,11 +555,11 @@ HandleRecoverOK(p, id) ==
                             /\ UNCHANGED <<bal, cmd, abal, ts, dep, phase>>
                 ELSE  
                     /\ ApplyAccept(p,p,bal[p][id],id,ts[p][id],dep[p][id],Nop)
-                    /\  LET Dq == { id2 \in Id : (Conflicts(cmd'[p][id2], cmd'[p][id]) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
+                    /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
                         IN
                         /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(p,q,bal[p][id],id,ts[p][id],dep[p][id],Nop) : q \in Proc \ {p} } \cup {AcceptOKMsg(p,p,bal[p][id],id,Dq)} 
                         /\ UNCHANGED <<Cvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag>>   
-    /\ UNCHANGED <<submitted, initCoord, initTimestamp, recovered >>
+    /\ UNCHANGED <<submitted, initCoord, recovered, initTimestamp >>
             
 (***************************************************************************)
 (* 86–95 HandlePostWaiting                                                 *)
@@ -560,7 +592,7 @@ HandlePostWaiting(p, id) ==
         IN 
         \/  /\ Case1
             /\  ApplyAccept(p,p,bal[p][id],id,ts[p][id],dep[p][id],Nop)
-            /\  LET Dq == { id2 \in Id : (Conflicts(cmd'[p][id2], cmd'[p][id]) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
+            /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
                 IN 
                 /\ msgs' = msgs \cup { AcceptMsg(p,q,bal[p][id],id,ts[p][id],dep[p][id],Nop) : q \in Proc \ {p} }
                             \cup {AcceptOKMsg(p,p,bal[p][id],id,Dq)}
@@ -568,7 +600,7 @@ HandlePostWaiting(p, id) ==
 
         \/  /\ Case2
             /\ ApplyAccept(p,p,bal[p][id],id,initTimestamp[id],D,c)
-            /\  LET Dq == { id2 \in Id : (Conflicts(cmd'[p][id2], cmd'[p][id]) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
+            /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
                 IN 
                 /\ msgs' = msgs \cup { AcceptMsg(p,q,bal[p][id],id,initTimestamp[id],D,c) : q \in Proc \ {p} }
                             \cup {AcceptOKMsg(p,p,bal[p][id],id,Dq)}
@@ -578,7 +610,7 @@ HandlePostWaiting(p, id) ==
             /\ UNCHANGED << msgs, postWaitingFlag, bal, dep, phase, abal, cmd, ts >>
                     
         
-    /\ UNCHANGED << submitted, initCoord, initTimestamp, recovered, Wvar, recoveryAttemptBal, Cvar, Dvar >>
+    /\ UNCHANGED << submitted, initCoord, recovered, Wvar, recoveryAttemptBal, Cvar, Dvar, initTimestamp >>
 
 
 (***************************************************************************)
@@ -586,42 +618,22 @@ HandlePostWaiting(p, id) ==
 (***************************************************************************)                 
 
 Agreement ==
-  \A id \in Id :
-    \A p, q \in Proc :
-      /\ phase[p][id] = CommittedPhase
-      /\ phase[q][id] = CommittedPhase
-      => /\ dep[p][id] = dep[q][id]
-         /\ cmd[p][id] = cmd[q][id]
-         /\ ts[p][id] = ts[q][id]
+  \A id \in Id : \A p, q \in Proc :
+    /\ phase[p][id] \in {CommittedPhase,StablePhase}
+    /\ phase[q][id] \in {CommittedPhase,StablePhase}
+    =>  /\ cmd[p][id] = cmd[q][id]
+        /\ ts[p][id] = ts[q][id]
 
 Visibility ==
-  \A id1, id2 \in Id : \A p, q \in Proc :
-    /\ id1 # id2
-    /\ cmd[p][id1] # Nop
-    /\ cmd[q][id2] # Nop 
-    /\ phase[p][id1] = CommittedPhase
-    /\ phase[q][id2] = CommittedPhase
-    /\ Conflicts(cmd[p][id1], cmd[q][id2])
-    /\ LessThanTs(ts[p][id1], ts[q][id2])
-    => \/ id1 \in dep[q][id2]
-
-Init == 
-    /\ bal = [p \in Proc |-> [id \in Id |-> 0]]
-    /\ phase = [p \in Proc |-> [id \in Id |-> InitialPhase]]
-    /\ cmd = [p \in Proc |-> [id \in Id |-> Bottom]]
-    /\ dep = [p \in Proc |-> [id \in Id |-> {}]]
-    /\ ts = [p \in Proc |-> [id \in Id |-> [t |-> 0, id |-> 0]]] 
-    /\ abal = [p \in Proc |-> [id \in Id |-> 0]]
-    /\ msgs = {}
-    /\ submitted = {}
-    /\ initCoord = [id \in Id |-> NoProc]
-    /\ initTimestamp = [id \in Id |-> [t |-> 0, id |-> 0]]
-    /\ recovered = [p \in Proc |-> [id \in Id |-> 0]]
-    /\ Wvar = [p \in Proc |-> [id \in Id |-> 0]]
-    /\ Cvar = [p \in Proc |-> [id \in Id |-> Bottom]]
-    /\ Dvar = [p \in Proc |-> [id \in Id |-> {}]]
-    /\ postWaitingFlag = [p \in Proc |-> [id \in Id |-> FALSE]]
-    /\ recoveryAttemptBal = [p \in Proc |-> [id \in Id |-> 0]]
+  \A id1, id2 \in Id :
+    \A p, q \in Proc :
+      /\ phase[p][id1] = StablePhase
+      /\ phase[q][id2] = CommittedPhase
+      /\ cmd[p][id1] # Nop
+      /\ cmd[q][id2] # Nop
+      /\ ConflictingPayload(id1, id2)
+      /\ LessThanTs(ts[q][id2],ts[p][id1])
+      => id2 \in dep[p][id1]
 
 
 
