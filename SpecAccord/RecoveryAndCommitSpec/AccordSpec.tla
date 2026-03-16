@@ -296,7 +296,7 @@ HandlePreAccept(m) ==
                 /\  cmd' = [cmd EXCEPT ![p][id] = c]
                 /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> id])
                     IN
-                    /\ ApplyPreAccept(p,q,id,c,finalTs,D0)
+                    /\ ApplyPreAccept(p,q,id,c,finalTs,D0 \cup D)
                     /\ msgs' = (msgs \cup { PreAcceptOKMsg(p, q, id, finalTs, D) }) \ {m}
     /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, Cvar, Dvar, Wvar, Qvar>>
 
