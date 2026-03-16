@@ -257,20 +257,20 @@ ApplyRecover(p, q, b, id, c) ==
 Submit(p, id) ==
     /\  id \notin submitted
     /\  LET c == id \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these integer Ids.
-            earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = p /\ LessThanTs(initTimestamp[id1],initTimestamp[id])}}
+            earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = p /\ LessThanTs(initTimestamp[id],initTimestamp[id1])}}
         IN 
         /\ LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
             IN
             /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [id |-> id, t |-> initTimestampVal]]
             /\ submitted' = submitted \cup {id}
             /\ initCoord' = [initCoord EXCEPT ![id] = p]
-            /\ ts' = [ts EXCEPT ![p][id] = initTimestamp[id]]
+            /\ ts' = [ts EXCEPT ![p][id] = initTimestamp'[id]]
             /\  LET setOfConflictingTs == {ts1 \in { ts[p][id2] : id2 \in Id} : ts1.id # 0 /\ Conflicts(p, id, ts1.id)}
-                    D == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
+                    D == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp'[id]) ) }
                 IN
                 /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
                     IN
-                    /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> id])
+                    /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> id])
                         IN
                         /\ msgs' = msgs \cup { PreAcceptMsg(p, q, id, c, D) : q \in Proc \ {p} } \cup {PreAcceptOKMsg(p,p,id,finalTs,D)}
                         /\ ApplyPreAccept(p,p,id,c,finalTs,D)
@@ -286,6 +286,7 @@ HandlePreAccept(m) ==
             q  == m.from
             id == m.body.id
             c  == m.body.c
+            D0 == m.body.D0
         IN 
         /\  LET setOfConflictingTs == {ts1 \in { ts[p][id2] : id2 \in Id} : ts1.id # 0 /\  Conflicts(p, id, ts1.id)}
                 D == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
@@ -295,7 +296,7 @@ HandlePreAccept(m) ==
                 /\  cmd' = [cmd EXCEPT ![p][id] = c]
                 /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> id])
                     IN
-                    /\ ApplyPreAccept(p,q,id,c,finalTs,D)
+                    /\ ApplyPreAccept(p,q,id,c,finalTs,D0)
                     /\ msgs' = (msgs \cup { PreAcceptOKMsg(p, q, id, finalTs, D) }) \ {m}
     /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, Cvar, Dvar, Wvar, Qvar>>
 
@@ -352,7 +353,7 @@ HandleAccept(m) ==
             c  == m.body.c
         IN
         /\  ApplyAccept(p,q,b,id,t,D,c)
-        /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ MaxTs(initTimestamp[id2], t) = t) }
+        /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], t)) }
             IN
             /\ msgs' = (msgs \cup { AcceptOKMsg(p, q, b, id, Dq) }) \ {m}
     /\ UNCHANGED << submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, Cvar, Dvar, initTimestamp, Qvar  >>
@@ -436,15 +437,15 @@ HandleStable(m) ==
 StartRecover(p,id) ==
     /\ recovered[p][id] < NumberOfRecoveryAttempts
     /\ id \in SeenIds(p)
-    /\ cmd[p][id] # Bottom
     /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = FALSE] 
     /\ recovered' = [recovered EXCEPT ![p][id] = recovered[p][id] + 1]
     \* Ballots owned by p are of the form k*N + p.
-    /\  LET  b == IF bal[p][id] = 0 THEN p ELSE bal[p][id] + Cardinality(Proc)
+    /\  LET k == ((bal[p][id] - p + N) \div N) IN
+        LET b == k * N + p
         IN
-        IF phase[p][id] # InitialPhase THEN msgs' = msgs \cup { RecoverMsg(p,q,b,id,cmd[p][id]) : q \in Proc }
-        ELSE msgs' = msgs \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc }
-    /\ UNCHANGED <<bal, phase, cmd, dep, ts, abal, submitted, initCoord, Wvar, recoveryAttemptBal, Cvar, Dvar, initTimestamp, Qvar>>
+        /\  IF phase[p][id] # InitialPhase THEN msgs' = msgs \cup { RecoverMsg(p,q,b,id,cmd[p][id]) : q \in Proc }
+            ELSE msgs' = msgs \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc }
+    /\ UNCHANGED <<bal, phase, cmd, dep, ts, abal, submitted, initCoord, Wvar, Cvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal>>
 
 (***************************************************************************)
 (* 55–68 HandleRecover                                                     *)
@@ -566,8 +567,8 @@ HandleRecoverOK(p, id) ==
                             /\ Wvar' = [Wvar EXCEPT  ![p][id] = W]
                             /\ Dvar' = [Dvar EXCEPT  ![p][id] = D]
                             /\ Qvar' = [Qvar EXCEPT  ![p][id] = Q]
-                            /\ recoveryAttemptBal' = [recoveryAttemptBal EXCEPT ![p][id] = bal[p][id]]
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = TRUE]
+                            /\ recoveryAttemptBal' = [recoveryAttemptBal EXCEPT ![p][id] = bal[p][id]]
                             /\ msgs' = msgs \ quorumOfMessages
                             /\ UNCHANGED <<bal, cmd, abal, ts, dep, phase>>
                 ELSE  
