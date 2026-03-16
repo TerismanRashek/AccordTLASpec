@@ -443,9 +443,29 @@ StartRecover(p,id) ==
     /\  LET k == ((bal[p][id] - p + N) \div N) IN
         LET b == k * N + p
         IN
-        /\  IF phase[p][id] # InitialPhase THEN msgs' = msgs \cup { RecoverMsg(p,q,b,id,cmd[p][id]) : q \in Proc }
-            ELSE msgs' = msgs \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc }
-    /\ UNCHANGED <<bal, phase, cmd, dep, ts, abal, submitted, initCoord, Wvar, Cvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal>>
+        /\  ApplyRecover(p, p, b, id, cmd[p][id])
+        /\  LET D == IF phase[p][id] # InitialPhase THEN dep[p][id]
+                     ELSE {id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
+            IN
+            /\  LET S == {id2 \in SeenIds(p) : (id2 # id /\ Conflicts(p, id, id2) /\ cmd[p][id2] # Nop /\ id \notin dep[p][id2]
+                        /\(   (phase[p][id2] \in {CommittedPhase, StablePhase} /\ LessThanTs(initTimestamp[id], ts[p][id2]))  
+                            \/ (   phase[p][id2] = AcceptedPhase   /\   LessThanTs( initTimestamp[id] ,  initTimestamp[id2])) 
+                          )                    ) 
+                        }
+                    W == {<<id3,abal[p][id3]>> : id3 \in { id2 \in SeenIds(p) : (id2 # id /\ Conflicts(p, id, id2) /\ cmd[p][id2] # Nop /\ id \notin dep[p][id2] 
+                        /\ (  (phase[p][id2] = AcceptedPhase /\ LessThanTs(initTimestamp[id2],initTimestamp[id]) /\ LessThanTs(initTimestamp[id],ts[p][id2]))
+                           \/ (phase[p][id2] = PreAcceptedPhase /\ LessThanTs(initTimestamp[id2],initTimestamp[id]) )
+                           )
+                        )}}
+                    WP == {id2 \in SeenIds(p) : id2 # id /\ Conflicts(p, id, id2) /\ phase[p][id2] = PreAcceptedPhase 
+                            /\ LessThanTs(initTimestamp[id],initTimestamp[id2]) /\ id \notin dep[p][id2] }
+                IN
+                IF S # {}
+                THEN IF phase[p][id] # InitialPhase THEN msgs' = (msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],TRUE,W,WP)} \cup  { RecoverMsg(p,q,b,id,cmd[p][id]) : q \in Proc \ {p} })
+                     ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],TRUE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
+                ELSE IF phase[p][id] # InitialPhase THEN msgs' = (msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],FALSE,W,WP)} \cup  { RecoverMsg(p,q,b,id,cmd[p][id]) : q \in Proc \ {p} })
+                     ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],cmd[p][id],ts[p][id],D,phase[p][id],FALSE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
+    /\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, Cvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal>>
 
 (***************************************************************************)
 (* 55–68 HandleRecover                                                     *)
