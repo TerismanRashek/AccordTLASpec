@@ -61,7 +61,7 @@ Init ==
     /\ Dvar = [p \in Proc |-> [id \in Id |-> {}]]
     /\ postWaitingFlag = [p \in Proc |-> [id \in Id |-> FALSE]]
     /\ recoveryAttemptBal = [p \in Proc |-> [id \in Id |-> 0]]
-    /\ initTimestamp = <<[id |-> 1, t |-> 0], [id |-> 2, t |-> 2]>>
+    /\ initTimestamp = <<[id |-> 1, t |-> 0], [id |-> 2, t |-> 2], [id |-> 3, t |-> 1]>>
     /\ Qvar = [p \in Proc |-> [id \in Id |-> {}]]
 
 
@@ -87,9 +87,9 @@ MaxTsInSet(S) ==
 
 
 ConflictingPayload(id1, id2) ==
-    \* IF id1 = 3 \/ id2 = 3 THEN TRUE
-    \* ELSE FALSE
-    id1 # id2
+    IF id1 = 3 \/ id2 = 3 THEN TRUE
+    ELSE FALSE
+    \* id1 # id2
 
 Conflicts(p, idGettingChecked, id2) ==
     IF cmd[p][id2] = Bottom THEN
