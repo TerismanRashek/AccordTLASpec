@@ -61,7 +61,7 @@ Init ==
     /\ Dvar = [p \in Proc |-> [id \in Id |-> {}]]
     /\ postWaitingFlag = [p \in Proc |-> [id \in Id |-> FALSE]]
     /\ recoveryAttemptBal = [p \in Proc |-> [id \in Id |-> 0]]
-    /\ initTimestamp = <<[id |-> 1, t |-> 0], [id |-> 2, t |-> 2], [id |-> 3, t |-> 1]>>
+    /\ initTimestamp = <<[id |-> 1, t |-> 0], [id |-> 2, t |-> 2]>>
     /\ Qvar = [p \in Proc |-> [id \in Id |-> {}]]
 
 
@@ -87,9 +87,9 @@ MaxTsInSet(S) ==
 
 
 ConflictingPayload(id1, id2) ==
-    IF id1 = 3 \/ id2 = 3 THEN TRUE
-    ELSE FALSE
-    \* id1 # id2
+    \* IF id1 = 3 \/ id2 = 3 THEN TRUE
+    \* ELSE FALSE
+    id1 # id2
 
 Conflicts(p, idGettingChecked, id2) ==
     IF txn[p][id2] = Bottom THEN
@@ -241,7 +241,7 @@ ApplyStable(p,q,b,id) ==
 ApplyRecover(p, q, b, id, tx) ==
     /\  bal[p][id] < b
     /\  bal'  = [bal  EXCEPT ![p][id] = b]
-    /\  IF phase[p][id] = InitialPhase THEN  txn'  = [txn  EXCEPT ![p][id] = tx] ELSE UNCHANGED txn
+    /\  IF phase[p][id] \in {InitialPhase,PreAcceptedPhase} THEN  txn'  = [txn  EXCEPT ![p][id] = tx] ELSE UNCHANGED txn
 
     
 
@@ -296,7 +296,7 @@ HandlePreAccept(m) ==
                 /\  txn' = [txn EXCEPT ![p][id] = tx]
                 /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> id])
                     IN
-                    /\ ApplyPreAccept(p,q,id,tx,finalTs,D0 \cup D)
+                    /\ ApplyPreAccept(p,q,id,tx,finalTs,D0)
                     /\ msgs' = (msgs \cup { PreAcceptOKMsg(p, q, id, finalTs, D) }) \ {m}
     /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, TXvar, Dvar, Wvar, Qvar>>
 
@@ -480,8 +480,8 @@ HandleRecover(m) ==
             tx == m.body.tx
         IN 
         /\  ApplyRecover(p, q, b, id, tx)
-        /\  LET D == IF phase[p][id] # InitialPhase THEN dep[p][id]
-                     ELSE {id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
+        /\  LET D == IF phase[p][id] \notin {InitialPhase,PreAcceptedPhase} THEN dep[p][id]
+                     ELSE dep[p][id] \cup {id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
             IN
             /\  LET S == {id2 \in SeenIds(p) : (id2 # id /\ Conflicts(p, id, id2) /\ txn[p][id2] # Nop /\ id \notin dep[p][id2]
                         /\(   (phase[p][id2] \in {CommittedPhase, StablePhase} /\ LessThanTs(initTimestamp[id], ts[p][id2]))  
