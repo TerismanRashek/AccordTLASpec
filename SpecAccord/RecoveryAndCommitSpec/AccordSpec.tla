@@ -65,7 +65,7 @@ Init ==
     /\ Dvar = [p \in Proc |-> [id \in Id |-> {}]]
     /\ postWaitingFlag = [p \in Proc |-> [id \in Id |-> FALSE]]
     /\ recoveryAttemptBal = [p \in Proc |-> [id \in Id |-> 0]]
-    /\ initTimestamp = <<[id |-> 0, t |-> 0], [id |-> 0, t |-> 2], [id |-> 0 , t |-> 1]>>
+    /\ initTimestamp = <<[id |-> NoProc, t |-> 0], [id |-> NoProc, t |-> 2], [id |-> NoProc , t |-> 1]>>
     /\ Qvar = [p \in Proc |-> [id \in Id |-> {}]]
 
 
@@ -74,8 +74,8 @@ N == Cardinality(Proc)
 Max(a, b) == IF a > b THEN a ELSE b
 
 LessThanTs(ts1,ts2) ==
-    IF ts1.id = 0 THEN TRUE
-    ELSE IF ts2.id = 0 THEN FALSE
+    IF ts1.id = NoProc THEN TRUE
+    ELSE IF ts2.id = NoProc THEN FALSE
     ELSE IF ts1.t < ts2.t THEN TRUE
     ELSE IF ts1.t > ts2.t THEN FALSE
     ELSE ts1.id < ts2.id
@@ -261,7 +261,7 @@ ApplyRecover(p, q, b, id, tx) ==
 
 Submit(p, id) ==
     /\  id \notin submitted
-    /\  LET tx == id \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these integer Ids.
+    /\  LET tx == id \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these id integers.
             earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = p /\ LessThanTs(initTimestamp[id],initTimestamp[id1])}}
         IN 
         /\ LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
@@ -270,7 +270,8 @@ Submit(p, id) ==
             /\ submitted' = submitted \cup {id}
             /\ initCoord' = [initCoord EXCEPT ![id] = p]
             /\ ts' = [ts EXCEPT ![p][id] = initTimestamp'[id]]
-            /\  LET setOfConflictingTs == {ts[p][id2] : id2 \in { id2 \in Id : ts[p][id2].id # 0 /\ Conflicts(p, id, id2)}}
+            \* This part has computations of the handle pre accept part because we have to immediately handle the self addressed message, this is a recurring pattern whenever we broadcast.
+            /\  LET setOfConflictingTs == {ts[p][id2] : id2 \in { id2 \in Id : ts[p][id2].id # NoProc /\ Conflicts(p, id, id2)}}
                     D == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp'[id]) ) }
                 IN
                 /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
@@ -293,7 +294,7 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        /\  LET setOfConflictingTs == {ts[p][id2] : id2 \in { id2 \in Id : ts[p][id2].id # 0 /\ Conflicts(p, id, id2)}}
+        /\  LET setOfConflictingTs == {ts[p][id2] : id2 \in { id2 \in Id : ts[p][id2].id # NoProc /\ Conflicts(p, id, id2)}}
                 D == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
             IN
             /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
