@@ -97,7 +97,9 @@ ConflictPairs == {
 }
 
 ConflictingPayload(id1, id2) ==
-    <<id1, id2>> \in ConflictPairs \/ <<id2, id1>> \in ConflictPairs
+    \* IF id1 = 3 \/ id2 = 3 THEN TRUE
+    \* ELSE FALSE
+    id1 # id2
 
 Conflicts(p, idGettingChecked, id2) ==
     IF txn[p][id2] = Bottom THEN
