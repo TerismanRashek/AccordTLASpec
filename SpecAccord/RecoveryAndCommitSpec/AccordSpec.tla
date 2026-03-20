@@ -69,7 +69,7 @@ Init ==
     /\ recoveryAttemptBal = [p \in Proc |-> [id \in Id |-> 0]]
     /\ initTimestamp = <<[id |-> NoProc, t |-> 0], [id |-> NoProc, t |-> 2], [id |-> NoProc , t |-> 1]>>
     /\ Qvar = [p \in Proc |-> [id \in Id |-> {}]]
-    /\ executed = [p \in Proc |-> {}]
+    /\ executed = [p \in Proc |-> [id \in Id |-> 0]]
 
 
 N == Cardinality(Proc)
@@ -707,12 +707,16 @@ HandlePostWaiting(p, id) ==
 (***************************************************************************)  
 
 Execute(p,id) ==
-    /\ id \notin executed[p]
+    /\ executed[p][id] = 0
     /\ phase[p][id] = StablePhase
     /\ \A id2 \in dep[p][id] :
         /\ phase[p][id2] \in {CommittedPhase,StablePhase}
-        /\ LessThanTs(ts[p][id2],ts[p][id]) => id2 \in executed[p]
-    /\ executed' = [executed EXCEPT ![p] = executed[p] \cup {id}]
+        /\ LessThanTs(ts[p][id2],ts[p][id]) => executed[p][id] # 0
+    /\  LET S == {executed[p][id2] : id2 \in Id}
+        IN  
+        LET nextInOrder ==  (CHOOSE i \in S : \A j \in S : i >= j ) + 1
+        IN 
+        /\ executed' = [executed EXCEPT ![p][id] = nextInOrder]
     /\ UNCHANGED << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar>>
 
 (***************************************************************************)
@@ -726,7 +730,7 @@ Agreement ==
     =>  /\ txn[p][id] = txn[q][id]
         /\ ts[p][id] = ts[q][id]
 
-Visibility ==
+Ordering ==
   \A id1, id2 \in Id :
     \A p, q \in Proc :
       /\ phase[p][id1] = StablePhase
@@ -737,7 +741,13 @@ Visibility ==
       /\ LessThanTs(ts[q][id2],ts[p][id1])
       => id2 \in dep[p][id1]
 
-
+PartialOrder == 
+    \A id1, id2 \in Id :
+        ConflictingPayload(id1,id2)
+        =>  /\ \A p, q \in Proc :
+                (txn[p][id1] # Nop /\ txn[p][id2] # Nop /\ txn[q][id1] # Nop /\ txn[q][id2] # Nop)
+                => ((executed[p][id1] # 0 /\ executed[p][id2] # 0 /\ executed[q][id1] # 0 /\ executed[q][id2] # 0 )
+                => (executed[p][id1] < executed[p][id2] => executed[q][id1] < executed[q][id2]) )
 
 Next ==
     \/ \E m \in msgs :
