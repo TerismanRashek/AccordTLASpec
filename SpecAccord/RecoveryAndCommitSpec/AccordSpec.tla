@@ -19,10 +19,10 @@ VARIABLES
     Qvar,
     postWaitingFlag,
     recoveryAttemptBal,
-
-    executed    \* executed[p] is a set of ids executed by p
+    executed,    \* executed[p] is a set of ids executed by p
+    relation     \* SMR relation to check acyclicity,  relation[id][id] is 0 (no relation) 1 (less than) 2 (greater than)
     
-vars == << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed >>
+vars == << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation >>
 
 
 
@@ -70,6 +70,7 @@ Init ==
     /\ initTimestamp = <<[id |-> NoProc, t |-> 0], [id |-> NoProc, t |-> 2], [id |-> NoProc , t |-> 1]>>
     /\ Qvar = [p \in Proc |-> [id \in Id |-> {}]]
     /\ executed = [p \in Proc |-> [id \in Id |-> 0]]
+    /\ relation = [id1 \in Id |-> [id2 \in Id |-> 0]]
 
 
 N == Cardinality(Proc)
@@ -114,6 +115,8 @@ SeenIds(p) ==
     {id \in Id : 
         \/ txn[p][id] # Bottom
         \/ \E id2 \in Id : id \in dep[p][id2]}
+
+        
 
 
 
@@ -283,7 +286,7 @@ Submit(p, id) ==
                         IN
                         /\ msgs' = msgs \cup { PreAcceptMsg(p, q, id, tx, D) : q \in Proc \ {p} } \cup {PreAcceptOKMsg(p,p,id,finalTs,D)}
                         /\ ApplyPreAccept(p,p,id,tx,finalTs,D)
-    /\ UNCHANGED << bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed >> 
+    /\ UNCHANGED << bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation >> 
 
 (***************************************************************************)
 (* 7–15 HandlePreAccept                                                    *)
@@ -307,7 +310,7 @@ HandlePreAccept(m) ==
                     IN
                     /\ ApplyPreAccept(p,q,id,tx,finalTs,D0)
                     /\ msgs' = (msgs \cup { PreAcceptOKMsg(p, q, id, finalTs, D) }) \ {m}
-    /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, TXvar, Dvar, Wvar, Qvar, executed>>
+    /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, TXvar, Dvar, Wvar, Qvar, executed, relation>>
 
 
 (***************************************************************************)
@@ -346,7 +349,7 @@ HandlePreAcceptOK(p, id) ==
                     IN 
                     /\ ApplyAccept(p,p,0,id,t,D,txn[p][id])
                     /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(p, q, 0, id, t, D, txn[p][id]) : q \in Proc \ {p} } \cup {AcceptOKMsg(p,p,0,id,Dq)}
-    /\ UNCHANGED <<  submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed  >>
+    /\ UNCHANGED <<  submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation  >>
        
 
 (***************************************************************************)
@@ -367,7 +370,7 @@ HandleAccept(m) ==
         /\  LET Dq == { id2 \in SeenIds(p) : (Conflicts(p, id, id2) /\ LessThanTs(initTimestamp[id2], t)) }
             IN
             /\ msgs' = (msgs \cup { AcceptOKMsg(p, q, b, id, Dq) }) \ {m}
-    /\ UNCHANGED << submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed  >>
+    /\ UNCHANGED << submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation  >>
 
 (***************************************************************************)
 (* 33–35 HandleAcceptOk                                                    *)
@@ -386,7 +389,7 @@ HandleAcceptOK(p, id) ==
             IN
             /\ msgs' = (msgs \cup {CommitMsg(p, q, bal[p][id], id, ts[p][id], D, Slow, txn[p][id]) : q \in Proc \ {p} } \cup {CommitOkMsg(p,p,bal[p][id],id)}) \ quorumOfMessages
             /\ ApplyCommit(p,p, bal[p][id], id, ts[p][id], D, txn[p][id])
-    /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed >>
+    /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
 (***************************************************************************)
 (* 36–44 HandleCommit                                                      *)
@@ -405,7 +408,7 @@ HandleCommit(m) ==
        IN
        /\ ApplyCommit(p,q,b,id,t,D,tx)
        /\ IF fastOrSlow = Slow THEN msgs' = (msgs \cup { CommitOkMsg(p, q, b, id) } ) \ {m} ELSE msgs' = msgs \ {m}
-       /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, initTimestamp, executed >>
+       /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, initTimestamp, executed, relation >>
 
 
 
@@ -424,7 +427,7 @@ HandleCommitOK(p, id) ==
         /\ IsQuorumSized(quorumOfMessages)
         /\ msgs' = (msgs \cup {StableMsg(p, q, bal[p][id], id) : q \in Proc \ {p} }) \ quorumOfMessages
         /\ ApplyStable(p,p,bal[p][id],id)
-    /\ UNCHANGED << bal, txn, dep, ts, abal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed >>
+    /\ UNCHANGED << bal, txn, dep, ts, abal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
 (***************************************************************************)
 (* 48–50 HandleStable                                                      *)
@@ -439,7 +442,7 @@ HandleStable(m) ==
         IN
         /\ ApplyStable(p,q,b,id)
         /\ msgs' = msgs \ {m}
-        /\ UNCHANGED << bal, submitted, initCoord, dep, abal, txn, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed >>
+        /\ UNCHANGED << bal, submitted, initCoord, dep, abal, txn, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
 (***************************************************************************)
 (* 51–54 StartRecover                                                      *)
@@ -476,7 +479,7 @@ StartRecover(p,id) ==
                      ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],txn[p][id],ts[p][id],D,phase[p][id],TRUE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
                 ELSE IF phase[p][id] # InitialPhase THEN msgs' = (msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],txn[p][id],ts[p][id],D,phase[p][id],FALSE,W,WP)} \cup  { RecoverMsg(p,q,b,id,txn[p][id]) : q \in Proc \ {p} })
                      ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],txn[p][id],ts[p][id],D,phase[p][id],FALSE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
-    /\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, TXvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal, executed>>
+    /\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, TXvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal, executed, relation>>
 
 (***************************************************************************)
 (* 55–68 HandleRecover                                                     *)
@@ -510,7 +513,7 @@ HandleRecover(m) ==
                 IF S # {}
                 THEN msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],txn'[p][id],ts[p][id],D,phase[p][id],TRUE,W,WP)}) \ {m} 
                 ELSE msgs' = (msgs \cup {RecoverOkMsg(p,q,b,id,abal[p][id],txn'[p][id],ts[p][id],D,phase[p][id],FALSE,W,WP)}) \ {m}
-    /\ UNCHANGED << submitted, initCoord, dep, abal, ts, phase, recovered, TXvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal, initTimestamp, Qvar, executed  >>
+    /\ UNCHANGED << submitted, initCoord, dep, abal, ts, phase, recovered, TXvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal, initTimestamp, Qvar, executed, relation  >>
 
 (***************************************************************************)
 (* 69–85 HandleRecoverOK                                                   *)
@@ -610,7 +613,7 @@ HandleRecoverOK(p, id) ==
                         IN
                         /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(p,q,bal[p][id],id,ts[p][id],dep[p][id],Nop) : q \in Proc \ {p} } \cup {AcceptOKMsg(p,p,bal[p][id],id,Dq)} 
                         /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
-    /\ UNCHANGED <<submitted, initCoord, recovered, initTimestamp, executed >>
+    /\ UNCHANGED <<submitted, initCoord, recovered, initTimestamp, executed, relation >>
             
 (***************************************************************************)
 (* 86–95 HandlePostWaiting                                                 *)
@@ -699,7 +702,7 @@ HandlePostWaiting(p, id) ==
             /\ UNCHANGED << msgs, postWaitingFlag, bal, dep, phase, abal, txn, ts >>
                     
         
-    /\ UNCHANGED << submitted, initCoord, recovered, Wvar, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed >>
+    /\ UNCHANGED << submitted, initCoord, recovered, Wvar, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
 
 (***************************************************************************)
@@ -717,6 +720,16 @@ Execute(p,id) ==
         LET nextInOrder ==  (CHOOSE i \in S : \A j \in S : i >= j ) + 1
         IN 
         /\ executed' = [executed EXCEPT ![p][id] = nextInOrder]
+    
+    /\ relation' =
+            [id1 \in Id |-> 
+                [id2 \in Id |->
+                IF id1 = id /\ (ConflictingPayload(id, id2) \/ id2 \notin submitted) /\ relation[id][id2] = 0 THEN 1
+                ELSE IF id2 = id /\ (ConflictingPayload(id, id1) \/ id1 \notin submitted) /\ relation[id][id1] = 0 THEN 2
+                ELSE relation[id1][id2]
+                ]
+            ]
+
     /\ UNCHANGED << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar>>
 
 (***************************************************************************)
@@ -749,6 +762,18 @@ PartialOrder ==
                 => ((executed[p][id1] # 0 /\ executed[p][id2] # 0 /\ executed[q][id1] # 0 /\ executed[q][id2] # 0 )
                 => (executed[p][id1] < executed[p][id2] => executed[q][id1] < executed[q][id2]) )
 
+Edges ==
+    { <<i, j>> \in Id \X Id : relation[i][j] = 1 }
+
+RECURSIVE Reach(_,_)
+
+Reach(i, j) ==
+    \/ <<i, j>> \in Edges
+    \/ \E k \in Id : <<i, k>> \in Edges /\ Reach(k, j)
+
+Acyclicity ==
+    \A i \in Id : ~Reach(i, i)
+        
 Next ==
     \/ \E m \in msgs :
         \/ HandlePreAccept(m) 
