@@ -282,7 +282,7 @@ Submit(p, id) ==
                 IN
                 /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
                     IN
-                    /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> id])
+                    /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> p])
                         IN
                         /\ msgs' = msgs \cup { PreAcceptMsg(p, q, id, tx, D) : q \in Proc \ {p} } \cup {PreAcceptOKMsg(p,p,id,finalTs,D)}
                         /\ ApplyPreAccept(p,p,id,tx,finalTs,D)
@@ -306,7 +306,7 @@ HandlePreAccept(m) ==
             /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
                 IN
                 /\  txn' = [txn EXCEPT ![p][id] = tx]
-                /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> id])
+                /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> q])
                     IN
                     /\ ApplyPreAccept(p,q,id,tx,finalTs,D0)
                     /\ msgs' = (msgs \cup { PreAcceptOKMsg(p, q, id, finalTs, D) }) \ {m}
