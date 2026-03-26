@@ -94,9 +94,9 @@ MaxTsInSet(S) ==
 
 
 idToShard == [i \in {1,2,3} |->
-                  CASE i = 1 -> {3}
-                    [] i = 2 -> {1}
-                    [] i = 3 -> {2}]
+                  CASE i = 1 -> {1,2,3}
+                    [] i = 2 -> {1,3}
+                    [] i = 3 -> {1,2}]
 
 ConflictPairs == {
     <<1, 2>>,
@@ -633,7 +633,7 @@ HandleRecoverOK(s, p, id) ==
                             /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
                         ELSE 
                             LET n == CHOOSE n \in quorumOfMessages : n.body.phaseq = PreAcceptedPhase
-                                Wall == UNION {(m.body.Wq \cup {<<id1, 0>> : id1 \in {id2 \in m.body.WPq : m.from = initCoord[id2]}}) : m \in quorumOfMessages}
+                                Wall == UNION {(m.body.Wq \cup {<<id1, 0>> : id1 \in {id2 \in m.body.WPq : <<m.shardfrom,m.from>> = initCoord[id2]}}) : m \in quorumOfMessages}
                             IN
                             LET tx == n.body.txq
                                 W == {<<id1, bal1>> \in Wall : \A <<id2, bal2>> \in Wall : bal2 <= bal1}
