@@ -94,9 +94,9 @@ MaxTsInSet(S) ==
 
 
 idToShard == [i \in {1,2,3} |->
-                  CASE i = 1 -> {1,3}
+                  CASE i = 1 -> {3}
                     [] i = 2 -> {1}
-                    [] i = 3 -> {2,3}]
+                    [] i = 3 -> {2}]
 
 ConflictPairs == {
     <<1, 2>>,
@@ -118,13 +118,13 @@ IsFastQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - E
 
 IsQuorum(set,id) ==
     \A shard \in idToShard[id] :
-        LET quorum == {m \in set : m.shardfrom \in shard}
+        LET quorum == {m \in set : m.shardfrom = shard}
         IN 
         /\ IsQuorumSized(quorum)
 
 IsFastQuorum(set,id) ==
     \A shard \in idToShard[id] :
-        LET quorum == {m \in set : m.shardfrom \in shard}
+        LET quorum == {m \in set : m.shardfrom = shard}
         IN 
         /\ IsFastQuorumSized(quorum)
 
@@ -284,6 +284,7 @@ ApplyRecover(sp, p, b, id, tx) ==
 
 Submit(s, p, id) ==
     /\  id \notin submitted
+    /\  s \in idToShard[id]
     /\  LET tx == id \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these id integers.
             earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = <<s,p>> /\ LessThanTs(initTimestamp[id],initTimestamp[id1])}}
         IN 
@@ -324,7 +325,7 @@ HandlePreAccept(m) ==
                 D == { id2 \in SeenIds(s,p) : (Conflicts(s, p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
             IN
             /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
-                IN
+                IN 
                 /\  txn' = [txn EXCEPT ![s][p][id] = tx]
                 /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> q])
                     IN
@@ -562,7 +563,7 @@ HandleRecoverOK(s, p, id) ==
             /\ m.shardto = s  }
         IN
         /\ IsQuorum(quorumOfMessages,id) 
-        /\  LET Q == { m.from : m \in quorumOfMessages}
+        /\  LET Q == { <<m.shardfrom,m.from>> : m \in quorumOfMessages  }
                 Abals == { m.body.abalq : m \in quorumOfMessages }
                 bmax == CHOOSE val \in Abals : \A val2 \in Abals : val >= val2
                 U == { m \in quorumOfMessages : m.body.abalq = bmax }
@@ -608,16 +609,22 @@ HandleRecoverOK(s, p, id) ==
                             IN
                             /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } \cup {AcceptOKMsg(s,p,s,p,bal[s][p][id],id,Dq)} 
                         /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
-                ELSE IF (   LET Rmax == { n \in quorumOfMessages :
+                ELSE IF ( \A shard \in idToShard[id] :
+                            LET Rmax == { n \in quorumOfMessages :
                                                 /\ n.body.phaseq = PreAcceptedPhase
+                                                /\ n.shardfrom = shard
                                                 /\ n.body.tq = initTimestamp[id] }
-                            IN Cardinality(Rmax) >= Cardinality(quorumOfMessages) - E)
+                            IN Cardinality(Rmax) >= Cardinality({n \in quorumOfMessages : n.shardfrom = s}) - E)
                         THEN
                         LET rejects == {m \in quorumOfMessages : m.body.rejectq = TRUE}
                         IN
                         IF (rejects # {} 
-                            \/ ((Cardinality({m \in quorumOfMessages : m.body.phaseq = PreAcceptedPhase /\ m.body.tq = initTimestamp[id]}) = Cardinality(quorumOfMessages) - E)
-                                /\ \E id2 \in UNION {m.body.WPq : m \in quorumOfMessages} : initCoord[id2] \notin Q ))
+                            \/ (\E shard \in idToShard[id] :
+                                    LET shardQuorum == {n \in quorumOfMessages : n.shardfrom = shard}
+                                    IN (
+                                        (Cardinality({m \in shardQuorum : m.body.phaseq = PreAcceptedPhase /\ m.body.tq = initTimestamp[id]}) = Cardinality(shardQuorum ) - E)
+                                        /\ \E id2 \in UNION {m.body.WPq : m \in shardQuorum} : initCoord[id2] \notin Q ))
+                                        )   
                         THEN 
                             /\ ApplyAccept(s,p,bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop)
                             /\  LET Dq == { id2 \in SeenIds(s,p) : (Conflicts(s, p, id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) ) }
@@ -680,8 +687,8 @@ HandlePostWaiting(s, p, id) ==
             Case3 ==
                 (\E m \in msgs :
                     /\ m.type = TypeRecoverOK
-                    /\ m.from \notin Q
-                    /\ (m.body.phaseq \in {StablePhase,CommittedPhase,AcceptedPhase} \/ m.from = initCoord[id]))
+                    /\ <<m.shardfrom,m.from>> \notin Q
+                    /\ (m.body.phaseq \in {StablePhase,CommittedPhase,AcceptedPhase} \/ <<m.shardfrom,m.from>> = initCoord[id]))
         IN 
         \/  /\ Case1
             /\  ApplyAccept(s,p,bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop)
@@ -703,8 +710,8 @@ HandlePostWaiting(s, p, id) ==
                     /\ m.body.b = b
                     /\ m.body.id = id
                     /\ m.to = p
-                    /\ m.from \notin Q
-                    /\ (m.body.phaseq \in {StablePhase,CommittedPhase,AcceptedPhase} \/ m.from = initCoord[id])
+                    /\ <<m.shardfrom,m.from>> \notin Q
+                    /\ (m.body.phaseq \in {StablePhase,CommittedPhase,AcceptedPhase} \/ <<m.shardfrom,m.from>>  = initCoord[id])
                     /\  IF (m.body.phaseq = StablePhase) THEN
                             /\ ApplyCommit(s,p,b,id,m.body.tq,m.body.depq,m.body.txq)
                             /\ ApplyStable(s,p,b,id)               
@@ -770,7 +777,7 @@ Execute(s,p,id) ==
 (***************************************************************************)                 
 
 Agreement ==
-  \A id \in Id : \A p, q \in Proc, s \in Shards :
+  \A id \in Id : \A p, q \in Proc : \A s \in Shards :
     /\ phase[s][p][id] \in {CommittedPhase,StablePhase}
     /\ phase[s][q][id] \in {CommittedPhase,StablePhase}
     =>  /\ txn[s][p][id] = txn[s][q][id]
@@ -778,7 +785,7 @@ Agreement ==
 
 Ordering ==
   \A id1, id2 \in Id :
-    \A p, q \in Proc, s \in Shards  :
+    \A p, q \in Proc : \A s \in Shards  :
       /\ phase[s][p][id1] = StablePhase
       /\ phase[s][q][id2] = CommittedPhase
       /\ txn[s][p][id1] # Nop
@@ -790,7 +797,7 @@ Ordering ==
 PartialOrder == 
     \A id1, id2 \in Id :
         ConflictingPayload(id1,id2)
-        =>  /\ \A p, q \in Proc, s \in Shards  :
+        =>  /\ \A p, q \in Proc : \A s \in Shards  :
                 (txn[s][p][id1] # Nop /\ txn[s][p][id2] # Nop /\ txn[s][q][id1] # Nop /\ txn[s][q][id2] # Nop)
                 => ((executed[s][p][id1] # 0 /\ executed[s][p][id2] # 0 /\ executed[s][q][id1] # 0 /\ executed[s][q][id2] # 0 )
                 => (executed[s][p][id1] < executed[s][p][id2] => executed[s][q][id1] < executed[s][q][id2]) )
