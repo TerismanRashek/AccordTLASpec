@@ -724,8 +724,8 @@ Execute(p,id) ==
     /\ relation' =
             [id1 \in Id |-> 
                 [id2 \in Id |->
-                IF id1 = id /\ (ConflictingPayload(id, id2) \/ id2 \notin submitted) /\ relation[id][id2] = 0 THEN 1
-                ELSE IF id2 = id /\ (ConflictingPayload(id, id1) \/ id1 \notin submitted) /\ relation[id][id1] = 0 THEN 2
+                IF id1 = id /\ (ConflictingPayload(id, id2) \/ id2 \notin submitted) /\ relation[id1][id2] = 0 THEN 1
+                ELSE IF id2 = id /\ (ConflictingPayload(id, id1) \/ id1 \notin submitted) /\ relation[id1][id2] = 0 THEN 2
                 ELSE relation[id1][id2]
                 ]
             ]
