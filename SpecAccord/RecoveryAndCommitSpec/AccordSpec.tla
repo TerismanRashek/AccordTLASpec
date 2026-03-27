@@ -79,7 +79,7 @@ ConflictPairs == {
 
 \* Constant to define initial timestamp values for the commands, injected into initTimestamp var, this value can be redefined on submission when necessary
 \* (a single process can't submit a second command with a lower timestamp than the first), the id is defined on submission.
-initTimestampConstant == <<[id |-> NoProc, t |-> 0], [id |-> NoProc, t |-> 2], [id |-> NoProc , t |-> 1]>>
+initTimestampConstant == <<[id |-> <<0, NoProc>>, t |-> 0], [id |-> <<0, NoProc>>, t |-> 2], [id |-> <<0, NoProc>> , t |-> 1]>>
 
 
 (***************************************************************************)
@@ -94,7 +94,8 @@ Max(a, b) == IF a > b THEN a ELSE b
 LessThanTs(ts1,ts2) ==
     IF ts1.t < ts2.t THEN TRUE
     ELSE IF ts1.t > ts2.t THEN FALSE
-    ELSE ts1.id < ts2.id
+    ELSE IF ts1.id[2] = ts2.id[2] THEN ts1.id[1] < ts2.id[1]
+    ELSE ts1.id[2] < ts2.id[2]
 
 MaxTs(ts1, ts2) ==
     IF LessThanTs(ts1,ts2) THEN ts2 ELSE ts1
@@ -142,7 +143,7 @@ Init ==
     /\ phase = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> InitialPhase]]]
     /\ txn = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> Bottom]]]
     /\ dep = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
-    /\ ts = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> [t |-> 0, id |-> 0]]] ]
+    /\ ts = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> [t |-> 0, id |-> <<0,NoProc>>]]] ]
     /\ abal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
     /\ msgs = {}
     /\ submitted = {}
@@ -293,17 +294,17 @@ Submit(s, p, id) ==
         \* making sure that this process has not already submitted a command with a greater timestamp than the one we are currently submitting.
         /\ LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
             IN
-            /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [id |-> p, t |-> initTimestampVal]]
+            /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [id |-> <<s,p>>, t |-> initTimestampVal]]
             /\ submitted' = submitted \cup {id}
             /\ initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
             /\ ts' = [ts EXCEPT ![s][p][id] = initTimestamp'[id]]
             \* This part has computations of the handle pre accept part because we have to immediately handle the self addressed message (and send the resulting PreAcceptOk message), this is a recurring pattern whenever we broadcast and handle the self addressed message immediately.
-            /\  LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # NoProc /\ Conflicts(id,id2)}}
+            /\  LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id,id2)}}
                     D == { id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp'[id]) ) }
                 IN
                 /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
                     IN
-                    /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> p])
+                    /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> <<s,p>>])
                             
                         IN
                         /\ ApplyPreAccept(s,p,id,tx,finalTs,D)
@@ -327,13 +328,13 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        /\  LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # NoProc /\ Conflicts(id,id2)}}
+        /\  LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id,id2)}}
                 D == { id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
             IN
             /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
                 IN 
                 /\  txn' = [txn EXCEPT ![s][p][id] = tx]
-                /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> q])
+                /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> <<sq,q>>])
                     IN
                     /\ ApplyPreAccept(s,p,id,tx,finalTs,D0)
                     /\ msgs' = (msgs \cup { PreAcceptOKMsg(s, p, sq, q, id, finalTs, D) }) \ {m}
