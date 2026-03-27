@@ -115,11 +115,10 @@ MaxTsInSet(S) ==
 Conflicts(id1, id2) ==
     <<id1, id2>> \in ConflictPairs \/ <<id2, id1>> \in ConflictPairs
 
-
-
 IsQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - F
 IsFastQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - E
 
+\* both of these check that input set of messages has a quorum for each shard of command id.
 IsQuorum(set,id) ==
     \A shard \in idToShard[id] :
         LET quorum == {m \in set : m.shardfrom = shard}
@@ -132,6 +131,7 @@ IsFastQuorum(set,id) ==
         IN 
         /\ IsFastQuorumSized(quorum)
 
+\* This finds all commands that a process knows of, (checks in payload and in dependencies)
 SeenIds(s,p) ==
     {id \in Id : 
         \/ txn[s][p][id] # Bottom
@@ -139,7 +139,6 @@ SeenIds(s,p) ==
 
 
 ASSUME N >= Max(2*E+F-1, 2*F+1)
-
 
 (***************************************************************************)
 (* Init of all the variables                                               *)
@@ -170,6 +169,8 @@ Init ==
 (* Message constructors                                                    *)
 (***************************************************************************)
 
+\* this is the general message constructor, the message type, the sender process and receiving process, the body holds the rest of the
+\* parameters specific to the message type. (Once again, to identify a process we need both the shard id : shardfrom, and the process id within that shard : from)
 Message(type, shardfrom, from, shardto, to, body) ==
     [ type |-> type, shardfrom |-> shardfrom, from |-> from, to |-> to, shardto |-> shardto, body |-> body ]
 
@@ -241,6 +242,9 @@ RecoverOkMsg(sp, p, sq, q,b,id,abalq,txq,tq,depq,phaseq,rejectq,Wq,WPq) ==
 (* State changing Actions                                                  *)
 (***************************************************************************)
 
+\*These operations are the insides of all the 'when received' a single message operations, this split allows me to handle self addressed
+\* messages by simply calling the corresponding Apply operation. 
+
 ApplyPreAccept(sp, p, id, tx, finalTs, D0) ==
     /\  bal[sp][p][id] = 0
     /\  phase[sp][p][id] = InitialPhase
@@ -278,7 +282,6 @@ ApplyRecover(sp, p, b, id, tx) ==
         /\  bal'  = [bal  EXCEPT ![sp][p][id] = b]
         /\  IF phase[sp][p][id] = InitialPhase THEN  txn'  = [txn  EXCEPT ![sp][p][id] = tx] ELSE UNCHANGED txn
 
-    
 
 
 (***************************************************************************)
@@ -286,21 +289,24 @@ ApplyRecover(sp, p, b, id, tx) ==
 (***************************************************************************)
 
 
-(* 4–6 Submit                                                              *)
+(* 1–3 Submit *)
 
 Submit(s, p, id) ==
     /\  id \notin submitted
-    /\  s \in idToShard[id]
-    /\  LET tx == id \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these id integers.
+    \* I am checking that the initial coordinator is part of the shards of that transaction. It seems like a reasonable assumption,
+    \* if I remove it, I would address a 'self sent message' that does not exist. This does not seem to actually create a bug(minimal testing was done) 
+    /\  s \in idToShard[id] 
+    /\  LET tx == id        \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these id integers.
             earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = <<s,p>> /\ LessThanTs(initTimestamp[id],initTimestamp[id1])}}
         IN 
+        \* making sure that this process has not already submitted a command with a greater timestamp than the one we are currently submitting.
         /\ LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
             IN
             /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [id |-> p, t |-> initTimestampVal]]
             /\ submitted' = submitted \cup {id}
             /\ initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
             /\ ts' = [ts EXCEPT ![s][p][id] = initTimestamp'[id]]
-            \* This part has computations of the handle pre accept part because we have to immediately handle the self addressed message, this is a recurring pattern whenever we broadcast.
+            \* This part has computations of the handle pre accept part because we have to immediately handle the self addressed message (and send the resulting PreAcceptOk message), this is a recurring pattern whenever we broadcast and handle the self addressed message immediately.
             /\  LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # NoProc /\ Conflicts(id,id2)}}
                     D == { id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp'[id]) ) }
                 IN
@@ -309,12 +315,15 @@ Submit(s, p, id) ==
                     /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> p])
                             
                         IN
-                        /\ msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } \cup {PreAcceptOKMsg(s, p, s, p,id,finalTs,D)}
                         /\ ApplyPreAccept(s,p,id,tx,finalTs,D)
+                        \* I send PreAcceptMsg to everyone except myself, for my message, I apply the operation and then send the PreAcceptOkMsg directly.
+                        \* This pattern is the same at every point where we broadacst
+                        /\ msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
+                                        \cup { PreAcceptOKMsg(s, p, s, p,id,finalTs,D)}
     /\ UNCHANGED << bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation >> 
 
 
-(* 7–15 HandlePreAccept                                                    *)
+(* 4–12 HandlePreAccept  *)
                    
 
 HandlePreAccept(m) ==
@@ -341,7 +350,7 @@ HandlePreAccept(m) ==
 
 
 
-(* 16–23 HandlePreAcceptOk *)
+(* 13–18 HandlePreAcceptOk *)
 
 HandlePreAcceptOK(s, p, id) ==
     /\ bal[s][p][id] = 0
@@ -378,7 +387,7 @@ HandlePreAcceptOK(s, p, id) ==
     /\ UNCHANGED <<  submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation  >>
        
 
-(* 24–32 HandleAccept                                                      *)
+(* 19–27 HandleAccept *)
                            
 HandleAccept(m) ==
     /\ m.type = TypeAccept
@@ -399,7 +408,7 @@ HandleAccept(m) ==
     /\ UNCHANGED << submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation  >>
 
 
-(* 33–35 HandleAcceptOk *)
+(* 28–30 HandleAcceptOk *)
 
 HandleAcceptOK(s, p, id) ==
     /\ phase[s][p][id] = AcceptedPhase
@@ -418,7 +427,7 @@ HandleAcceptOK(s, p, id) ==
     /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
 
-(* 36–44 HandleCommit *)
+(* 31–38 HandleCommit *)
 
 HandleCommit(m) ==
     /\ m.type = TypeCommit
@@ -438,7 +447,7 @@ HandleCommit(m) ==
        /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, initTimestamp, executed, relation >>
 
 
-(* 45–47 HandleCommitOk *)
+(* 42–44 HandleCommitOk *)
 
 HandleCommitOK(s, p, id) ==
     /\ phase[s][p][id] = CommittedPhase
@@ -454,7 +463,7 @@ HandleCommitOK(s, p, id) ==
         /\ ApplyStable(s,p,bal[s][p][id],id)
     /\ UNCHANGED << bal, txn, dep, ts, abal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
-(* 48–50 HandleStable *)
+(* 39–41 HandleStable *)
 
 HandleStable(m) ==
     /\ m.type = TypeStable
@@ -470,7 +479,7 @@ HandleStable(m) ==
         /\ UNCHANGED << bal, submitted, initCoord, dep, abal, txn, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
 
-(* 51–54 StartRecover *)
+(* 45–48 StartRecover *)
 
 StartRecover(s,p,id) ==
     /\ recovered[s][p][id] < NumberOfRecoveryAttempts
@@ -507,7 +516,7 @@ StartRecover(s,p,id) ==
     /\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, TXvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal, executed, relation>>
 
 
-(* 55–68 HandleRecover *)
+(* 49–60 HandleRecover *)
 
 HandleRecover(m) ==
     /\  m.type = TypeRecover
@@ -542,7 +551,7 @@ HandleRecover(m) ==
     /\ UNCHANGED << submitted, initCoord, dep, abal, ts, phase, recovered, TXvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal, initTimestamp, Qvar, executed, relation  >>
 
 
-(* 69–85 HandleRecoverOK *)
+(* 61–79 + 90-91 HandleRecoverOK *)
 
 HandleRecoverOK(s, p, id) ==
     /\  LET quorumOfMessages ==
@@ -648,7 +657,7 @@ HandleRecoverOK(s, p, id) ==
     /\ UNCHANGED <<submitted, initCoord, recovered, initTimestamp, executed, relation >>
 
                  
-(* 86–95 HandlePostWaiting *)
+(* 80–89 HandlePostWaiting *)
                     
 HandlePostWaiting(s, p, id) ==
     /\  recoveryAttemptBal[s][p][id] = bal[s][p][id] \* I'm not getting the ballot of corresponding recovery attempt from messages here so I use this extra variable to check ballot.
