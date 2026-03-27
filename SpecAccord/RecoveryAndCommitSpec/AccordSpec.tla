@@ -481,10 +481,7 @@ StartRecover(s,p,id) ==
     /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE] 
     /\ recovered' = [recovered EXCEPT ![s][p][id] = recovered[s][p][id] + 1]
     \* Ballots owned by p are of the form k*N + p. This k computation is just to get the smallest k * N + p larger than the current ballot
-    \* something quite suspiscious here : Since 2 processes from different shards can have the same id, the notion of ballot ownership by p breaks
-    \* This doesn't create bugs with my logic because in the case that the current ballot is 'owned' by p (ie already of the form k * N + p),
-    \* it will still take the next one. (Actually, I guess ballot ownership doesn't matter at all for safety, but simultaneous recovery attempts 
-    \* on the same ballot (by different processes) can block each other, I should fix this then).
+    \* Since 2 processes from different shards can have the same id I compute a new p unique id (N * Nshards of them in total) and use that.
     /\  LET Ntotal == N * Nshards IN
         LET pUnique == (s - 1) * N + p  IN
         LET k == ((bal[s][p][id] - pUnique) \div Ntotal) + 1 IN
