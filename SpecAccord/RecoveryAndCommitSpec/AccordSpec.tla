@@ -478,7 +478,11 @@ StartRecover(s,p,id) ==
     /\ s \in idToShard[id]
     /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE] 
     /\ recovered' = [recovered EXCEPT ![s][p][id] = recovered[s][p][id] + 1]
-    \* Ballots owned by p are of the form k*N + p.
+    \* Ballots owned by p are of the form k*N + p. This k computation is just to get the smallest k * N + p larger than the current ballot
+    \* something quite suspiscious here : Since 2 processes from different shards can have the same id, the notion of ballot ownership by p breaks
+    \* This doesn't create bugs with my logic because in the case that the current ballot is 'owned' by p (ie already of the form k * N + p),
+    \* it will still take the next one. (Actually, I guess ballot ownership doesn't matter at all for safety, but simultaneous recovery attempts 
+    \* on the same ballot (by different processes) can block each other, I should fix this then).
     /\  LET k == ((bal[s][p][id] - p + N) \div N) IN
         LET b == k * N + p
         IN
@@ -559,7 +563,6 @@ HandleRecoverOK(s, p, id) ==
                 Abals == { m.body.abalq : m \in quorumOfMessages }
                 bmax == CHOOSE val \in Abals : \A val2 \in Abals : val >= val2
                 U == { m \in quorumOfMessages : m.body.abalq = bmax }
-                \* Dq is used when sending an accept message, to treat the self addressed one because we need it when sending AcceptOK.
             IN
             /\  IF (\E n \in U :
                         /\ n.body.phaseq  = StablePhase)
@@ -651,7 +654,7 @@ HandleRecoverOK(s, p, id) ==
 (* 80–89 HandlePostWaiting *)
                     
 HandlePostWaiting(s, p, id) ==
-    /\  recoveryAttemptBal[s][p][id] = bal[s][p][id] \* I'm not getting the ballot of corresponding recovery attempt from messages here so I use this extra variable to check ballot.
+    /\  recoveryAttemptBal[s][p][id] = bal[s][p][id] \* I'm not getting the ballot of corresponding recovery attempt from messages here so I use this extra variable to check we havn't moved ballot.
     /\  postWaitingFlag[s][p][id] = TRUE
     /\  LET W == Wvar[s][p][id]
             b == bal[s][p][id] 
@@ -678,6 +681,9 @@ HandlePostWaiting(s, p, id) ==
             Case3 ==
                 (\E m \in msgs :
                     /\ m.type = TypeRecoverOK
+                    /\ m.body.b = b
+                    /\ m.body.id = id
+                    /\ m.to = p
                     /\ <<m.shardfrom,m.from>> \notin Q
                     /\ (m.body.phaseq \in {StablePhase,CommittedPhase,AcceptedPhase} \/ <<m.shardfrom,m.from>> = initCoord[id]))
         IN 
@@ -696,6 +702,8 @@ HandlePostWaiting(s, p, id) ==
                 /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,initTimestamp[id],D,tx) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   }
                             \cup {AcceptOKMsg(s,p,s,p,bal[s][p][id],id,Dq)}
                 /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
+        \* If I use case 3 here the interpreter doesn't know what m is, which I need in the following. This begs the question why am I
+        \* define the cases seperately in the first place : I need to specify that the state doesn't change when none of the 3 cases are verified. (at the end of this handler)
         \/  (\E m \in msgs :
                     /\ m.type = TypeRecoverOK
                     /\ m.body.b = b
