@@ -1,6 +1,10 @@
 ---- MODULE AccordSpec ----
 EXTENDS TLC, Naturals, Sequences, FiniteSets
 
+(***************************************************************************)
+(* Variables                                                               *)
+(***************************************************************************)
+
 VARIABLES
     bal,           \* bal[s][p][id] = current ballot known by in shard s by process p for command id
     phase,         \* phase[s][p][id] ∈ {"none","preaccepted","accepted","committed"}
@@ -25,59 +29,65 @@ VARIABLES
 vars == << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation >>
 
 
+(***************************************************************************)
+(* Constants :these are for the most part defined in the configuration file*)
+(***************************************************************************)
+
 
 CONSTANTS
     Shards,     \* The set of shards 
     Proc,       \* The set of processes, all shards use same numbered processes
     Id,         \* The set of command IDs
-    F, 
+    F,         
     E,
     Bottom,     \* The bottom value for the command payload
     NoProc,      \* A special value representing no process
-    Nop,
-    NumberOfRecoveryAttempts
+    Nop,           \* special Nop payload
+    NumberOfRecoveryAttempts \* constant used to cap the amount of recovery attempts, this cap is per process command pair.
 
-\*Phases
-(* Initial = 1
-   PreAccepted = 2
-   Accepted = 3
-   Committed = 4
-   Stable = 5 *)
+\*Phase constants
+(* Initial = 1, PreAccepted = 2, Accepted = 3, Committed = 4, Stable = 5 *)
 CONSTANTS 
     InitialPhase, PreAcceptedPhase, AcceptedPhase, CommittedPhase, StablePhase
 
-\* fast or slow path for commit messages
+\* fast or slow path values for commit messages
 CONSTANTS
     Fast, Slow
 
-ASSUME E<=F
+\* Constants for Message types
+(* 1 = PreAccept, 2 = PreAcceptOK, 3 = Accept, 4 = AcceptOK, 5 = Commit, 6 = CommitOK, 7 = Stable, 8 = Recover, 9 = RecoverOK *)
+CONSTANTS 
+TypePreAccept, TypePreAcceptOK, TypeAccept, TypeAcceptOK, TypeCommit, TypeCommitOK, TypeStable, TypeRecover, TypeRecoverOK 
 
-Init == 
-    /\ bal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
-    /\ phase = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> InitialPhase]]]
-    /\ txn = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> Bottom]]]
-    /\ dep = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
-    /\ ts = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> [t |-> 0, id |-> 0]]] ]
-    /\ abal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
-    /\ msgs = {}
-    /\ submitted = {}
-    /\ initCoord = [id \in Id |-> <<0, NoProc>>]
-    /\ recovered = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
-    /\ Wvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
-    /\ TXvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> Bottom]]]
-    /\ Dvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
-    /\ postWaitingFlag = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> FALSE]]]
-    /\ recoveryAttemptBal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
-    /\ initTimestamp = <<[id |-> NoProc, t |-> 0], [id |-> NoProc, t |-> 2], [id |-> NoProc , t |-> 1]>>
-    /\ Qvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
-    /\ executed = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
-    /\ relation = [id1 \in Id |-> [id2 \in Id |-> 0]]
+\* The next three constants cannot be parsed by the config file because it has a reduced grammar, they are defined here,
+\* to change the configuration ( specifically to change the number/config of the transactions), the must be changed here.
+
+\* constant that maps to each command that command's the set of shards,
+idToShard == [i \in {1,2,3} |->
+                  CASE i = 1 -> {1,2,3}
+                    [] i = 2 -> {1,3}
+                    [] i = 3 -> {2}]
+
+\*constant to define the conflict relation,
+ConflictPairs == {
+    <<1, 2>>,
+    <<1, 3>>
+}
+
+\* Constant to define initial timestamp values for the commands, injected into initTimestamp var, this value can be redefined on submission when necessary
+\* (a single process can't submit a second command with a lower timestamp than the first), the id is defined on submission.
+initTimestampConstant == <<[id |-> NoProc, t |-> 0], [id |-> NoProc, t |-> 2], [id |-> NoProc , t |-> 1]>>
+
+(***************************************************************************)
+(* Helper definitions                                                      *)
+(***************************************************************************)
 
 
 N == Cardinality(Proc)
 
 Max(a, b) == IF a > b THEN a ELSE b
 
+\* Relations on timestamps
 LessThanTs(ts1,ts2) ==
     IF ts1.id = NoProc THEN TRUE
     ELSE IF ts2.id = NoProc THEN FALSE
@@ -92,16 +102,6 @@ MaxTsInSet(S) ==
     CHOOSE ts1 \in S : \A ts2 \in S :
                             ts2 # ts1 => LessThanTs(ts2, ts1)
 
-
-idToShard == [i \in {1,2,3} |->
-                  CASE i = 1 -> {1,2,3}
-                    [] i = 2 -> {1,3}
-                    [] i = 3 -> {1,2}]
-
-ConflictPairs == {
-    <<1, 2>>,
-    <<1, 3>>
-}
 
 ConflictingPayload(id1, id2) ==
     <<id1, id2>> \in ConflictPairs \/ <<id2, id1>> \in ConflictPairs
@@ -133,35 +133,38 @@ SeenIds(s,p) ==
         \/ txn[s][p][id] # Bottom
         \/ \E id2 \in Id : id \in dep[s][p][id2]}
 
-        
-
-
-
 
 ASSUME N >= Max(2*E+F-1, 2*F+1)
 
 
-\* Message types
-(* 1 = PreAccept
-2 = PreAcceptOK
-3 = Accept
-4 = AcceptOK
-5 = Commit
-6 = CommitOK
-7 = Stable
-8 = Recover
-9 = RecoverOK
-*)
-CONSTANTS 
-TypePreAccept,
-TypePreAcceptOK,
-TypeAccept,     
-TypeAcceptOK,    
-TypeCommit,
-TypeCommitOK,
-TypeStable,
-TypeRecover,
-TypeRecoverOK 
+(***************************************************************************)
+(* Init of all the variables                                               *)
+(***************************************************************************)
+
+Init == 
+    /\ bal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
+    /\ phase = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> InitialPhase]]]
+    /\ txn = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> Bottom]]]
+    /\ dep = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
+    /\ ts = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> [t |-> 0, id |-> 0]]] ]
+    /\ abal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
+    /\ msgs = {}
+    /\ submitted = {}
+    /\ initCoord = [id \in Id |-> <<0, NoProc>>]
+    /\ recovered = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
+    /\ Wvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
+    /\ TXvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> Bottom]]]
+    /\ Dvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
+    /\ postWaitingFlag = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> FALSE]]]
+    /\ recoveryAttemptBal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
+    /\ initTimestamp = initTimestampConstant
+    /\ Qvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
+    /\ executed = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
+    /\ relation = [id1 \in Id |-> [id2 \in Id |-> 0]]
+
+(***************************************************************************)
+(* Message constructors                                                    *)
+(***************************************************************************)
 
 Message(type, shardfrom, from, shardto, to, body) ==
     [ type |-> type, shardfrom |-> shardfrom, from |-> from, to |-> to, shardto |-> shardto, body |-> body ]
@@ -275,12 +278,11 @@ ApplyRecover(sp, p, b, id, tx) ==
 
 
 (***************************************************************************)
-(* Message handling Actions                                                  *)
+(* Message handling Actions                                                *)
 (***************************************************************************)
 
-(***************************************************************************)
+
 (* 4–6 Submit                                                              *)
-(***************************************************************************)
 
 Submit(s, p, id) ==
     /\  id \notin submitted
@@ -307,9 +309,9 @@ Submit(s, p, id) ==
                         /\ ApplyPreAccept(s,p,id,tx,finalTs,D)
     /\ UNCHANGED << bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation >> 
 
-(***************************************************************************)
+
 (* 7–15 HandlePreAccept                                                    *)
-(***************************************************************************)                    
+                   
 
 HandlePreAccept(m) ==
     /\  m.type = TypePreAccept
@@ -334,10 +336,8 @@ HandlePreAccept(m) ==
     /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, TXvar, Dvar, Wvar, Qvar, executed, relation>>
 
 
-(***************************************************************************)
-(* 16–23 HandlePreAcceptOk                                                      *)
-(***************************************************************************)
 
+(* 16–23 HandlePreAcceptOk                                                  *)
 
 HandlePreAcceptOK(s, p, id) ==
     /\ bal[s][p][id] = 0
@@ -374,10 +374,8 @@ HandlePreAcceptOK(s, p, id) ==
     /\ UNCHANGED <<  submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation  >>
        
 
-(***************************************************************************)
 (* 24–32 HandleAccept                                                      *)
-(***************************************************************************)                            
-
+                           
 HandleAccept(m) ==
     /\ m.type = TypeAccept
     /\  LET s == m.shardto
@@ -396,9 +394,8 @@ HandleAccept(m) ==
             /\ msgs' = (msgs \cup { AcceptOKMsg(s, p, sq, q, b, id, Dq) }) \ {m}
     /\ UNCHANGED << submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation  >>
 
-(***************************************************************************)
-(* 33–35 HandleAcceptOk                                                    *)
-(***************************************************************************)
+
+(* 33–35 HandleAcceptOk *)
 
 HandleAcceptOK(s, p, id) ==
     /\ phase[s][p][id] = AcceptedPhase
@@ -416,9 +413,8 @@ HandleAcceptOK(s, p, id) ==
             /\ ApplyCommit(s, p, bal[s][p][id], id, ts[s][p][id], D, txn[s][p][id])
     /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
-(***************************************************************************)
-(* 36–44 HandleCommit                                                      *)
-(***************************************************************************)
+
+(* 36–44 HandleCommit *)
 
 HandleCommit(m) ==
     /\ m.type = TypeCommit
@@ -438,10 +434,7 @@ HandleCommit(m) ==
        /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, initTimestamp, executed, relation >>
 
 
-
-(***************************************************************************)
-(* 45–47 HandleCommitOk                                                    *)
-(***************************************************************************)
+(* 45–47 HandleCommitOk *)
 
 HandleCommitOK(s, p, id) ==
     /\ phase[s][p][id] = CommittedPhase
@@ -457,9 +450,7 @@ HandleCommitOK(s, p, id) ==
         /\ ApplyStable(s,p,bal[s][p][id],id)
     /\ UNCHANGED << bal, txn, dep, ts, abal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
-(***************************************************************************)
-(* 48–50 HandleStable                                                      *)
-(***************************************************************************)
+(* 48–50 HandleStable *)
 
 HandleStable(m) ==
     /\ m.type = TypeStable
@@ -474,9 +465,8 @@ HandleStable(m) ==
         /\ msgs' = msgs \ {m}
         /\ UNCHANGED << bal, submitted, initCoord, dep, abal, txn, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
 
-(***************************************************************************)
-(* 51–54 StartRecover                                                      *)
-(***************************************************************************)
+
+(* 51–54 StartRecover *)
 
 StartRecover(s,p,id) ==
     /\ recovered[s][p][id] < NumberOfRecoveryAttempts
@@ -512,9 +502,8 @@ StartRecover(s,p,id) ==
                      ELSE msgs' =  msgs \cup {RecoverOkMsg(s,p,s,p,b,id,abal[s][p][id],txn[s][p][id],ts[s][p][id],D,phase[s][p][id],FALSE,W,WP)} \cup { RecoverMsg(s,p,to[1], to[2],b,id,Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }  }
     /\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, TXvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal, executed, relation>>
 
-(***************************************************************************)
-(* 55–68 HandleRecover                                                     *)
-(***************************************************************************)
+
+(* 55–68 HandleRecover *)
 
 HandleRecover(m) ==
     /\  m.type = TypeRecover
@@ -548,9 +537,8 @@ HandleRecover(m) ==
                 ELSE msgs' = (msgs \cup {RecoverOkMsg(s,p,sq,q,b,id,abal[s][p][id],txn'[s][p][id],ts[s][p][id],D,phase[s][p][id],FALSE,W,WP)}) \ {m}
     /\ UNCHANGED << submitted, initCoord, dep, abal, ts, phase, recovered, TXvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal, initTimestamp, Qvar, executed, relation  >>
 
-(***************************************************************************)
-(* 69–85 HandleRecoverOK                                                   *)
-(***************************************************************************)
+
+(* 69–85 HandleRecoverOK *)
 
 HandleRecoverOK(s, p, id) ==
     /\  LET quorumOfMessages ==
@@ -654,10 +642,9 @@ HandleRecoverOK(s, p, id) ==
                         /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } \cup {AcceptOKMsg(s,p,s,p,bal[s][p][id],id,Dq)} 
                         /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
     /\ UNCHANGED <<submitted, initCoord, recovered, initTimestamp, executed, relation >>
-            
-(***************************************************************************)
-(* 86–95 HandlePostWaiting                                                 *)
-(***************************************************************************)
+
+                 
+(* 86–95 HandlePostWaiting *)
                     
 HandlePostWaiting(s, p, id) ==
     /\  recoveryAttemptBal[s][p][id] = bal[s][p][id] \* I'm not getting the ballot of corresponding recovery attempt from messages here so I use this extra variable to check ballot.
