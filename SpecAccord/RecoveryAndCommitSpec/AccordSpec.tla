@@ -87,6 +87,7 @@ initTimestampConstant == <<[id |-> <<0, NoProc>>, t |-> 0], [id |-> <<0, NoProc>
 (***************************************************************************)
 
 N == Cardinality(Proc)
+Nshards == Cardinality(Shards)
 
 Max(a, b) == IF a > b THEN a ELSE b
 
@@ -484,8 +485,10 @@ StartRecover(s,p,id) ==
     \* This doesn't create bugs with my logic because in the case that the current ballot is 'owned' by p (ie already of the form k * N + p),
     \* it will still take the next one. (Actually, I guess ballot ownership doesn't matter at all for safety, but simultaneous recovery attempts 
     \* on the same ballot (by different processes) can block each other, I should fix this then).
-    /\  LET k == ((bal[s][p][id] - p + N) \div N) IN
-        LET b == k * N + p
+    /\  LET Ntotal == N * Nshards IN
+        LET pUnique == (s - 1) * N + p  IN
+        LET k == ((bal[s][p][id] - pUnique) \div Ntotal) + 1 IN
+        LET b == k * Ntotal + pUnique
         IN
         /\  ApplyRecover(s, p, b, id, txn[s][p][id])
         /\  LET D == IF phase[s][p][id] # InitialPhase THEN dep[s][p][id]
