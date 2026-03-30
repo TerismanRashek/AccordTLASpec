@@ -677,8 +677,7 @@ HandlePostWaiting(s, p, id) ==
                         bal1 == w[2]
                     IN /\ phase[s][p][id1] \in {CommittedPhase,StablePhase}
                     /\ abal[s][p][id1] >= bal1
-                    /\ txn[s][p][id1] # Nop
-                    /\ (LessThanTs(ts[s][p][id1], initTimestamp[id]) \/ id \in dep[s][p][id1])
+                    /\ (txn[s][p][id1] = Nop \/ LessThanTs(ts[s][p][id1], initTimestamp[id]) \/ id \in dep[s][p][id1])
             Case3 ==
                 (\E m \in msgs :
                     /\ m.type = TypeRecoverOK
