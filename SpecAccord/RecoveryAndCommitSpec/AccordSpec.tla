@@ -235,9 +235,15 @@ RecoverOkMsg(sp, p, sq, q,b,id,abalq,txq,tq,depq,phaseq,rejectq,Wq,WPq) ==
 (* State changing Actions                                                  *)
 (***************************************************************************)
 
-\*These operations are the insides of all the 'when received' a single message operations, this split allows me to handle self addressed
-\* messages by simply calling the corresponding Apply operation. I also have an operation for the local computations done in every handler.
-\* It's not possible to write a proper function that will change the state and return the result of the computations I need, so I have a operator for the computations and another to describe the next state. 
+\* These operators are the insides of all the 'when received' a single message operations, this split allows me to handle self addressed
+\* messages by calling the corresponding Apply operation. The computations operation is used for the resulting message we have to send.
+\* For example, after we submit a command, we :
+\*        - send PreAccept messages to everyone except ourselves
+\*        - apply the PreAccept operation on ourselves
+\*        - Compute the t and D values (see pseudocode)
+\*        - send PreAcceptOk(id,t,D) to ourselves.
+
+\* It's not possible to write a proper function that will apply the state change and also return the result of the computations in tla+, so I have a operator for the computations and another to describe the next state. 
 
 PreAcceptComputations(s, p, id, tx) ==
     LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id,id2)}}
@@ -272,7 +278,7 @@ ApplyAccept(sp, p, b,id,t,D,tx) ==
     /\  dep'  = [dep  EXCEPT ![sp][p][id] = D]
     /\  phase' = [phase EXCEPT ![sp][p][id] = AcceptedPhase]
 
-\* no local computations in commit handler
+\* no local computations when receiving a commit message
 
 ApplyCommit(sp, p, b,id,t,D,tx) ==
     /\ bal[sp][p][id] = b
@@ -283,7 +289,7 @@ ApplyCommit(sp, p, b,id,t,D,tx) ==
     /\ dep' = [dep EXCEPT ![sp][p][id] = D]
     /\ phase' = [phase EXCEPT ![sp][p][id] = CommittedPhase]
 
-\* no local computations in stable handler
+\* no local computations when receiving a stable message
 
 ApplyStable(sp, p, b,id) ==
         /\ bal[sp][p][id] = b
@@ -320,14 +326,12 @@ ApplyRecover(sp, p, b, id, tx) ==
 (* Message handling Actions                                                *)
 (***************************************************************************)
 
-
-
 (* 1–3 Submit *)
 
 Submit(s, p, id) ==
     /\  id \notin submitted
-    \* I am checking that the initial coordinator is part of the shards of that transaction. It seems like a reasonable assumption,
-    \* if I remove it, I would address a 'self sent message' that does not exist. This does not seem to actually create a bug(minimal testing was done) 
+    \* I am checking that the initial coordinator is part of the shards for that transaction. It seems like a reasonable assumption,
+    \* if I remove it, I would address a 'self sent message' that does not exist, altough this does not seem to actually create a bug (minimal testing was done). 
     /\  s \in idToShard[id] 
     /\  LET tx == id     \* I just use id as command payload, the actual payload does not matter here. Conflict relation is defined on these id integers.
             earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = <<s,p>> /\ LessThanTs(initTimestamp[id],initTimestamp[id1])}}
@@ -341,9 +345,7 @@ Submit(s, p, id) ==
             /\ ts' = [ts EXCEPT ![s][p][id] = initTimestamp'[id]]
             /\  LET computations == PreAcceptComputations(s,p,id,tx)
                 IN
-                /\ ApplyPreAccept(s,p,id,tx,computations.finalTs,computations.D)
-                \* I send PreAcceptMsg to everyone except myself. To handle the message I should send to myself, I apply the operation and then send the PreAcceptOkMsg directly.
-                \* This pattern is the same at every point where we broadacst, this pattern is used because of the assumption that self addressed messages are handled immediately.
+                /\ ApplyPreAccept(s,p,id,tx,computations.finalTs,computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
                 /\ msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                 \cup { PreAcceptOKMsg(s, p, s, p,id,computations.finalTs,computations.D)}
     /\ UNCHANGED << bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar >> 
@@ -351,7 +353,6 @@ Submit(s, p, id) ==
 
 (* 4–12 HandlePreAccept  *)
                    
-
 HandlePreAccept(m) ==
     /\  m.type = TypePreAccept
     /\  LET s == m.shardto
@@ -368,7 +369,6 @@ HandlePreAccept(m) ==
             /\ ApplyPreAccept(s,p,id,tx,computations.finalTs,D0)
             /\ msgs' = (msgs \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }) \ {m}
     /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Wvar, Qvar>>
-
 
 
 (* 13–18 HandlePreAcceptOk *)
