@@ -238,6 +238,16 @@ RecoverOkMsg(sp, p, sq, q,b,id,abalq,txq,tq,depq,phaseq,rejectq,Wq,WPq) ==
 \*These operations are the insides of all the 'when received' a single message operations, this split allows me to handle self addressed
 \* messages by simply calling the corresponding Apply operation. 
 
+PreAcceptComputations(s, p, id, tx) ==
+    LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id,id2)}}
+        D == { id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp'[id]) ) }
+    IN
+    LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
+    IN
+    LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> <<s,p>>])
+    IN
+    [finalTs |-> finalTs, D |-> D]
+
 ApplyPreAccept(sp, p, id, tx, finalTs, D0) ==
     /\  bal[sp][p][id] = 0
     /\  phase[sp][p][id] = InitialPhase
@@ -282,6 +292,7 @@ ApplyRecover(sp, p, b, id, tx) ==
 (***************************************************************************)
 
 
+
 (* 1–3 Submit *)
 
 Submit(s, p, id) ==
@@ -289,7 +300,7 @@ Submit(s, p, id) ==
     \* I am checking that the initial coordinator is part of the shards of that transaction. It seems like a reasonable assumption,
     \* if I remove it, I would address a 'self sent message' that does not exist. This does not seem to actually create a bug(minimal testing was done) 
     /\  s \in idToShard[id] 
-    /\  LET tx == id        \* I just use Id as command payload, the actual payload does not matter. Conflict relation is defined on these id integers.
+    /\  LET tx == id     \* I just use id as command payload, the actual payload does not matter here. Conflict relation is defined on these id integers.
             earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = <<s,p>> /\ LessThanTs(initTimestamp[id],initTimestamp[id1])}}
         IN 
         \* making sure that this process has not already submitted a command with a greater timestamp than the one we are currently submitting.
@@ -299,20 +310,13 @@ Submit(s, p, id) ==
             /\ submitted' = submitted \cup {id}
             /\ initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
             /\ ts' = [ts EXCEPT ![s][p][id] = initTimestamp'[id]]
-            \* This part has computations of the handle pre accept part because we have to immediately handle the self addressed message (and send the resulting PreAcceptOk message), this is a recurring pattern whenever we broadcast and handle the self addressed message immediately.
-            /\  LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id,id2)}}
-                    D == { id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp'[id]) ) }
+            /\  LET vals == PreAcceptComputations(s,p,id,tx)
                 IN
-                /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
-                    IN
-                    /\  LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> <<s,p>>])
-                            
-                        IN
-                        /\ ApplyPreAccept(s,p,id,tx,finalTs,D)
-                        \* I send PreAcceptMsg to everyone except myself, for my message, I apply the operation and then send the PreAcceptOkMsg directly.
-                        \* This pattern is the same at every point where we broadacst
-                        /\ msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
-                                        \cup { PreAcceptOKMsg(s, p, s, p,id,finalTs,D)}
+                /\ ApplyPreAccept(s,p,id,tx,vals.finalTs,vals.D)
+                \* I send PreAcceptMsg to everyone except myself. To handle the message I should send to myself, I apply the operation and then send the PreAcceptOkMsg directly.
+                \* This pattern is the same at every point where we broadacst, this pattern is used because of the assumption that self addressed messages are handled immediately.
+                /\ msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, vals.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
+                                \cup { PreAcceptOKMsg(s, p, s, p,id,vals.finalTs,vals.D)}
     /\ UNCHANGED << bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar >> 
 
 
@@ -329,16 +333,10 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        /\  LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id,id2)}}
-                D == { id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
+        /\  LET vals == PreAcceptComputations(s,p,id,tx)
             IN
-            /\  LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
-                IN 
-                /\  txn' = [txn EXCEPT ![s][p][id] = tx]
-                /\  LET finalTs == MaxTs(initTimestamp[id], [t |-> tval, id |-> <<sq,q>>])
-                    IN
-                    /\ ApplyPreAccept(s,p,id,tx,finalTs,D0)
-                    /\ msgs' = (msgs \cup { PreAcceptOKMsg(s, p, sq, q, id, finalTs, D) }) \ {m}
+            /\ ApplyPreAccept(s,p,id,tx,vals.finalTs,D0)
+            /\ msgs' = (msgs \cup { PreAcceptOKMsg(s, p, sq, q, id, vals.finalTs, vals.D) }) \ {m}
     /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, initTimestamp, TXvar, Dvar, Wvar, Qvar>>
 
 
@@ -488,6 +486,7 @@ StartRecover(s,p,id) ==
         LET b == k * Ntotal + pUnique
         IN
         /\  ApplyRecover(s, p, b, id, txn[s][p][id])
+        \* again here, the computation done in recover handler is done here in order to send the recover OK msg to myself
         /\  LET D == IF phase[s][p][id] # InitialPhase THEN dep[s][p][id]
                      ELSE {id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
             IN
