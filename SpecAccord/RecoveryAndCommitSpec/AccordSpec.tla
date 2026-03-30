@@ -291,8 +291,8 @@ ApplyStable(sp, p, b,id) ==
         /\ phase' = [phase EXCEPT ![sp][p][id] = StablePhase]
 
 RecoverComputations(s,p,id) ==
-    LET D == IF phase[s][p][id] # InitialPhase THEN dep[s][p][id]
-                ELSE {id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
+    LET D == IF phase[s][p][id] \notin {InitialPhase,PreAcceptedPhase} THEN dep[s][p][id]
+                ELSE dep[s][p][id] \cup {id2 \in SeenIds(s,p) : (Conflicts(id,id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
     IN
     LET S == {id2 \in SeenIds(s,p) : (id2 # id /\ Conflicts(id,id2) /\ txn[s][p][id2] # Nop /\ id \notin dep[s][p][id2]
             /\(   (phase[s][p][id2] \in {CommittedPhase, StablePhase} /\ LessThanTs(initTimestamp[id], ts[s][p][id2]))  
