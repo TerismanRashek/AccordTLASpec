@@ -755,6 +755,7 @@ HandlePostWaiting(s, p, id) ==
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
             )
 
+        \* If none of the cases are correct, the model checker still has to be explicitly told that the next state is unchanged.
         \/  /\ ~Case1 /\ ~Case2 /\ ~Case3
             /\ UNCHANGED << msgs, postWaitingFlag, bal, dep, phase, abal, txn, ts >>
                     
