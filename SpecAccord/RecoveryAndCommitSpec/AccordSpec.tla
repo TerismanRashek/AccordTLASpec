@@ -476,9 +476,9 @@ StartRecover(p,id) ==
                 IN
                 IF S # {}
                 THEN IF phase[p][id] # InitialPhase THEN msgs' = (msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],txn[p][id],ts[p][id],D,phase[p][id],TRUE,W,WP)} \cup  { RecoverMsg(p,q,b,id,txn[p][id]) : q \in Proc \ {p} })
-                     ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],txn[p][id],ts[p][id],D,phase[p][id],TRUE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
+                     ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],Nop,ts[p][id],D,phase[p][id],TRUE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
                 ELSE IF phase[p][id] # InitialPhase THEN msgs' = (msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],txn[p][id],ts[p][id],D,phase[p][id],FALSE,W,WP)} \cup  { RecoverMsg(p,q,b,id,txn[p][id]) : q \in Proc \ {p} })
-                     ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],txn[p][id],ts[p][id],D,phase[p][id],FALSE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
+                     ELSE msgs' =  msgs \cup {RecoverOkMsg(p,p,b,id,abal[p][id],Nop,ts[p][id],D,phase[p][id],FALSE,W,WP)} \cup { RecoverMsg(p,q,b,id,Nop) : q \in Proc \ {p} }
     /\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, TXvar, Dvar, initTimestamp, Qvar, recoveryAttemptBal, executed, relation>>
 
 (***************************************************************************)
@@ -642,8 +642,7 @@ HandlePostWaiting(p, id) ==
                         bal1 == w[2]
                     IN /\ phase[p][id1] \in {CommittedPhase,StablePhase}
                     /\ abal[p][id1] >= bal1
-                    /\ txn[p][id1] # Nop
-                    /\ (LessThanTs(ts[p][id1], initTimestamp[id]) \/ id \in dep[p][id1])
+                    /\ (txn[p][id1] = Nop \/ LessThanTs(ts[p][id1], initTimestamp[id]) \/ id \in dep[p][id1])
             Case3 ==
                 (\E m \in msgs :
                     /\ m.type = TypeRecoverOK
