@@ -385,7 +385,6 @@ HandlePreAcceptOK(s, p, id) ==
             }
         IN
         /\ IsQuorum(quorumOfMessages,id) 
-        \* I build the set of fast quorums from the messages, check if there is at least one, and CHOOSE it deterministically
         /\  LET largestFastQuorum ==
                 { m \in quorumOfMessages : m.body.tq = initTimestamp[id]  }
             IN
