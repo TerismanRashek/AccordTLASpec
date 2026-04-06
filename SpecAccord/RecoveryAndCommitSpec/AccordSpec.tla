@@ -324,7 +324,6 @@ Submit(p, id) ==
             /\ submitted' = submitted \cup {id}
             /\ initCoord' = [initCoord EXCEPT ![id] = p]
             /\ ts' = [ts EXCEPT ![p][id] = initTimestamp'[id]]
-            \* This part has computations of the handle pre accept part because we have to immediately handle the self addressed message, this is a recurring pattern whenever we broadcast.
             /\  LET computations == PreAcceptComputations(p,id,tx)
                 IN
                 /\ ApplyPreAccept(p,id,tx,computations.finalTs,computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
@@ -367,8 +366,7 @@ HandlePreAcceptOK(p, id) ==
                     /\ m.to = p
             }
         IN
-        /\ IsQuorumSized(quorumOfMessages)
-        \* I build the set of fast quorums from the messages, check if there is at least one, and CHOOSE it deterministically
+        /\  IsQuorumSized(quorumOfMessages)
         /\  LET largestFastQuorum ==
                 { m \in quorumOfMessages : m.body.tq = initTimestamp[id]  }
             IN
