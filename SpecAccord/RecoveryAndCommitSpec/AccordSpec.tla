@@ -355,7 +355,6 @@ HandlePreAccept(m) ==
 (* 16–23 HandlePreAcceptOk                                                      *)
 (***************************************************************************)
 
-
 HandlePreAcceptOK(p, id) ==
     /\ bal[p][id] = 0
     /\ phase[p][id] = PreAcceptedPhase
@@ -688,6 +687,8 @@ HandlePostWaiting(p, id) ==
                 /\ msgs' = msgs \cup { AcceptMsg(p,q,bal[p][id],id,initTimestamp[id],D,tx) : q \in Proc \ {p} }
                             \cup {AcceptOKMsg(p,p,bal[p][id],id,computations.Dq)}
                 /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = FALSE]
+        \* If I use the Case3 definition here the interpreter doesn't know what m is, which I need in the following. This begs the question why am I
+        \* define the cases seperately in the first place : I need to specify that the state doesn't change when none of the 3 cases are verified. (at the end of this handler)
         \/  (\E m \in msgs :
                     /\ m.type = TypeRecoverOK
                     /\ m.body.b = b
@@ -788,6 +789,7 @@ Reach(i, j) ==
 
 Acyclicity ==
     \A i \in Id : ~Reach(i, i)
+    
         
 Next ==
     \/ \E m \in msgs :
