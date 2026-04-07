@@ -59,7 +59,7 @@ CONSTANTS
 
 \* fast or slow path values for commit messages
 CONSTANTS
-    Fast, Slow
+    Fast, Slow, Medium
 
 \* Constants for Message types
 (* 1 = PreAccept, 2 = PreAcceptOK, 3 = Accept, 4 = AcceptOK, 5 = Commit, 6 = CommitOK, 7 = Stable, 8 = Recover, 9 = RecoverOK, 10 = TypeRead, 11 = TypeReadOk, 12 = TypeApply *)
@@ -184,19 +184,21 @@ PreAcceptOKMsg(sp, p, sq, q, id, tq, Dq) ==
           tq |-> tq,
           Dq |-> Dq ])
 
-AcceptMsg(sp, p, sq, q, b, id, t, D, tx) ==
+AcceptMsg(sp, p, sq, q, b, id, t, D, tx, pathSpeed) ==
     Message(TypeAccept, sp, p, sq, q,
         [ id   |-> id,
           b  |-> b,
           t |-> t,
           tx |-> tx,
-          D |-> D ])
+          D |-> D,
+          pathSpeed |-> pathSpeed ])
 
-AcceptOKMsg(sp, p, sq, q, b, id, Dq) ==
+AcceptOKMsg(sp, p, sq, q, b, id, Dq, pathSpeed) ==
     Message(TypeAcceptOK, sp, p, sq, q,
         [ id  |-> id,
           b |-> b,
-          Dq |-> Dq ])
+          Dq |-> Dq,
+          pathSpeed |-> pathSpeed ])
 
 CommitMsg(sp, p, sq, q, b, id, t, D, fastOrSlow, tx) ==
     Message(TypeCommit, sp, p, sq, q,
@@ -411,15 +413,23 @@ HandlePreAcceptOK(s, p, id) ==
                     /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], 0, id, initTimestamp[id], D, Fast, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                                                          \cup { StableMsg(s, p, to[1], to[2], 0, id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                     /\ UNCHANGED bal
-            ELSE     
+            ELSE IF IsQuorum(largestFastQuorum,id) THEN
+                    LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in largestFastQuorum }
+                    IN
+                    LET computations == AcceptComputations(s,p,id,initTimestamp[id])
+                    IN 
+                    /\ ApplyAccept(s,p,0,id,initTimestamp[id],D,txn[s][p][id])
+                    /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], 0, id, initTimestamp[id], D, txn[s][p][id],Medium) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }  } 
+                                                         \cup {AcceptOKMsg(s,p,s,p,0,id,computations.Dq,Medium)}
+            ELSE    
                 /\  LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in quorumOfMessages }
                         t == MaxTsInSet({ m.body.tq : m \in quorumOfMessages })
                     IN
                     LET computations == AcceptComputations(s,p,id,t)
                     IN 
                     /\ ApplyAccept(s,p,0,id,t,D,txn[s][p][id])
-                    /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], 0, id, t, D, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }  } 
-                                                         \cup {AcceptOKMsg(s,p,s,p,0,id,computations.Dq)}
+                    /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], 0, id, t, D, txn[s][p][id],Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }  } 
+                                                         \cup {AcceptOKMsg(s,p,s,p,0,id,computations.Dq,Slow)}
     /\ UNCHANGED <<  submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar,  executed, executeWaitingFlag, relation  >>
        
 
@@ -436,11 +446,12 @@ HandleAccept(m) ==
             t  == m.body.t
             D  == m.body.D
             tx  == m.body.tx
+            pathSpeed == m.body.pathSpeed
         IN
         LET computations == AcceptComputations(s,p,id,t)
         IN
         /\  ApplyAccept(s,p,b,id,t,D,tx)
-            /\ msgs' = (msgs \cup { AcceptOKMsg(s, p, sq, q, b, id, computations.Dq) }) \ {m}
+            /\ msgs' = (msgs \cup { AcceptOKMsg(s, p, sq, q, b, id, computations.Dq,pathSpeed) }) \ {m}
     /\ UNCHANGED << submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar,  executed, executeWaitingFlag, relation  >>
 
 
@@ -457,10 +468,18 @@ HandleAcceptOK(s, p, id) ==
         IN
         /\ IsQuorum(quorumOfMessages, id)
         /\  LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in quorumOfMessages }
+                n == CHOOSE m \in quorumOfMessages : TRUE
+                pathSpeed == n.body.pathSpeed
             IN
-            /\ msgs' = (msgs \cup {CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], D, Slow, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }  } 
-                             \cup {CommitOkMsg(s,p,s,p,bal[s][p][id],id)} ) \ quorumOfMessages
-            /\ ApplyCommit(s, p, bal[s][p][id], id, ts[s][p][id], D, txn[s][p][id])
+            IF pathSpeed = Slow THEN
+                /\ msgs' = (msgs \cup {CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], D, Slow, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }  } 
+                                \cup {CommitOkMsg(s,p,s,p,bal[s][p][id],id)} ) \ quorumOfMessages
+                /\ ApplyCommit(s, p, bal[s][p][id], id, ts[s][p][id], D, txn[s][p][id])
+            ELSE 
+                /\ ApplyCommit(s,p,bal[s][p][id],id,ts[s][p][id],D,txn[s][p][id])
+                /\ ApplyStable(s,p,bal[s][p][id],id)               
+                /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], D, Fast, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                                                    \cup { StableMsg(s, p, to[1], to[2], bal[s][p][id], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
     /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar,  executed, executeWaitingFlag, relation >>
 
 
@@ -621,16 +640,16 @@ HandleRecoverOK(s, p, id) ==
                             /\  ApplyAccept(s,p,bal[s][p][id],id,n.body.tq,n.body.depq,n.body.txq)
                             /\  LET computations == AcceptComputations(s,p,id,n.body.tq)
                                 IN  
-                                /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,n.body.tq,n.body.depq,n.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }} 
-                                                                     \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq)}
+                                /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,n.body.tq,n.body.depq,n.body.txq,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }} 
+                                                                     \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq,Slow)}
                             /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>> 
                 ELSE IF (initCoord[id] \in Q)
                 THEN 
                         /\ ApplyAccept(s,p,bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop)
                         /\  LET computations == AcceptComputations(s,p,id,ts[s][p][id])
                             IN 
-                            /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } 
-                                                                 \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq)} 
+                            /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } 
+                                                                 \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq,Slow)} 
                         /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
                 ELSE IF ( \A shard \in idToShard[id] :
                             LET Rmax == { n \in quorumOfMessages :
@@ -652,8 +671,8 @@ HandleRecoverOK(s, p, id) ==
                             /\ ApplyAccept(s,p,bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop)
                             /\  LET computations == AcceptComputations(s,p,id,ts[s][p][id])
                                 IN 
-                                /\ msgs' = (msgs\ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }} 
-                                                                    \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq)} 
+                                /\ msgs' = (msgs\ quorumOfMessages) \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }} 
+                                                                    \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq,Slow)} 
                             /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
                         ELSE 
                             LET n == CHOOSE n \in quorumOfMessages : n.body.phaseq = PreAcceptedPhase
@@ -675,8 +694,8 @@ HandleRecoverOK(s, p, id) ==
                     /\ ApplyAccept(s,p,bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop)
                     /\  LET computations == AcceptComputations(s,p,id,ts[s][p][id])
                         IN 
-                        /\ msgs' =   (msgs \ quorumOfMessages)  \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }} 
-                                                                \cup {AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq)} 
+                        /\ msgs' =   (msgs \ quorumOfMessages)  \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }} 
+                                                                \cup {AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq,Slow)} 
                         /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
     /\ UNCHANGED <<submitted, initCoord, recovered, initTimestamp,  executed, executeWaitingFlag, relation >>
 
@@ -720,16 +739,16 @@ HandlePostWaiting(s, p, id) ==
             /\  ApplyAccept(s,p,bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop)
             /\  LET computations == AcceptComputations(s,p,id,ts[s][p][id])
                 IN 
-                /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   }
-                                \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq)}
+                /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   }
+                                \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq,Slow)}
                 /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
 
         \/  /\ Case2
             /\ ApplyAccept(s,p,bal[s][p][id],id,initTimestamp[id],D,tx)
             /\  LET computations == AcceptComputations(s,p,id,initTimestamp[id])
                 IN 
-                /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,initTimestamp[id],D,tx) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   }
-                                \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq)}
+                /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,initTimestamp[id],D,tx,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   }
+                                \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq,Slow)}
                 /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
         \* If I use case 3 here the interpreter doesn't know what m is, which I need in the following. This begs the question why am I
         \* define the cases seperately in the first place : I need to specify that the state doesn't change when none of the 3 cases are verified. (at the end of this handler)
@@ -757,15 +776,15 @@ HandlePostWaiting(s, p, id) ==
                             LET computations == AcceptComputations(s,p,id,m.body.tq)
                             IN 
                             /\ ApplyAccept(s,p,b,id,m.body.tq,m.body.depq,m.body.txq)
-                            /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],b,id,m.body.tq,m.body.depq,m.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } 
-                                            \cup { AcceptOKMsg(s,p,s,p,b,id,computations.Dq)}
+                            /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],b,id,m.body.tq,m.body.depq,m.body.txq,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } 
+                                            \cup { AcceptOKMsg(s,p,s,p,b,id,computations.Dq,Slow)}
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
                         ELSE 
                             LET computations == AcceptComputations(s,p,id,ts[s][p][id])
                             IN 
                             /\ ApplyAccept(s,p,bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop)
-                            /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } 
-                                            \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq)} 
+                            /\ msgs' = msgs \cup { AcceptMsg(s,p,to[1], to[2],bal[s][p][id],id,ts[s][p][id],dep[s][p][id],Nop,Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> }   } 
+                                            \cup { AcceptOKMsg(s,p,s,p,bal[s][p][id],id,computations.Dq,Slow)} 
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
             )
 
