@@ -850,6 +850,7 @@ HandleApply(m) ==
             [id1 \in Id |-> 
                 [id2 \in Id |->
                 IF id1 = id /\ (Conflicts(id, id2) \/ id2 \notin submitted) /\ relation[id1][id2] = 0 THEN 1
+                ELSE IF id2 = id /\ (Conflicts(id1, id) \/ id1 \notin submitted) /\ relation[id1][id2] = 0 THEN 2
                 ELSE relation[id1][id2]
                 ]
             ]
