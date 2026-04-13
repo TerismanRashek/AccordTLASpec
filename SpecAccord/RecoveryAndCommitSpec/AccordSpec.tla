@@ -1,6 +1,13 @@
 ---- MODULE AccordSpec ----
 EXTENDS TLC, Naturals, Sequences, FiniteSets, ExtraConfiguration
 
+(*
+This file contains the TLA + specification for Accord, It provides formal specification as well as
+model checking capabilities to add an extra layer of certainty on the correctness of the algorithm.
+This is the version without multi shard.
+*)
+
+
 (***************************************************************************)
 (* Variables                                                               *)
 (***************************************************************************)
