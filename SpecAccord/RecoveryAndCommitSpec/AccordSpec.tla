@@ -531,9 +531,9 @@ HandleRecover(m) ==
                 WP == computations.WP
             IN
             /\  ApplyRecover(p, b, id, tx)
-            IF S # {}
-            THEN msgs' = (msgs \ {m})  \cup {RecoverOkMsg(p, q, b, id, abal[p][id], txn'[p][id], ts[p][id], D, phase[p][id], TRUE, W, WP)}
-            ELSE msgs' = (msgs \ {m})  \cup {RecoverOkMsg(p, q, b, id, abal[p][id], txn'[p][id], ts[p][id], D, phase[p][id], FALSE, W, WP)}
+            /\  IF S # {}
+                THEN msgs' = (msgs \ {m})  \cup {RecoverOkMsg(p, q, b, id, abal[p][id], txn'[p][id], ts[p][id], D, phase[p][id], TRUE, W, WP)}
+                ELSE msgs' = (msgs \ {m})  \cup {RecoverOkMsg(p, q, b, id, abal[p][id], txn'[p][id], ts[p][id], D, phase[p][id], FALSE, W, WP)}
     /\ UNCHANGED << submitted, initCoord, dep, abal, ts, phase, recovered, TXvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal, initTimestamp, Qvar, executed, relation  >>
 
 (***************************************************************************)
