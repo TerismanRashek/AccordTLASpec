@@ -1,5 +1,12 @@
 ---- MODULE AccordSpec ----
-EXTENDS TLC, Naturals, Sequences, FiniteSets
+EXTENDS TLC, Naturals, Sequences, FiniteSets, ExtraConfiguration
+
+
+(*
+This file contains the TLA + specification for Accord, It provides formal specification as well as
+model checking capabilities to add an extra layer of certainty on the correctness of the algorithm.
+*)
+
 
 (***************************************************************************)
 (* Variables                                                               *)
@@ -51,52 +58,37 @@ CONSTANTS
     NoProc,      \* A special value representing no process
     Nop,           \* special Nop payload
     NumberOfRecoveryAttempts \* constant used to cap the amount of recovery attempts, this cap is per process command pair.
+    \* The following constants are also imported from the ExtraConfiguration module. Look at the file for more details.
+    \* idToShard[id] is the shards for transactions id.
+    \* ConflictPairs is used to define the conflict relation between transactions
+    \* initTimestampConstant gives an initial timestamp value for each transaction
+
 
 \* Constants for Phases
-InitialPhase = 1
-PreAcceptedPhase = 2
-AcceptedPhase = 3
-CommittedPhase = 4
-StablePhase = 5
+InitialPhase == 1
+PreAcceptedPhase == 2
+AcceptedPhase == 3
+CommittedPhase == 4
+StablePhase == 5
 
 \* Constants for Fast Slow or Medium Path
-Fast = 0
-Slow = 1
-Medium = 2
+Fast == 0
+Slow == 1
+Medium == 2
 
 \* Constants for message types
-TypePreAccept = 1
-TypePreAcceptOK = 2
-TypeAccept = 3
-TypeAcceptOK = 4
-TypeCommit = 5
-TypeCommitOK = 6
-TypeStable = 7
-TypeRecover = 8
-TypeRecoverOK = 9
-TypeRead = 10
-TypeReadOk = 11
-TypeApply = 12
-
-
-\* The next three constants cannot be parsed by the config file because it has a reduced grammar, they are defined here,
-\* to change the configuration ( specifically to change the number/config of the transactions), the must be changed here.
-
-\* constant that maps to each command that command's set of shards,
-idToShard == [i \in {1,2,3} |->
-                  CASE i = 1 -> {1,2}
-                    [] i = 2 -> {1}
-                    [] i = 3 -> {2}]
-
-\*constant to define the conflict relation,
-ConflictPairs == {
-    <<1, 2>>,
-    <<1, 3>>
-}
-
-\* Constant to define initial timestamp values for the commands, injected into initTimestamp var, this value can be redefined on submission when necessary
-\* (a single process can't submit a second command with a lower timestamp than the first), the id is defined on submission.
-initTimestampConstant == <<[id |-> <<0, NoProc>>, t |-> 0], [id |-> <<0, NoProc>>, t |-> 2], [id |-> <<0, NoProc>> , t |-> 1]>>
+TypePreAccept == 1
+TypePreAcceptOK == 2
+TypeAccept == 3
+TypeAcceptOK == 4
+TypeCommit == 5
+TypeCommitOK == 6
+TypeStable == 7
+TypeRecover == 8
+TypeRecoverOK == 9
+TypeRead == 10
+TypeReadOk == 11
+TypeApply == 12
 
 
 (***************************************************************************)
