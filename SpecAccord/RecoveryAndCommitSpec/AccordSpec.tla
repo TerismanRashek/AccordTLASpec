@@ -29,7 +29,7 @@ VARIABLES
     postWaitingFlag,
     recoveryAttemptBal,
 
-     executed, \* set of  executed, executeWaitingFlag, relation commands at [s][p]
+    executed, \* set of  executed, executeWaitingFlag, relation commands at [s][p]
     executeWaitingFlag, \* flag to know when a process has already started executing id.
     relation
 
@@ -52,24 +52,37 @@ CONSTANTS
     Nop,           \* special Nop payload
     NumberOfRecoveryAttempts \* constant used to cap the amount of recovery attempts, this cap is per process command pair.
 
-\*Phase constants
-(* Initial = 1, PreAccepted = 2, Accepted = 3, Committed = 4, Stable = 5 *)
-CONSTANTS 
-    InitialPhase, PreAcceptedPhase, AcceptedPhase, CommittedPhase, StablePhase
+\* Constants for Phases
+InitialPhase = 1
+PreAcceptedPhase = 2
+AcceptedPhase = 3
+CommittedPhase = 4
+StablePhase = 5
 
-\* fast or slow path values for commit messages
-CONSTANTS
-    Fast, Slow, Medium
+\* Constants for Fast Slow or Medium Path
+Fast = 0
+Slow = 1
+Medium = 2
 
-\* Constants for Message types
-(* 1 = PreAccept, 2 = PreAcceptOK, 3 = Accept, 4 = AcceptOK, 5 = Commit, 6 = CommitOK, 7 = Stable, 8 = Recover, 9 = RecoverOK, 10 = TypeRead, 11 = TypeReadOk, 12 = TypeApply *)
-CONSTANTS 
-TypePreAccept, TypePreAcceptOK, TypeAccept, TypeAcceptOK, TypeCommit, TypeCommitOK, TypeStable, TypeRecover, TypeRecoverOK, TypeRead, TypeReadOk, TypeApply 
+\* Constants for message types
+TypePreAccept = 1
+TypePreAcceptOK = 2
+TypeAccept = 3
+TypeAcceptOK = 4
+TypeCommit = 5
+TypeCommitOK = 6
+TypeStable = 7
+TypeRecover = 8
+TypeRecoverOK = 9
+TypeRead = 10
+TypeReadOk = 11
+TypeApply = 12
+
 
 \* The next three constants cannot be parsed by the config file because it has a reduced grammar, they are defined here,
 \* to change the configuration ( specifically to change the number/config of the transactions), the must be changed here.
 
-\* constant that maps to each command that command's the set of shards,
+\* constant that maps to each command that command's set of shards,
 idToShard == [i \in {1,2,3} |->
                   CASE i = 1 -> {1,2}
                     [] i = 2 -> {1}
@@ -464,7 +477,7 @@ HandleAcceptOK(s, p, id) ==
     /\ LET quorumOfMessages == { m \in msgs :
         /\ m.type = TypeAcceptOK
         /\ m.to = p
-        /\ m.body.b = bal[s][p][id] \*Ballot precondition is here
+        /\ m.body.b = bal[s][p][id]
         /\ m.body.id = id
         /\ m.shardto = s }   
         IN
@@ -512,7 +525,7 @@ HandleCommitOK(s, p, id) ==
     /\  LET quorumOfMessages == { m \in msgs :
                                     /\ m.type = TypeCommitOK
                                     /\ m.to = p
-                                    /\ m.body.b = bal[s][p][id] \*Ballot precondition is here
+                                    /\ m.body.b = bal[s][p][id]
                                     /\ m.body.id = id
                                     /\ m.shardto = s 
                                }   
@@ -603,7 +616,7 @@ HandleRecoverOK(s, p, id) ==
             /\ m.type = TypeRecoverOK
             /\ m.to = p 
             /\ m.body.id = id 
-            /\ m.body.b = bal[s][p][id] \* ballot precondition is here
+            /\ m.body.b = bal[s][p][id]
             /\ abal[s][p][id] < m.body.b
             /\ m.shardto = s  }
         IN
