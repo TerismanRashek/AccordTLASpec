@@ -271,13 +271,13 @@ ApplyMsg(sp, p, sq, q, id) ==
 
 \* It's not possible to write a proper function that will apply the state change and also return the result of the computations in tla+, so I have a operator for the computations and another to describe the next state. 
 
-PreAcceptComputations(s, p, id, tx) ==
+PreAcceptComputations(s, p, id, tx, initTs) ==
     LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id, id2)}}
-        D == { id2 \in SeenIds(s, p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp'[id2], initTimestamp'[id]) ) }
+        D == { id2 \in SeenIds(s, p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], initTs) ) }
     IN
     LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
     IN
-    LET finalTs == MaxTs(initTimestamp'[id], [t |-> tval, id |-> <<s,p>>])
+    LET finalTs == MaxTs(initTs, [t |-> tval, id |-> <<s,p>>])
     IN
     [finalTs |-> finalTs, D |-> D] \* this is the record we get as output when we call this
 
@@ -363,16 +363,18 @@ Submit(s, p, id) ==
             earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = <<s,p>> /\ LessThanTs(initTimestamp[id], initTimestamp[id1])}}
         IN 
         \* making sure that this process has not already submitted a command with a greater timestamp than the one we are currently submitting.
-        /\ LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
+        LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
+        IN
+        LET newInitTimestamp == [id |-> <<s,p>>, t |-> initTimestampVal]
+        IN
+        /\ initTimestamp' = [initTimestamp EXCEPT ![id] = newInitTimestamp]
+        /\ submitted' = submitted \cup {id}
+        /\ initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
+        /\  LET computations == PreAcceptComputations(s, p, id, tx, newInitTimestamp)
             IN
-            /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [id |-> <<s,p>>, t |-> initTimestampVal]]
-            /\ submitted' = submitted \cup {id}
-            /\ initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
-            /\  LET computations == PreAcceptComputations(s, p, id, tx)
-                IN
-                /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
-                /\ msgs' = msgs \cup {PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
-                                \cup {PreAcceptOKMsg(s, p, s, p, id, computations.finalTs, computations.D)}
+            /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
+            /\ msgs' = msgs \cup {PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
+                            \cup {PreAcceptOKMsg(s, p, s, p, id, computations.finalTs, computations.D)}
     /\ UNCHANGED << bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation >> 
 
 
@@ -388,12 +390,11 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        /\  UNCHANGED initTimestamp \* PreAcceptComputations uses initTimestamp' because submit can change it, so I have to specify the next state value of initTimestamp before using it here or TLC complains.
-        /\  LET computations == PreAcceptComputations(s, p, id, tx)
-            IN
-            /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, D0)
-            /\ msgs' = (msgs \ {m}) \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }
-    /\ UNCHANGED <<bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Wvar, Qvar, executed, executeWaitingFlag, relation>>
+        LET computations == PreAcceptComputations(s, p, id, tx, initTimestamp[id])
+        IN
+        /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, D0)
+        /\ msgs' = (msgs \ {m}) \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }
+    /\ UNCHANGED <<bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Wvar, Qvar, executed, executeWaitingFlag, relation, initTimestamp>>
 
 
 (* 13–18 HandlePreAcceptOk *)
