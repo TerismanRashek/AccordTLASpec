@@ -331,7 +331,6 @@ Submit(p, id) ==
             /\ initTimestamp' = [initTimestamp EXCEPT ![id] = [id |-> p, t |-> initTimestampVal]]
             /\ submitted' = submitted \cup {id}
             /\ initCoord' = [initCoord EXCEPT ![id] = p]
-            /\ ts' = [ts EXCEPT ![p][id] = initTimestamp'[id]]
             /\  LET computations == PreAcceptComputations(p, id, tx)
                 IN
                 /\ ApplyPreAccept(p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
