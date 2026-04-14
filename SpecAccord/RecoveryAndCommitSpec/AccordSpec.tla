@@ -235,7 +235,7 @@ RecoverOkMsg(p, q, b, id, abalq, txq, tq, depq, phaseq, rejectq, Wq, WPq) ==
 
 PreAcceptComputations(p, id, tx, initTs) ==
     LET setOfConflictingTs == {ts[p][id2] : id2 \in { id2 \in Id : ts[p][id2].id # NoProc /\ Conflicts(id, id2)}}
-        D == { id2 \in SeenIds(p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp'[id2], initTs) ) }
+        D == { id2 \in SeenIds(p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], initTs) ) }
     IN
     LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
     IN
@@ -268,14 +268,14 @@ ApplyAccept(p, b, id, t, D, tx) ==
 
 \* no local computations when receiving a commit message
 
-ApplyCommit(p, b, id, t, D, tx) ==
+ApplyCommit(p, b, id, t, D, tx, stable) ==
     /\ bal[p][id] = b
     /\ b = 0 => phase[p][id] \in {PreAcceptedPhase, AcceptedPhase}
     /\ IF b > 0 THEN txn'  = [txn  EXCEPT ![p][id] = tx] ELSE UNCHANGED txn
     /\ abal' = [abal EXCEPT ![p][id] = b]
     /\ ts'   = [ts  EXCEPT ![p][id] = t]
     /\ dep' = [dep EXCEPT ![p][id] = D]
-    /\ phase' = [phase EXCEPT ![p][id] = CommittedPhase]
+    /\ IF stable THEN phase' = [phase EXCEPT ![p][id] = StablePhase] ELSE phase' = [phase EXCEPT ![p][id] = CommittedPhase]
 
 \* no local computations when receiving a stable message
 
@@ -352,11 +352,11 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        LET computations == PreAcceptComputations(p, id, tx, initTs)
+        LET computations == PreAcceptComputations(p, id, tx, initTimestamp[id])
         IN
         /\ ApplyPreAccept(p, id, tx, computations.finalTs, D0)
         /\ msgs' = (msgs \ {m}) \cup {PreAcceptOKMsg(p, q, id, computations.finalTs, computations.D) }
-    /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Wvar, Qvar, executed, relation>>
+    /\ UNCHANGED << bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Wvar, Qvar, executed, relation, initTimestamp>>
 
 
 (***************************************************************************)
@@ -380,8 +380,7 @@ HandlePreAcceptOK(p, id) ==
             IF IsFastQuorumSized(largestFastQuorum) THEN
                     LET D == dep[p][id] \cup UNION { m.body.Dq : m \in largestFastQuorum }
                     IN
-                    /\ ApplyCommit(p, 0, id, initTimestamp[id], D, txn[p][id])
-                    /\ ApplyStable(p, 0, id)               
+                    /\ ApplyCommit(p, 0, id, initTimestamp[id], D, txn[p][id], TRUE)             
                     /\ msgs' = (msgs \ quorumOfMessages) \cup {CommitMsg(p, q, 0, id, initTimestamp[id], D, Fast, txn[p][id]) : q \in Proc \ {p} }
                                                          \cup {StableMsg(p, q, 0, id) : q \in Proc \ {p}}
                     /\ UNCHANGED bal
@@ -432,7 +431,7 @@ HandleAcceptOK(p, id) ==
         /\ IsQuorumSized(quorumOfMessages)
         /\  LET D == dep[p][id] \cup UNION { m.body.Dq : m \in quorumOfMessages }
             IN
-            /\ ApplyCommit(p, bal[p][id], id, ts[p][id], D, txn[p][id])
+            /\ ApplyCommit(p, bal[p][id], id, ts[p][id], D, txn[p][id], FALSE)
             /\ msgs' = (msgs \ quorumOfMessages) \cup {CommitMsg(p, q, bal[p][id], id, ts[p][id], D, Slow, txn[p][id]) : q \in Proc \ {p} } 
                                                  \cup {CommitOkMsg(p, p, bal[p][id], id)}
     /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, relation >>
@@ -452,7 +451,7 @@ HandleCommit(m) ==
            fastOrSlow == m.body.fastOrSlow
            t == m.body.t
        IN
-       /\ ApplyCommit(p, b, id, t, D, tx)
+       /\ ApplyCommit(p, b, id, t, D, tx, FALSE)
        /\ IF fastOrSlow = Slow THEN msgs' = (msgs \ {m}) \cup {CommitOkMsg(p, q, b, id)}  ELSE msgs' = msgs \ {m}
        /\ UNCHANGED << bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, initTimestamp, executed, relation >>
 
@@ -569,7 +568,7 @@ HandleRecoverOK(p, id) ==
                         /\  LET n == CHOOSE n \in U :
                                         n.body.phaseq = StablePhase
                             IN
-                            /\ ApplyCommit(p, bal[p][id], id, n.body.tq, n.body.depq, n.body.txq)
+                            /\ ApplyCommit(p, bal[p][id], id, n.body.tq, n.body.depq, n.body.txq, FALSE)
                             /\ ApplyStable(p, bal[p][id], id)
                             /\ msgs' = (msgs \ quorumOfMessages) \cup {CommitMsg(p, q, bal[p][id], id, n.body.tq, n.body.depq, Fast, n.body.txq) : q \in Proc \ {p} }
                                                                  \cup {StableMsg(p, q, bal[p][id], id) : q \in Proc \ {p}}
@@ -580,7 +579,7 @@ HandleRecoverOK(p, id) ==
                         /\  LET n == CHOOSE n \in U :
                                         n.body.phaseq = CommittedPhase
                             IN
-                            /\ ApplyCommit(p, bal[p][id], id, n.body.tq, n.body.depq, n.body.txq)
+                            /\ ApplyCommit(p, bal[p][id], id, n.body.tq, n.body.depq, n.body.txq, FALSE)
                             /\ msgs' = (msgs \ quorumOfMessages) \cup {CommitMsg(p, q, bal[p][id], id, n.body.tq, n.body.depq, Slow, n.body.txq) : q \in Proc \ {p} } 
                                                                  \cup {CommitOkMsg(p, p, bal[p][id], id)}
                             /\ UNCHANGED <<bal , TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>  
@@ -705,14 +704,14 @@ HandlePostWaiting(p, id) ==
                     /\ m.from \notin Q
                     /\ (m.body.phaseq \in {StablePhase, CommittedPhase, AcceptedPhase} \/ m.from = initCoord[id])
                     /\  IF (m.body.phaseq = StablePhase) THEN
-                            /\ ApplyCommit(p, b, id, m.body.tq, m.body.depq, m.body.txq)
+                            /\ ApplyCommit(p, b, id, m.body.tq, m.body.depq, m.body.txq, FALSE)
                             /\ ApplyStable(p, b, id)               
                             /\ msgs' = msgs \cup {CommitMsg(p, q, b, id, m.body.tq, m.body.depq, Fast, m.body.txq) : q \in Proc \ {p} }
                                             \cup {StableMsg(p, q, b, id) : q \in Proc \ {p}}
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = FALSE]
                             /\ UNCHANGED bal
                         ELSE IF (m.body.phaseq = CommittedPhase) THEN   
-                            /\ ApplyCommit(p, b, id, m.body.tq, m.body.depq, m.body.txq)
+                            /\ ApplyCommit(p, b, id, m.body.tq, m.body.depq, m.body.txq, FALSE)
                             /\ msgs' = msgs \cup {CommitMsg(p, q, b, id, m.body.tq, m.body.depq, Slow, m.body.txq) : q \in Proc \ {p} } 
                                             \cup {CommitOkMsg(p, p, b, id)}
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![p][id] = FALSE]
