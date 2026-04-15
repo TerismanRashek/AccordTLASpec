@@ -271,13 +271,13 @@ ApplyMsg(sp, p, sq, q, id) ==
 
 \* It's not possible to write a proper function that will apply the state change and also return the result of the computations in tla+, so I have a operator for the computations and another to describe the next state. 
 
-PreAcceptComputations(s, p, id, tx, initTs) ==
+PreAcceptComputations(s, p, sq, q, id, tx, initTs) ==
     LET setOfConflictingTs == {ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id, id2)}}
         D == { id2 \in SeenIds(s, p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], initTs) ) }
     IN
     LET tval == IF setOfConflictingTs = {} THEN 0 ELSE MaxTsInSet(setOfConflictingTs).t + 1
     IN
-    LET finalTs == MaxTs(initTs, [t |-> tval, id |-> <<s,p>>])
+    LET finalTs == MaxTs(initTs, [t |-> tval, id |-> <<sq,q>>])
     IN
     [finalTs |-> finalTs, D |-> D] \* this is the record we get as output when we call this
 
@@ -370,7 +370,7 @@ Submit(s, p, id) ==
         /\ initTimestamp' = [initTimestamp EXCEPT ![id] = newInitTimestamp]
         /\ submitted' = submitted \cup {id}
         /\ initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
-        /\  LET computations == PreAcceptComputations(s, p, id, tx, newInitTimestamp)
+        /\  LET computations == PreAcceptComputations(s, p, s, p, id, tx, newInitTimestamp)
             IN
             /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
             /\ msgs' = msgs \cup {PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
@@ -390,7 +390,7 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        LET computations == PreAcceptComputations(s, p, id, tx, initTimestamp[id])
+        LET computations == PreAcceptComputations(s, p, sq, q, id, tx, initTimestamp[id])
         IN
         /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, D0)
         /\ msgs' = (msgs \ {m}) \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }
