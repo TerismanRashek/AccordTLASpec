@@ -665,7 +665,7 @@ HandleRecoverOK(s, p, id) ==
                                                 /\ n.body.phaseq = PreAcceptedPhase
                                                 /\ n.shardfrom = shard
                                                 /\ n.body.tq = initTimestamp[id] }
-                            IN Cardinality(Rmax) >= Cardinality({n \in quorumOfMessages : n.shardfrom = s}) - E)
+                            IN Cardinality(Rmax) >= Cardinality({n \in quorumOfMessages : n.shardfrom = shard}) - E)
                         THEN
                         LET rejects == {m \in quorumOfMessages : m.body.rejectq = TRUE}
                         IN
