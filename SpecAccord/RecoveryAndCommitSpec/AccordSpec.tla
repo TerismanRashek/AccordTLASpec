@@ -2,71 +2,51 @@
 EXTENDS TLC, Naturals, Sequences, FiniteSets, ExtraConfiguration
 
 (*
-This file contains the TLA + specification for Accord, It provides formal specification as well as
-model checking capabilities to add an extra layer of certainty on the correctness of the algorithm.
-This is the version without multi shard.
+
+A TLA+ specification of the EPaxos* protocol from the following ........ paper:
+Accord: Fast Geo-Distributed Transactions in Apache Cassandra
+Benedict Elliott Smith, Fedor Ryabinin, Alexey Gotsman, and Pierre Sutra.
+
+Link
+
+This file contains the specification of the Accord protocol on a single shard,
+corresponding to Figures 2 and 5 in the paper.
+
+Author: Alexandre SIRET
+
 *)
 
 
-(***************************************************************************)
-(* Variables                                                               *)
-(***************************************************************************)
-
-VARIABLES
-    bal,           \* bal[p][id] = current ballot known by process p for command id
-    phase,         \* phase[p][id] ∈ {"none","preaccepted","accepted","committed"}
-    txn,           \* txn[p][id] = command payload at p
-    dep,           \* dep[p][id] = final dependency set (accepted or committed)
-    ts,            \* ts[p][id] = timestamp at p, timestamp is a couple of (t, id) ts.t for timestamp, ts.id for id.
-    abal,          \* abal[p][id] = last ballot where p accepted a slow-path value
-    msgs,           \* multiset of network messages
-    submitted,      \* set of submitted command ids
-    initCoord,      \* initCoord[id] = process that submitted id
-    initTimestamp,
-    recovered,       \* var to limit amount of recovery attempts started
-
-    \* the following variables are used in recovery to : 
-    \*              -persist local state to the post waiting operation
-    \*              -keep track of when we are allowed to trigger the post waiting operation
-    Wvar,
-    TXvar,
-    Dvar,
-    Qvar,
-    postWaitingFlag,
-    recoveryAttemptBal,
-
-    executed,    \* executed[p] is a set of ids executed by p
-    relation     \* SMR relation to check acyclicity,  relation[id][id] is 0 (no relation) 1 (less than) 2 (greater than)
-    
-vars == << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation >>
 
 (***************************************************************************)
-(* Constants :these are for the most part defined in the configuration file*)
+(* Constants : these are model checking parameters                         *)
 (***************************************************************************)
 
 CONSTANTS 
-    Proc,       \* The set of processes
+    Proc,       \* The set of processes, all shards use same numbered processes
     Id,         \* The set of command IDs
-    F, 
+    F,         
     E,
     Bottom,     \* The bottom value for the command payload
     NoProc,      \* A special value representing no process
-    Nop,
-    NumberOfRecoveryAttempts
+    Nop,           \* special Nop payload
+    NumberOfRecoveryAttempts \* constant used to cap the amount of recovery attempts, this cap is per process command pair.
+    \* The following constants are also imported from the ExtraConfiguration module. Look at the file for more details.
+    \* ConflictPairs is used to define the conflict relation between transactions
+    \* initTimestampConstant gives an initial timestamp value for each transaction
 
-\* Constants for Phases
+N == Cardinality(Proc)
+Max(a, b) == IF a > b THEN a ELSE b
+ASSUME N >= Max(2*E+F-1, 2*F+1)
+
+\* Phase constants
 InitialPhase == 1
 PreAcceptedPhase == 2
 AcceptedPhase == 3
 CommittedPhase == 4
 StablePhase == 5
 
-\* Constants for Fast Slow or Medium Path
-Fast == 0
-Slow == 1
-Medium == 2
-
-\* Constants for message types
+\* Message types
 TypePreAccept == 1
 TypePreAcceptOK == 2
 TypeAccept == 3
@@ -76,48 +56,95 @@ TypeCommitOK == 6
 TypeStable == 7
 TypeRecover == 8
 TypeRecoverOK == 9
+TypeRead == 10
+TypeReadOk == 11
+TypeApply == 12
 
+\* Constants for Fast or Slow Path
+Fast == 0
+Slow == 1
 
 
 (***************************************************************************)
-(* Helper definitions                                                      *)
+(* Message constructors                                                    *)
 (***************************************************************************)
 
-N == Cardinality(Proc)
+\* this is the general message constructor, the message type, the sender process and receiving process, the body holds the rest of the
+\* parameters specific to the message type.
 
-Max(a, b) == IF a > b THEN a ELSE b
+Message(type, from, to, body) ==
+    [type |-> type, from |-> from, to |-> to, body |-> body]
 
-\* Relations on timestamps 
-LessThanTs(ts1, ts2) ==
-    IF ts1.id = NoProc THEN TRUE
-    ELSE IF ts2.id = NoProc THEN FALSE
-    ELSE IF ts1.t < ts2.t THEN TRUE
-    ELSE IF ts1.t > ts2.t THEN FALSE
-    ELSE ts1.id < ts2.id
+PreAcceptMsg(p, q, id, tx, D0) ==
+    Message(TypePreAccept, p, q, [id |-> id, tx |-> tx, D0 |-> D0])
 
-MaxTs(ts1, ts2) ==
-    IF LessThanTs(ts1, ts2) THEN ts2 ELSE ts1
+PreAcceptOKMsg(p, q, id, tq, Dq) ==
+    Message(TypePreAcceptOK, p, q, [id |-> id, tq |-> tq, Dq |-> Dq])
 
-MaxTsInSet(S) ==
-    CHOOSE ts1 \in S : \A ts2 \in S :
-                            ts2 # ts1 => LessThanTs(ts2, ts1)
+AcceptMsg(p, q, b, id, t, D, tx) ==
+    Message(TypeAccept, p, q, [id |-> id, b |-> b, t |-> t, D |-> D, tx |-> tx])
 
-\* uses the conflict pairs constant defined above, symmetrical of course
-\* I use the id of the command as the payload (see submit operation)
-Conflicts(id1, id2) ==
-    <<id1, id2>> \in ConflictPairs \/ <<id2, id1>> \in ConflictPairs
+AcceptOKMsg(p, q, b, id, Dq) ==
+    Message(TypeAcceptOK, p, q, [id |-> id, b |-> b, Dq |-> Dq])
 
-IsQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - F
-IsFastQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - E
+CommitMsg(p, q, b, id, t, D, fastOrSlow, tx) ==
+    Message(TypeCommit, p, q, [id |-> id, b |-> b, t |-> t, D |-> D, fastOrSlow |-> fastOrSlow, tx |-> tx])
 
-\* This finds all commands that a process has seen, (checks in payload and in dependencies)
-SeenIds(p) ==
-    {id \in Id : 
-        \/ txn[p][id] # Bottom
-        \/ \E id2 \in Id : id \in dep[p][id2]}
+CommitOkMsg(p, q, b, id) ==
+    Message(TypeCommitOK, p, q, [id |-> id, b |-> b])
 
-ASSUME N >= Max(2*E+F-1, 2*F+1)
+StableMsg(p, q, b, id) ==
+    Message(TypeStable, p, q, [id |-> id, b |-> b])
 
+RecoverMsg(p, q, b, id, tx) ==
+    Message(TypeRecover, p, q, [id |-> id, b |-> b, tx |-> tx])
+
+RecoverOkMsg(p, q, b, id, abalq, txq, tq, depq, phaseq, rejectq, Wq, WPq) ==
+    Message(TypeRecoverOK, p, q, [id |-> id, b |-> b, abalq |-> abalq, txq |-> txq, tq |-> tq, depq |-> depq, phaseq |-> phaseq, rejectq |-> rejectq, Wq |-> Wq, WPq |-> WPq])
+
+ReadMsg(p, q, id) ==
+    Message(TypeRead, p, q, [id |-> id])
+
+ReadOkMsg(p, q, id) ==
+    Message(TypeReadOk, p, q, [id |-> id])
+
+ApplyMsg(p, q, id) ==
+    Message(TypeReadOk, p, q, [id |-> id])
+
+
+(***************************************************************************)
+(* Variables                                                               *)
+(***************************************************************************)
+
+
+VARIABLES
+    bal,           \* bal[p][id] = current ballot known by process p for transaction id
+    phase,         \* phase[p][id] \in {InitialPhase, PreAcceptedPhase, AcceptedPhase, CommittedPhase, StablePhase}
+    txn,           \* txn[p][id] = command payload at p
+    dep,           \* dep[p][id] = final dependency set (accepted or committed)
+    ts,            \* ts[p][id] = timestamp at p, timestamp is a couple of (t, id) ts.t is the timestamp value, ts.id is it's id.
+    abal,          \* abal[p][id] = the last ballot where p accepted a slow path value
+    msgs,          \* set of network messages
+    submitted,     \* set of submitted command ids
+    initCoord,     \* initCoord[id] = process that submitted id, it is the pair p
+    initTimestamp, \* id's initial timestamp defined on submit using initTimestampConstant
+    recovered,     \* recovered[p][id] = counter of times recovery is invoked
+    
+    \* the following variables are used in recovery to : 
+    \*              -persist local state to the post waiting operation
+    \*              -keep track of when we are allowed to trigger the post waiting operation
+    Wvar,           
+    TXvar,
+    Dvar,
+    Qvar,
+    postWaitingFlag,
+    recoveryAttemptBal,
+
+    executed,           \* executed[p] = the set of executed transactions by p
+
+    relation            \* this is the < relation over transactions to check acyclicity
+
+vars == << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation >>
 
 (***************************************************************************)
 (* Init of all the variables                                               *)
@@ -146,92 +173,49 @@ Init ==
 
 
 (***************************************************************************)
-(* Message constructors                                                    *)
+(* Helper definitions                                                      *)
 (***************************************************************************)
 
-\* this is the general message constructor, the message type, the sender process and receiving process, the body holds the rest of the
-\* parameters specific to the message type.
+\* Relation on timestamps 
+LessThanTs(ts1, ts2) ==
+    IF ts1.id = NoProc THEN TRUE
+    ELSE IF ts2.id = NoProc THEN FALSE
+    ELSE IF ts1.t < ts2.t THEN TRUE
+    ELSE IF ts1.t > ts2.t THEN FALSE
+    ELSE ts1.id < ts2.id
 
-Message(type, from, to, body) ==
-    [ type |-> type, from |-> from, to |-> to, body |-> body ]
+MaxTs(ts1, ts2) ==
+    IF LessThanTs(ts1, ts2) THEN ts2 ELSE ts1
 
-PreAcceptMsg(p, q, id, tx, D0) ==
-    Message(TypePreAccept, p, q,
-        [ id  |-> id,
-          tx |-> tx,
-          D0 |-> D0 ])
+MaxTsInSet(S) ==
+    CHOOSE ts1 \in S : \A ts2 \in S :
+                            ts2 # ts1 => LessThanTs(ts2, ts1)
 
-PreAcceptOKMsg(p, q, id, tq, Dq) ==
-    Message(TypePreAcceptOK, p, q,
-        [ id  |-> id,
-          tq |-> tq,
-          Dq |-> Dq ])
+\* ConflictPairs is a model constant defined in ExtraConfiguration
+Conflicts(id1, id2) ==
+    <<id1, id2>> \in ConflictPairs \/ <<id2, id1>> \in ConflictPairs
 
-AcceptMsg(p, q, b, id, t, D, tx) ==
-    Message(TypeAccept, p, q,
-        [ id   |-> id,
-          b  |-> b,
-          t |-> t,
-          tx |-> tx,
-          D |-> D ])
+IsQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - F
+IsFastQuorumSized(set) == Cardinality(set) >= Cardinality(Proc) - E
 
-AcceptOKMsg(p, q, b, id, Dq) ==
-    Message(TypeAcceptOK, p, q,
-        [ id  |-> id,
-          b |-> b,
-          Dq |-> Dq ])
+\* This finds all commands that a process knows of, (checks in payload and in dependencies)
+SeenIds(p) ==
+    {id \in Id : 
+        \/ txn[p][id] # Bottom
+        \/ \E id2 \in Id : id \in dep[p][id2]}
 
-CommitMsg(p, q, b, id, t, D, fastOrSlow, tx) ==
-    Message(TypeCommit, p, q,
-        [ id   |-> id,
-          b  |-> b,
-          tx |-> tx,
-          D |-> D,
-          fastOrSlow |-> fastOrSlow,
-          t |-> t ])
-
-CommitOkMsg(p, q, b, id) ==
-    Message(TypeCommitOK, p, q,
-        [ id  |-> id,
-          b |-> b ])
-
-StableMsg(p, q, b, id) ==
-    Message(TypeStable, p, q,
-        [ id  |-> id,
-          b |-> b ])
-
-RecoverMsg(p, q, b, id, tx) ==
-    Message(TypeRecover, p, q,
-        [id   |-> id,
-          b  |-> b,
-          tx |-> tx])
-
-RecoverOkMsg(p, q, b, id, abalq, txq, tq, depq, phaseq, rejectq, Wq, WPq) ==
-    Message(TypeRecoverOK, p, q,
-        [id   |-> id,
-          b  |-> b,
-          txq |-> txq,
-          depq |-> depq,
-          phaseq |-> phaseq,
-          abalq |-> abalq,
-          tq |-> tq,
-          rejectq |-> rejectq,
-          Wq |-> Wq,
-          WPq |-> WPq ])
 
 (***************************************************************************)
 (* State changing Actions                                                  *)
 (***************************************************************************)
 
-\* These operators are the insides of all the 'when received' a single message operations, this split allows me to handle self addressed
-\* messages by calling the corresponding Apply operation. The computations operation is used for the resulting message we have to send.
+\* These operators are the insides of all the 'when received' a single message operations, this split allows handling self addressed
+\* messages by  using the corresponding Apply and computation operations.
 \* For example, after we submit a command, we :
 \*        - send PreAccept messages to everyone except ourselves
-\*        - apply the PreAccept operation on ourselves
-\*        - Compute the t and D values (see pseudocode)
+\*        - apply the PreAccept operation on ourselves using ApplyPreAccept()
+\*        - Compute the t and D values (see pseudocode) with PreAcceptComputations()
 \*        - send PreAcceptOk(id, t, d) to ourselves.
-
-\* It's not possible to write a proper function that will apply the state change and also return the result of the computations in tla+, so I have a operator for the computations and another to describe the next state. 
 
 PreAcceptComputations(p, q, id, tx, initTs) ==
     LET setOfConflictingTs == {ts[p][id2] : id2 \in { id2 \in Id : ts[p][id2].id # NoProc /\ Conflicts(id, id2)}}
@@ -287,33 +271,34 @@ ApplyStable(p, b, id) ==
 
 RecoverComputations(p, id) ==
     LET D == IF phase[p][id] \notin {InitialPhase, PreAcceptedPhase} THEN dep[p][id]
-                ELSE dep[p][id] \cup {id2 \in SeenIds(p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
+             ELSE dep[p][id] \cup {id2 \in SeenIds(p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], initTimestamp[id])) }
     IN
     LET S == {id2 \in SeenIds(p) : (id2 # id /\ Conflicts(id, id2) /\ txn[p][id2] # Nop /\ id \notin dep[p][id2]
-            /\(   (phase[p][id2] \in {CommittedPhase, StablePhase} /\ LessThanTs(initTimestamp[id], ts[p][id2]))  
-                \/ (   phase[p][id2] = AcceptedPhase   /\   LessThanTs( initTimestamp[id] ,  initTimestamp[id2])) 
-                )                    ) 
+                                             /\ ( (phase[p][id2] \in {CommittedPhase, StablePhase} /\ LessThanTs(initTimestamp[id], ts[p][id2]))  
+                                                  \/ (phase[p][id2] = AcceptedPhase /\ LessThanTs(initTimestamp[id], initTimestamp[id2])) 
+                                                )                    
+                                   ) 
             }
-        W == {<<id3, abal[p][id3]>> : id3 \in { id2 \in SeenIds(p) : (id2 # id /\ Conflicts(id, id2) /\ txn[p][id2] # Nop /\ id \notin dep[p][id2] 
-            /\ (  (phase[p][id2] = AcceptedPhase /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) /\ LessThanTs(initTimestamp[id], ts[p][id2]))
-                \/ (phase[p][id2] = PreAcceptedPhase /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) )
-                )
-            )}}
+        W == {<<id3, abal[p][id3]>> : 
+                    id3 \in { id2 \in SeenIds(p) : 
+                                    (id2 # id /\ Conflicts(id, id2) /\ txn[p][id2] # Nop /\ id \notin dep[p][id2] 
+                                    /\  ((phase[p][id2] = AcceptedPhase /\ LessThanTs(initTimestamp[id2], initTimestamp[id]) /\ LessThanTs(initTimestamp[id], ts[p][id2]))
+                                          \/ (phase[p][id2] = PreAcceptedPhase /\ LessThanTs(initTimestamp[id2], initTimestamp[id]))
+                                        )
+                                    )}}
         WP == {id2 \in SeenIds(p) : id2 # id /\ Conflicts(id, id2) /\ phase[p][id2] = PreAcceptedPhase 
-                /\ LessThanTs(initTimestamp[id], initTimestamp[id2]) /\ id \notin dep[p][id2] }
+                                             /\ LessThanTs(initTimestamp[id], initTimestamp[id2]) /\ id \notin dep[p][id2] 
+              }
     IN
     [D |-> D, S |-> S, W |-> W, WP |-> WP]
 
 ApplyRecover(p, b, id, tx) ==
     /\  bal[p][id] < b
-    /\  bal'  = [bal  EXCEPT ![p][id] = b]
-    /\  IF phase[p][id] = InitialPhase THEN  txn'  = [txn  EXCEPT ![p][id] = tx] ELSE UNCHANGED txn
-
-    
-
+    /\  bal' = [bal  EXCEPT ![p][id] = b]
+    /\  IF phase[p][id] = InitialPhase THEN  txn' = [txn  EXCEPT ![p][id] = tx] ELSE UNCHANGED txn
 
 (***************************************************************************)
-(* Message handling Actions                                                  *)
+(* Message handling Actions                                                *)
 (***************************************************************************)
 
 (***************************************************************************)
