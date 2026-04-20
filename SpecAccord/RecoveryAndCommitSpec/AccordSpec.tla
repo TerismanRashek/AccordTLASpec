@@ -144,9 +144,11 @@ VARIABLES
 
     executed,           \* executed[s][p] = the set of executed transactions by (s,p)
     executeWaitingFlag, \* flag to know when a process has already started executing id.
-    relation            \* this is the < relation over transactions to check acyclicity
+    relation,           \* this is the < relation over transactions to check acyclicity
 
-vars == << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation >>
+    consumedMsgs        \* set of all consumed messages used to check invariants.
+
+vars == << bal, phase, txn, dep, ts, abal, msgs, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs >>
 
 (***************************************************************************)
 (* Initialization                                                          *)
@@ -173,6 +175,7 @@ Init ==
     /\ executed = [s \in Shards |-> [p \in Proc |-> {} ]]
     /\ executeWaitingFlag =  [s \in Shards |-> [p \in Proc |-> [id \in Id |-> FALSE]]]
     /\ relation = [id1 \in Id |-> [id2 \in Id |-> 0]]
+    /\ consumedMsgs = {}
 
 
 (***************************************************************************)
@@ -340,7 +343,7 @@ Submit(s, p, id) ==
             /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
             /\ msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                             \cup { PreAcceptOKMsg(s, p, s, p, id, computations.finalTs, computations.D) }
-    /\ UNCHANGED <<bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation>> 
+    /\ UNCHANGED <<bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs>> 
 
 
 (* HandlePreAccept (lines 4-12) *)
@@ -359,6 +362,7 @@ HandlePreAccept(m) ==
         IN
         /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, D0)
         /\ msgs' = (msgs \ {m}) \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }
+        /\ consumedMsgs' = consumedMsgs \cup {m}
     /\ UNCHANGED <<bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Wvar, Qvar, executed, executeWaitingFlag, relation, initTimestamp>>
 
 
@@ -383,8 +387,9 @@ HandlePreAcceptOK(s, p, id) ==
                     LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in largestFastQuorum }
                     IN
                     /\ ApplyCommit(s, p, 0, id, initTimestamp[id], D, txn[s][p][id], TRUE)              
-                    /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], 0, id, initTimestamp[id], D, Fast, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
-                                                         \cup { StableMsg(s, p, to[1], to[2], 0, id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                    /\ msgs' = (msgs \ largestFastQuorum) \cup { CommitMsg(s, p, to[1], to[2], 0, id, initTimestamp[id], D, Fast, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                                                          \cup { StableMsg(s, p, to[1], to[2], 0, id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                    /\ consumedMsgs' = consumedMsgs \cup largestFastQuorum 
                     /\ UNCHANGED bal
             ELSE IF IsQuorum(largestFastQuorum, id) THEN
                     LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in largestFastQuorum }
@@ -392,8 +397,9 @@ HandlePreAcceptOK(s, p, id) ==
                     LET computations == AcceptComputations(s, p, id, initTimestamp[id])
                     IN 
                     /\ ApplyAccept(s, p, 0, id, initTimestamp[id], D, txn[s][p][id])
-                    /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], 0, id, initTimestamp[id], D, txn[s][p][id], Medium) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
-                                                         \cup { AcceptOKMsg(s, p, s, p, 0, id, computations.Dq, Medium) }
+                    /\ msgs' = (msgs \ largestFastQuorum) \cup { AcceptMsg(s, p, to[1], to[2], 0, id, initTimestamp[id], D, txn[s][p][id], Medium) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
+                                                          \cup { AcceptOKMsg(s, p, s, p, 0, id, computations.Dq, Medium) }
+                    /\ consumedMsgs' = consumedMsgs \cup largestFastQuorum
             ELSE    
                     LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in quorumOfMessages }
                         t == MaxTsInSet({ m.body.tq : m \in quorumOfMessages })
@@ -403,6 +409,7 @@ HandlePreAcceptOK(s, p, id) ==
                     /\ ApplyAccept(s, p, 0, id, t, D, txn[s][p][id])
                     /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], 0, id, t, D, txn[s][p][id], Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                          \cup { AcceptOKMsg(s, p, s, p, 0, id, computations.Dq, Slow) }
+                    /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
     /\ UNCHANGED <<submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
        
 
@@ -425,6 +432,7 @@ HandleAccept(m) ==
         IN
         /\  ApplyAccept(s, p, b, id, t, D, tx)
         /\  msgs' = (msgs \ {m}) \cup { AcceptOKMsg(s, p, sq, q, b, id, computations.Dq, pathSpeed) }
+        /\  consumedMsgs' = consumedMsgs \cup {m}
     /\ UNCHANGED <<submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
 
 
@@ -450,11 +458,13 @@ HandleAcceptOK(s, p, id) ==
                 /\ ApplyCommit(s, p, bal[s][p][id], id, ts[s][p][id], D, txn[s][p][id], FALSE)
                 /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], D, Slow, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                      \cup { CommitOkMsg(s, p, s, p, bal[s][p][id], id) } 
+                /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
             ELSE 
                 /\ ApplyCommit(s, p, bal[s][p][id], id, ts[s][p][id], D, txn[s][p][id], FALSE)
                 /\ ApplyStable(s, p, bal[s][p][id], id)               
                 /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], D, Fast, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                                                      \cup { StableMsg(s, p, to[1], to[2], bal[s][p][id], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
     /\ UNCHANGED <<bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar,  executed, executeWaitingFlag, relation>>
 
 
@@ -475,6 +485,7 @@ HandleCommit(m) ==
        IN
        /\ ApplyCommit(s, p, b, id, t, D, tx, FALSE)
        /\ IF fastOrSlow = Slow THEN msgs' = (msgs \ {m}) \cup { CommitOkMsg(s, p, sq, q, b, id) } ELSE msgs' = msgs \ {m}
+       /\ consumedMsgs' = consumedMsgs \cup {m}
        /\ UNCHANGED <<bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, initTimestamp>>
 
 
@@ -494,6 +505,7 @@ HandleCommitOK(s, p, id) ==
         /\ IsQuorum(quorumOfMessages, id)
         /\ ApplyStable(s, p, bal[s][p][id], id)
         /\ msgs' = (msgs \ quorumOfMessages) \cup { StableMsg(s, p, to[1], to[2], bal[s][p][id], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+        /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
     /\ UNCHANGED <<bal, txn, dep, ts, abal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
 
 (* HandleStable (lines 39-41) *)
@@ -509,6 +521,7 @@ HandleStable(m) ==
         IN
         /\ ApplyStable(s, p, b, id)
         /\ msgs' = msgs \ {m}
+        /\ consumedMsgs' = consumedMsgs \cup {m}
         /\ UNCHANGED <<bal, submitted, initCoord, dep, abal, txn, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
 
 
@@ -540,7 +553,7 @@ StartRecover(s, p, id) ==
                         ELSE                                msgs' =  msgs \cup { RecoverOkMsg(s, p, s, p, b, id, abal[s][p][id], Nop, ts[s][p][id], D, phase[s][p][id], TRUE, W, WP) }            \cup { RecoverMsg(s, p, to[1], to[2], b, id, Nop)           : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ {<<s, p>>} }
                 ELSE IF phase[s][p][id] # InitialPhase THEN msgs' =  msgs \cup { RecoverOkMsg(s, p, s, p, b, id, abal[s][p][id], txn[s][p][id], ts[s][p][id], D, phase[s][p][id], FALSE, W, WP) } \cup { RecoverMsg(s, p, to[1], to[2], b, id, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ {<<s, p>>} }
                         ELSE                                msgs' =  msgs \cup { RecoverOkMsg(s, p, s, p, b, id, abal[s][p][id], Nop, ts[s][p][id], D, phase[s][p][id], FALSE, W, WP) }           \cup { RecoverMsg(s, p, to[1], to[2], b, id, Nop)           : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ {<<s, p>>} }
-/\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation, recoveryAttemptBal>>
+/\ UNCHANGED <<phase, dep, ts, abal, submitted, initCoord, Wvar, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation, consumedMsgs, recoveryAttemptBal>>
 
 
 (* HandleRecover (lines 49-60) *)
@@ -566,6 +579,7 @@ HandleRecover(m) ==
             /\  IF S # {}
                 THEN msgs' = (msgs \ {m}) \cup { RecoverOkMsg(s, p, sq, q, b, id, abal[s][p][id], txn'[s][p][id], ts[s][p][id], D, phase[s][p][id], TRUE, W, WP) } 
                 ELSE msgs' = (msgs \ {m}) \cup { RecoverOkMsg(s, p, sq, q, b, id, abal[s][p][id], txn'[s][p][id], ts[s][p][id], D, phase[s][p][id], FALSE, W, WP) }
+            /\ consumedMsgs' = consumedMsgs \cup {m}
     /\ UNCHANGED <<submitted, initCoord, dep, abal, ts, phase, recovered, TXvar, Dvar, postWaitingFlag, Wvar, recoveryAttemptBal, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
 
 
@@ -598,6 +612,7 @@ HandleRecoverOK(s, p, id) ==
                             /\ ApplyStable(s, p, bal[s][p][id], id)
                             /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, n.body.tq, n.body.depq, Fast, n.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                                                                  \cup { StableMsg(s, p, to[1], to[2], bal[s][p][id], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                            /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\ UNCHANGED <<bal, TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>> 
                 ELSE IF (\E n \in U :
                         /\ n.body.phaseq = CommittedPhase)
@@ -608,6 +623,7 @@ HandleRecoverOK(s, p, id) ==
                             /\ ApplyCommit(s, p, bal[s][p][id], id, n.body.tq, n.body.depq, n.body.txq, FALSE)
                             /\ msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, n.body.tq, n.body.depq, Slow, n.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                                  \cup { CommitOkMsg(s, p, s, p, bal[s][p][id], id) }
+                            /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\ UNCHANGED <<bal, TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>  
                 ELSE IF (\E n \in U :
                         /\ n.body.phaseq = AcceptedPhase)
@@ -620,6 +636,7 @@ HandleRecoverOK(s, p, id) ==
                             /\ ApplyAccept(s, p, bal[s][p][id], id, n.body.tq, n.body.depq, n.body.txq)
                             /\ msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, n.body.tq, n.body.depq, n.body.txq, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                                  \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) }
+                            /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>> 
                 ELSE IF (initCoord[id] \in Q)
                 THEN 
@@ -628,6 +645,7 @@ HandleRecoverOK(s, p, id) ==
                         /\  ApplyAccept(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop)            
                         /\  msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                               \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) } 
+                        /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
                         /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
                 ELSE IF ( \A shard \in idToShard[id] :
                             LET Rmax == { n \in quorumOfMessages :
@@ -650,6 +668,7 @@ HandleRecoverOK(s, p, id) ==
                             /\ ApplyAccept(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop)                    
                             /\ msgs' = (msgs\ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                                 \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) } 
+                            /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
                         ELSE 
                             LET n == CHOOSE n \in quorumOfMessages : n.body.phaseq = PreAcceptedPhase
@@ -666,6 +685,7 @@ HandleRecoverOK(s, p, id) ==
                             /\ postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = TRUE]
                             /\ recoveryAttemptBal' = [recoveryAttemptBal EXCEPT ![s][p][id] = bal[s][p][id]]
                             /\ msgs' = msgs \ quorumOfMessages
+                            /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\ UNCHANGED <<bal, txn, abal, ts, dep, phase>>
                 ELSE  
                     LET computations == AcceptComputations(s, p, id, ts[s][p][id])
@@ -673,6 +693,7 @@ HandleRecoverOK(s, p, id) ==
                     /\ ApplyAccept(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop)
                     /\ msgs' =   (msgs \ quorumOfMessages)  \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                             \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) } 
+                    /\ consumedMsgs' = consumedMsgs \cup quorumOfMessages
                     /\ UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
     /\ UNCHANGED <<submitted, initCoord, recovered, initTimestamp,  executed, executeWaitingFlag, relation>>
 
@@ -772,7 +793,7 @@ HandlePostWaiting(s, p, id) ==
         \/  /\ ~Case1 /\ ~Case2 /\ ~Case3
             /\ UNCHANGED <<msgs, postWaitingFlag, bal, dep, phase, abal, txn, ts>>
                       
-    /\ UNCHANGED <<submitted, initCoord, recovered, Wvar, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
+    /\ UNCHANGED <<submitted, initCoord, recovered, Wvar, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation, consumedMsgs>>
 
 (***************************************************************************)
 (* Execution                                                               *)
@@ -787,7 +808,7 @@ StartExecute(s, p, id) ==
     /\ executeWaitingFlag[s][p][id] = FALSE
     /\ msgs' = msgs \cup { ReadMsg(s, p, sq, p, id) : sq \in idToShard[id] }
     /\ executeWaitingFlag' = [executeWaitingFlag EXCEPT ![s][p][id] = TRUE]
-    /\ UNCHANGED <<bal, phase, txn, dep, ts, abal, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation>>
+    /\ UNCHANGED <<bal, phase, txn, dep, ts, abal, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, relation, consumedMsgs>>
     
 (* HandleRead (lines 99-101) *)
 HandleRead(m) ==
@@ -800,6 +821,7 @@ HandleRead(m) ==
         /\ phase[s][p][id] = StablePhase
         /\ \A id2 \in dep[s][p][id] : id2 \in executed[s][p]
         /\ msgs' = (msgs \ {m}) \cup {ReadOkMsg(s, p, sq, q, id)}
+        /\ consumedMsgs' = consumedMsgs \cup {m}
     /\ UNCHANGED <<bal, phase, txn, dep, ts, abal, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, executeWaitingFlag, relation>>
 
 (* When received readOks (lines 96-98) *)
@@ -814,7 +836,8 @@ HandleReadOk(s, p, id) ==
             }
         IN
         /\ Cardinality(readOKs) = Cardinality(idToShard[id]) \* check that we got answer from everyone.
-        /\ msgs' = (msgs \ readOKs) \cup { ApplyMsg(s, p, to[1], to[2], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } } 
+        /\ msgs' = (msgs \ readOKs) \cup { ApplyMsg(s, p, to[1], to[2], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } }
+        /\ consumedMsgs' = consumedMsgs \cup readOKs
     /\ UNCHANGED <<bal, phase, txn, dep, ts, abal, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executed, executeWaitingFlag, relation>>
             
 (* HandleApply (lines 102-105) *)
@@ -829,6 +852,7 @@ HandleApply(m) ==
         /\ phase[s][p][id] = StablePhase
         /\ \A id2 \in dep[s][p][id] : id2 \in executed[s][p]
         /\ msgs' = msgs \ {m}
+        /\ consumedMsgs' = consumedMsgs \cup {m}
         /\ executed' = [executed EXCEPT ![s][p] = executed[s][p] \cup {id}]
         /\ relation' =
             [id1 \in Id |-> 
