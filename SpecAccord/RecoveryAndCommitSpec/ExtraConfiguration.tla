@@ -16,6 +16,6 @@ ConflictPairs == {
 }
 
 \* Initial timestamp values
-initTimestampConstant == <<[id |-> <<0, 0>>, t |-> 4], [id |-> <<0, 0>>, t |-> 2], [id |-> <<0, 0>> , t |-> 3]>>
+initTimestampConstant == <<[id |-> <<0, 0>>, t |-> 1], [id |-> <<0, 0>>, t |-> 2], [id |-> <<0, 0>> , t |-> 3]>>
 
 =============================================================================

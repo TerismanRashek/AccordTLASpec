@@ -340,7 +340,7 @@ Submit(s, p, id) ==
         /\  initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
         /\  LET computations == PreAcceptComputations(s, p, s, p, id, tx, newInitTimestamp)
             IN
-            /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, D0) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
+            /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
             /\ msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                             \cup { PreAcceptOKMsg(s, p, s, p, id, computations.finalTs, computations.D) }
     /\ UNCHANGED <<bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs>> 
