@@ -360,7 +360,7 @@ HandlePreAccept(m) ==
         IN 
         LET computations == PreAcceptComputations(s, p, sq, q, id, tx, initTimestamp[id])
         IN
-        /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D)
+        /\ ApplyPreAccept(s, p, id, tx, computations.finalTs, D0 \cup computations.D)
         /\ msgs' = (msgs \ {m}) \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }
         /\ consumedMsgs' = consumedMsgs \cup {m}
     /\ UNCHANGED <<bal, abal, submitted, initCoord, recovered, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Wvar, Qvar, executed, executeWaitingFlag, relation, initTimestamp>>
