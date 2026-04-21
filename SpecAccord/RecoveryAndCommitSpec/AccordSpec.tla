@@ -189,6 +189,9 @@ LessThanTs(ts1, ts2) ==
     ELSE IF ts1.id[2] = ts2.id[2] THEN ts1.id[1] < ts2.id[1]
     ELSE ts1.id[2] < ts2.id[2]
 
+LessOrEqualTs(ts1, ts2) ==
+    LessThanTs(ts1, ts2) \/ ts1 = ts2
+
 MaxTs(ts1, ts2) ==
     IF LessThanTs(ts1, ts2) THEN ts2 ELSE ts1
 
@@ -237,7 +240,7 @@ SeenIds(s, p) ==
 \*        - Compute the t and D values (see pseudocode) with PreAcceptComputations()
 \*        - send PreAcceptOk(id,t,D) to ourselves.
 
-PreAcceptComputations(s, p, sq, q, id, tx, initTs) ==
+PreAcceptComputations(s, p, sq, q, id, initTs) ==
     LET setOfConflictingTs == { ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id, id2)} }
         D == { id2 \in SeenIds(s, p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], initTs)) }
     IN
@@ -337,7 +340,7 @@ Submit(s, p, id) ==
         /\  initTimestamp' = [initTimestamp EXCEPT ![id] = newInitTimestamp]
         /\  submitted' = submitted \cup {id}
         /\  initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
-        /\  LET computations == PreAcceptComputations(s, p, s, p, id, tx, newInitTimestamp)
+        /\  LET computations == PreAcceptComputations(s, p, s, p, id, newInitTimestamp)
             IN
             /\  ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
             /\  msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
@@ -357,7 +360,7 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        LET computations == PreAcceptComputations(s, p, sq, q, id, tx, initTimestamp[id])
+        LET computations == PreAcceptComputations(s, p, sq, q, id, initTimestamp[id])
         IN
         /\  ApplyPreAccept(s, p, id, tx, computations.finalTs, D0)
         /\  msgs' = (msgs \ {m}) \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }
@@ -894,6 +897,41 @@ Reach(i, j) ==
 
 Acyclicity ==
     \A i \in Id : ~Reach(i, i)
+
+Invariant3 == 
+    \A id \in Id :
+        ( \E m \in msgs :
+            /\ m.type \in {TypeAccept, TypeCommit}
+            /\ m.body.b = 0
+            /\ m.body.id = id
+        )
+        =>  
+        (   \E m \in msgs :
+                /\  m.type \in {TypeAccept, TypeCommit}
+                /\  m.body.b = 0
+                /\  LET setOfPreAcceptOKs == 
+                        {n \in consumedMsgs :
+                            /\  n.type = TypePreAcceptOK 
+                            /\  n.shardto = m.shardfrom
+                            /\  n.to = m.from
+                            /\  n.body.id = id
+                            /\  LessOrEqualTs(n.body.tq, m.body.t) 
+                        }
+                    IN IsQuorum(setOfPreAcceptOKs, id)
+        )
+
+(* Invariant4a == 
+        ( \E m \in msgs :
+            /\  m.type = TypeCommit
+            /\  m.body.fastOrSlow \in {Fast}
+        )
+        =>
+        (\E m \in msgs :
+            /\  m.type = TypeCommit
+            /\  m.body.fastOrSlow \in {Fast}
+            /\  LET 
+        ) *)
+
     
 Next ==
     \/  \E m \in msgs :
