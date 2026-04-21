@@ -53,6 +53,7 @@ CommittedPhase == 4
 StablePhase == 5
 
 \* Message types
+TypeSubmit == 0
 TypePreAccept == 1
 TypePreAcceptOK == 2
 TypeAccept == 3
@@ -77,6 +78,9 @@ Medium == 2
 
 Message(type, shardfrom, from, shardto, to, body) ==
     [type |-> type, shardfrom |-> shardfrom, from |-> from, to |-> to, shardto |-> shardto, body |-> body]
+
+SubmitMsg(sp, p, sq, q, id) ==
+    Message(TypeSubmit, sp, p, sq, q, [id |-> id])
 
 PreAcceptMsg(sp, p, sq, q, id, tx, D0) ==
     Message(TypePreAccept, sp, p, sq, q, [id |-> id, tx |-> tx, D0 |-> D0])
@@ -189,6 +193,9 @@ LessThanTs(ts1, ts2) ==
     ELSE IF ts1.id[2] = ts2.id[2] THEN ts1.id[1] < ts2.id[1]
     ELSE ts1.id[2] < ts2.id[2]
 
+LessOrEqualTs(ts1, ts2) ==
+    LessThanTs(ts1, ts2) \/ ts1 = ts2
+
 MaxTs(ts1, ts2) ==
     IF LessThanTs(ts1, ts2) THEN ts2 ELSE ts1
 
@@ -223,6 +230,10 @@ SeenIds(s, p) ==
         \/ \E id2 \in Id : id \in dep[s][p][id2] 
     }
 
+initCoordInQuorum(id, Q) ==
+    \E coord \in initCoord[id] :
+        coord \in Q
+
 
 
 (***************************************************************************)
@@ -237,7 +248,7 @@ SeenIds(s, p) ==
 \*        - Compute the t and D values (see pseudocode) with PreAcceptComputations()
 \*        - send PreAcceptOk(id,t,D) to ourselves.
 
-PreAcceptComputations(s, p, sq, q, id, tx, initTs) ==
+PreAcceptComputations(s, p, sq, q, id, initTs) ==
     LET setOfConflictingTs == { ts[s][p][id2] : id2 \in { id2 \in Id : ts[s][p][id2].id # <<0,NoProc>> /\ Conflicts(id, id2)} }
         D == { id2 \in SeenIds(s, p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], initTs)) }
     IN
@@ -326,7 +337,7 @@ ApplyRecover(sp, p, b, id, tx) ==
 Submit(s, p, id) ==
     /\  id \notin submitted
     /\  s \in idToShard[id] 
-    /\  LET tx == id   \* We use id as command payload, since the actual payload does not matter here.
+    /\  LET initCoords == { [id |-> id, shard |-> shard] : shard \in idToShard[id]}
             earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = <<s,p>> /\ LessThanTs(initTimestamp[id], initTimestamp[id1])}}
         IN 
         \* making sure that this process has not already submitted a command with a greater timestamp than the one we are currently submitting.
@@ -336,14 +347,25 @@ Submit(s, p, id) ==
         IN
         /\  initTimestamp' = [initTimestamp EXCEPT ![id] = newInitTimestamp]
         /\  submitted' = submitted \cup {id}
-        /\  initCoord' = [initCoord EXCEPT ![id] = <<s,p>>]
-        /\  LET computations == PreAcceptComputations(s, p, s, p, id, tx, newInitTimestamp)
+        /\  initCoord' = [initCoord EXCEPT ![id] = initCoords]
+        /\  msgs' = msgs \cup { SubmitMsg(s, p, coord.shard, coord.id, id) : coord \in initCoords }
+    /\  UNCHANGED <<bal, abal, txn, phase, ts, dep, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs>> 
+
+HandleSubmit(m) ==
+    /\  m.type = TypeSubmit
+    /\  LET s  == m.shardto
+            p  == m.to
+            sq == m.shardfrom
+            q  == m.from
+            id == m.body.id
+        IN 
+        /\  LET computations == PreAcceptComputations(s, p, s, p, id, initTimestamp[id])
+                tx == id \* we use the id as command payload since it does not matter
             IN
             /\  ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
-            /\  msgs' = msgs \cup { PreAcceptMsg(s, p, to[1], to[2], id, tx, computations.D) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
-                             \cup { PreAcceptOKMsg(s, p, s, p, id, computations.finalTs, computations.D) }
-    /\  UNCHANGED <<bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs>> 
-
+            /\  msgs' = (msgs \ {m}) \cup { PreAcceptMsg(sq, q, s, to, id, tx, computations.D) : to \in Proc \ {p} } \* sq and q in params here so the recipient will answer back to the original initcoord.
+                                     \cup { PreAcceptOKMsg(sq, q, s, p, id, computations.finalTs, computations.D) }
+    /\  UNCHANGED <<initTimestamp, submitted, initCoord, bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs>> 
 
 (* HandlePreAccept (lines 4-12) *)
                    
@@ -357,7 +379,7 @@ HandlePreAccept(m) ==
             tx  == m.body.tx
             D0 == m.body.D0
         IN 
-        LET computations == PreAcceptComputations(s, p, sq, q, id, tx, initTimestamp[id])
+        LET computations == PreAcceptComputations(s, p, sq, q, id, initTimestamp[id])
         IN
         /\  ApplyPreAccept(s, p, id, tx, computations.finalTs, D0)
         /\  msgs' = (msgs \ {m}) \cup { PreAcceptOKMsg(s, p, sq, q, id, computations.finalTs, computations.D) }
@@ -518,7 +540,7 @@ HandleStable(m) ==
             b  == m.body.b
             id == m.body.id
         IN
-        /\  ApplyStable(s, p, b, id)
+        /\  ApplyStable(sp, p, b, id)
         /\  msgs' = msgs \ {m}
         /\  consumedMsgs' = consumedMsgs \cup {m}
         /\  UNCHANGED <<bal, submitted, initCoord, dep, abal, txn, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
@@ -596,7 +618,7 @@ HandleRecoverOK(s, p, id) ==
             }
         IN
         /\  IsQuorum(quorumOfMessages, id) 
-        /\  LET Q == { <<m.shardfrom,m.from>> : m \in quorumOfMessages }
+        /\  LET Q == { [shard |-> m.shardfrom, id |-> m.from] : m \in quorumOfMessages }
                 Abals == { m.body.abalq : m \in quorumOfMessages }
                 bmax == CHOOSE val \in Abals : \A val2 \in Abals : val >= val2
                 U == { m \in quorumOfMessages : m.body.abalq = bmax }
@@ -618,7 +640,7 @@ HandleRecoverOK(s, p, id) ==
                         IN
                         /\  ApplyCommit(s, p, bal[s][p][id], id, n.body.tq, n.body.depq, n.body.txq, FALSE)
                         /\  msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, n.body.tq, n.body.depq, Slow, n.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
-                                                                \cup { CommitOkMsg(s, p, s, p, bal[s][p][id], id) }
+                                                              \cup { CommitOkMsg(s, p, s, p, bal[s][p][id], id) }
                         /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                         /\  UNCHANGED <<bal, TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>  
                 ELSE IF (\E n \in U : n.body.phaseq = AcceptedPhase)
@@ -633,7 +655,7 @@ HandleRecoverOK(s, p, id) ==
                                                                   \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) }
                             /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\  UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>> 
-                ELSE IF (initCoord[id] \in Q)
+                ELSE IF (initCoordInQuorum(id, Q))
                 THEN 
                         LET computations == AcceptComputations(s, p, id, ts[s][p][id])
                         IN 
@@ -895,6 +917,41 @@ Reach(i, j) ==
 Acyclicity ==
     \A i \in Id : ~Reach(i, i)
     
+Invariant3 == 
+    \A id \in Id :
+        ( \E m \in msgs :
+            /\ m.type \in {TypeAccept, TypeCommit}
+            /\ m.body.b = 0
+            /\ m.body.id = id
+        )
+        =>  
+        (   \E m \in msgs :
+                /\  m.type \in {TypeAccept, TypeCommit}
+                /\  m.body.b = 0
+                /\  LET setOfPreAcceptOKs == 
+                        {n \in consumedMsgs :
+                            /\  n.type = TypePreAcceptOK 
+                            /\  n.shardto = m.shardfrom
+                            /\  n.to = m.from
+                            /\  n.body.id = id
+                            /\  LessOrEqualTs(n.body.tq, m.body.t) 
+                        }
+                    IN IsQuorum(setOfPreAcceptOKs, id)
+        )
+
+(* Invariant4a == 
+        ( \E m \in msgs :
+            /\  m.type = TypeCommit
+            /\  m.body.fastOrSlow \in {Fast}
+        )
+        =>
+        (\E m \in msgs :
+            /\  m.type = TypeCommit
+            /\  m.body.fastOrSlow \in {Fast}
+            /\  LET 
+        ) *)
+
+
 Next ==
     \/  \E m \in msgs :
         \/  HandlePreAccept(m) 
