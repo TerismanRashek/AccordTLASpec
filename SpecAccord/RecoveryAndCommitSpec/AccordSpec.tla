@@ -90,8 +90,8 @@ AcceptMsg(sp, p, sq, q, b, id, t, D, tx, pathSpeed) ==
 AcceptOKMsg(sp, p, sq, q, b, id, Dq, pathSpeed) ==
     Message(TypeAcceptOK, sp, p, sq, q, [id |-> id, b |-> b, Dq |-> Dq, pathSpeed |-> pathSpeed])
 
-CommitMsg(sp, p, sq, q, b, id, t, D, fastOrSlow, tx) ==
-    Message(TypeCommit, sp, p, sq, q, [id |-> id, b |-> b, t |-> t, D |-> D, fastOrSlow |-> fastOrSlow, tx |-> tx])
+CommitMsg(sp, p, sq, q, b, id, t, D, pathSpeed, tx) ==
+    Message(TypeCommit, sp, p, sq, q, [id |-> id, b |-> b, t |-> t, D |-> D, pathSpeed |-> pathSpeed, tx |-> tx])
 
 CommitOkMsg(sp, p, sq, q, b, id) ==
     Message(TypeCommitOK, sp, p, sq, q, [id |-> id, b |-> b])
@@ -464,7 +464,7 @@ HandleAcceptOK(s, p, id) ==
             ELSE 
                 /\  ApplyCommit(s, p, bal[s][p][id], id, ts[s][p][id], D, txn[s][p][id], FALSE)
                 /\  ApplyStable(s, p, bal[s][p][id], id)               
-                /\  msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], D, Fast, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                /\  msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], D, Medium, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                                                       \cup { StableMsg(s, p, to[1], to[2], bal[s][p][id], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                 /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
     /\  UNCHANGED <<bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar,  executed, executeWaitingFlag, relation>>
@@ -482,11 +482,11 @@ HandleCommit(m) ==
             id == m.body.id
             tx  == m.body.tx
             D  == m.body.D
-            fastOrSlow == m.body.fastOrSlow
+            pathSpeed == m.body.pathSpeed
             t == m.body.t
         IN
-        /\  ApplyCommit(s, p, b, id, t, D, tx, FALSE)
-        /\  IF fastOrSlow = Slow THEN msgs' = (msgs \ {m}) \cup { CommitOkMsg(s, p, sq, q, b, id) } ELSE msgs' = msgs \ {m}
+        /\  IF pathSpeed = Slow THEN ApplyCommit(s, p, b, id, t, D, tx, FALSE) ELSE ApplyCommit(s, p, b, id, t, D, tx, TRUE)
+        /\  IF pathSpeed = Slow THEN msgs' = (msgs \ {m}) \cup { CommitOkMsg(s, p, sq, q, b, id) } ELSE msgs' = msgs \ {m}
         /\  consumedMsgs' = consumedMsgs \cup {m}
         /\  UNCHANGED <<bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, initTimestamp>>
 
@@ -920,19 +920,107 @@ Invariant3 ==
                     IN IsQuorum(setOfPreAcceptOKs, id)
         )
 
-(* Invariant4a == 
+Invariant4a == 
+    \A id \in Id :
         ( \E m \in msgs :
             /\  m.type = TypeCommit
-            /\  m.body.fastOrSlow \in {Fast}
+            /\  m.body.pathSpeed = Fast
+            /\  m.body.id = id
         )
         =>
         (\E m \in msgs :
             /\  m.type = TypeCommit
-            /\  m.body.fastOrSlow \in {Fast}
-            /\  LET 
-        ) *)
+            /\  m.body.pathSpeed = Fast
+            /\  m.body.id = id
+            /\  LET setOfPreAcceptOKs == 
+                    {n \in consumedMsgs :
+                        /\  n.type = TypePreAcceptOK 
+                        /\  n.shardto = m.shardfrom
+                        /\  n.to = m.from
+                        /\  n.body.id = id 
+                    }
+                IN 
+                \E setOfPreAccs \in SUBSET(setOfPreAcceptOKs) :
+                    /\  IsFastQuorum(setOfPreAccs, id)  
+                    /\  UNION {n.body.Dq : n \in setOfPreAccs} = m.body.D
+        )
 
+Invariant4b == 
+    \A id \in Id :
+        ( \E m \in msgs :
+            /\  m.type = TypeCommit
+            /\  m.body.pathSpeed = Medium
+            /\  m.body.id = id
+        )
+        =>
+        ( \E m \in msgs :
+            /\  m.type = TypeCommit
+            /\  m.body.pathSpeed = Medium
+            /\  m.body.id = id
+            /\  LET setOfPreAcceptOKs == 
+                        { n \in consumedMsgs :
+                            /\  n.type = TypePreAcceptOK 
+                            /\  n.shardto = m.shardfrom
+                            /\  n.to = m.from
+                            /\  n.body.id = id 
+                        }
+                    setOfRecOKs ==
+                        { n \in consumedMsgs :
+                            /\  n.type = TypeRecoverOK 
+                            /\  n.shardto = m.shardfrom
+                            /\  n.to = m.from
+                            /\  n.body.id = id 
+                        }
+                IN (\E setOfPreAccs \in SUBSET(setOfPreAcceptOKs) : (IsQuorum(setOfPreAccs, id) /\ UNION { n.body.Dq : n \in setOfPreAccs } = m.body.D)) 
+                \/ (\E setOfRecAccs \in SUBSET(setOfRecOKs) : (IsQuorum(setOfRecAccs, id) /\ UNION { n.body.depq : n \in setOfRecAccs } = m.body.D))
+        )
+
+Invariant5 ==
+    \A id \in Id :
+        ( \E m \in msgs :
+            /\  m.type = TypeAccept
+            /\  m.body.id = id
+            /\  m.body.tx # Nop
+        )
+        =>
+        ( \E m \in msgs :
+            /\  m.type = TypeAccept
+            /\  m.body.id = id
+            /\  m.body.tx # Nop
+            /\  LET setOfPreAcceptOKs == 
+                        { n \in consumedMsgs :
+                            /\  n.type = TypePreAcceptOK 
+                            /\  n.shardto = m.shardfrom
+                            /\  n.to = m.from
+                            /\  n.body.id = id 
+                        }
+                    setOfRecOKs ==
+                        { n \in consumedMsgs :
+                            /\  n.type = TypeRecoverOK 
+                            /\  n.shardto = m.shardfrom
+                            /\  n.to = m.from
+                            /\  n.body.id = id 
+                        }
+                IN 
+                (\E setOfPreAccs \in SUBSET(setOfPreAcceptOKs) : 
+                            /\  IsQuorum(setOfPreAccs, id) 
+                            /\  (UNION { n.body.Dq : n \in setOfPreAccs }) \subseteq m.body.D 
+                            /\  LessOrEqualTs(initTimestamp[id],MaxTsInSet({n.body.tq : n \in setOfPreAccs})))
+                \/  (\E setOfRecAccs \in SUBSET(setOfRecOKs) :
+                            /\  IsQuorum(setOfRecAccs, id) 
+                            /\  (UNION { n.body.depq : n \in setOfRecAccs }) \subseteq m.body.D 
+                            /\  LessOrEqualTs(initTimestamp[id],MaxTsInSet({n.body.tq : n \in setOfRecAccs})))
+        )
     
+Invariant6 ==
+    \A id \in Id :
+        ( \E m \in msgs :
+            /\  m.type = TypeCommit
+            /\  m.body.id = id
+            /\  m.body.pathSpeed = Fast
+        )
+        => 
+
 Next ==
     \/  \E m \in msgs :
         \/  HandlePreAccept(m) 
