@@ -1012,14 +1012,7 @@ Invariant5 ==
                             /\  LessOrEqualTs(initTimestamp[id],MaxTsInSet({n.body.tq : n \in setOfRecAccs})))
         )
     
-Invariant6 ==
-    \A id \in Id :
-        ( \E m \in msgs :
-            /\  m.type = TypeCommit
-            /\  m.body.id = id
-            /\  m.body.pathSpeed = Fast
-        )
-        => 
+
 
 Next ==
     \/  \E m \in msgs :
