@@ -557,8 +557,8 @@ StartRecover(s, p, id) ==
     \*  Ballots owned by p are of the form k*N + p. This k computation is just to get the smallest k * N + p larger than the current ballot
     \*  Since 2 processes from different shards can have the same id I compute a new p unique id (N * Nshards of them in total) and use that.
     /\  LET Ntotal == N * Nshards IN
-        LET pUnique == (s - 1) * N + p  IN
-        LET k == ((bal[s][p][id] - pUnique) \div Ntotal) + 1 IN
+        LET pUnique == ((s-1) * N) + p  IN
+        LET k == ((bal[s][p][id] - pUnique + Ntotal) \div Ntotal) IN
         LET b == k * Ntotal + pUnique
         IN
         /\  LET computations == RecoverComputations(s, p, id)
