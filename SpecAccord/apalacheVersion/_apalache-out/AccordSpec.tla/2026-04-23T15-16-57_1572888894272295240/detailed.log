@@ -1,0 +1,45 @@
+2026-04-23T15:16:57,716 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-23T15:16:57,736 [main] INFO  a.f.a.t.t.o.TypeCheckCmd - Type checking AccordSpec.tla
+2026-04-23T15:16:57,915 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-23T15:16:58,320 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:39:1-39:24]: Syntax error in annotation -- ';' expected but '@' found
+2026-04-23T15:16:58,358 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:39:1-39:24]: Syntax error in annotation -- ';' expected but '@' found
+2026-04-23T15:16:58,652 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:16:58,652 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:16:58,652 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:16:58,653 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:16:58,828 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
+2026-04-23T15:16:58,830 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
+2026-04-23T15:16:58,830 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
+2026-04-23T15:16:58,875 [main] ERROR a.f.a.t.t.TypeCheckerTool - Parsing error in the alias annotation: PreAcceptOKMessage = { type: MessageType, sp: SHARD, p: PROC, sq: SHARD, q: PROC, body: {id: Int, tq: TIMESTAMP, Dq: Set(Int)} }
+2026-04-23T15:16:58,878 [main] DEBUG a.f.a.i.p.PassChainExecutor - Adapted exception intercepted: 
+at.forsyte.apalache.tla.typecheck.TypingInputException: Parser error in type alias of typedefs_aliases: alias name expected
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.parseOneTypeAlias(TypeCheckerTool.scala:134)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$4(TypeCheckerTool.scala:105)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$4$adapted(TypeCheckerTool.scala:102)
+	at scala.collection.immutable.List.foreach(List.scala:323)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$2(TypeCheckerTool.scala:102)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$2$adapted(TypeCheckerTool.scala:101)
+	at scala.Option.foreach(Option.scala:437)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$1(TypeCheckerTool.scala:101)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$1$adapted(TypeCheckerTool.scala:100)
+	at scala.collection.immutable.List.foreach(List.scala:323)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.parseAllTypeAliases(TypeCheckerTool.scala:100)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.check(TypeCheckerTool.scala:36)
+	at at.forsyte.apalache.tla.passes.typecheck.EtcTypeCheckerPassImpl.execute(EtcTypeCheckerPassImpl.scala:54)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.exec(PassChainExecutor.scala:71)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.$anonfun$runPassOnModule$3(PassChainExecutor.scala:60)
+	at scala.util.Either.flatMap(Either.scala:360)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.$anonfun$runPassOnModule$1(PassChainExecutor.scala:58)
+	at scala.collection.LinearSeqOps.foldLeft(LinearSeq.scala:183)
+	at scala.collection.LinearSeqOps.foldLeft$(LinearSeq.scala:179)
+	at scala.collection.immutable.List.foldLeft(List.scala:79)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.runOnPasses(PassChainExecutor.scala:51)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.run(PassChainExecutor.scala:42)
+	at at.forsyte.apalache.tla.tooling.opt.TypeCheckCmd.run(TypeCheckCmd.scala:41)
+	at at.forsyte.apalache.tla.Tool$.runCommand(Tool.scala:139)
+	at at.forsyte.apalache.tla.Tool$.run(Tool.scala:119)
+	at at.forsyte.apalache.tla.Tool$.main(Tool.scala:40)
+	at at.forsyte.apalache.tla.Tool.main(Tool.scala)
+2026-04-23T15:16:58,881 [main] ERROR a.f.a.t.Tool$ - Typing input error: Parser error in type alias of typedefs_aliases: alias name expected
+2026-04-23T15:16:58,882 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  1 sec
+2026-04-23T15:16:58,882 [main] INFO  a.f.a.t.Tool$ - Total time: 1.163 sec

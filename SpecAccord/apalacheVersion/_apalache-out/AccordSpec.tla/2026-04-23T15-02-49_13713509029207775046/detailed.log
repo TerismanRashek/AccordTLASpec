@@ -1,0 +1,90 @@
+2026-04-23T15:02:49,657 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-23T15:02:49,699 [main] INFO  a.f.a.t.t.o.CheckCmd - Tuning: search.outputTraces=false
+2026-04-23T15:02:49,899 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-23T15:02:50,360 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:39:1-39:24]: Syntax error in annotation -- ';' expected but '@' found
+2026-04-23T15:02:50,366 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:53:1-54:129]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,369 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:57:1-58:131]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,371 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:61:1-62:167]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,373 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:65:1-66:151]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,375 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:69:1-70:167]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,377 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:73:1-74:115]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,378 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:77:1-78:113]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,382 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:81:1-82:125]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,385 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:85:1-86:236]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,387 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:33:5-33:6]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,389 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:41:5-41:10]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,390 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:37:5-37:5]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,391 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:35:5-35:5]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,391 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:29:5-29:10]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,392 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:45:5-45:28]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,393 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:39:5-39:10]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,393 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:31:5-31:8]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,394 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:43:5-43:7]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,394 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:78:5-78:9]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,395 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:86:5-86:8]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,396 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:94:5-94:17]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,396 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:76:5-76:7]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,397 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:80:5-80:7]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,397 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:110:5-110:19]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,398 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:102:5-102:8]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,398 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:82:5-82:7]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,399 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:112:5-112:22]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,399 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:90:5-90:13]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,400 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:106:5-106:8]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,400 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:88:5-88:8]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,400 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:114:5-114:16]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,401 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:108:5-108:8]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,401 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:84:5-84:6]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,401 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:104:5-104:9]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,402 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:96:5-96:13]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,402 [main] WARN  a.f.a.t.i.AnnotationExtractor - [AccordSpec:92:5-92:13]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,429 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:39:1-39:24]: Syntax error in annotation -- ';' expected but '@' found
+2026-04-23T15:02:50,433 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:53:1-54:129]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,435 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:57:1-58:131]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,436 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:61:1-62:167]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,437 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:65:1-66:151]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,438 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:69:1-70:167]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,440 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:73:1-74:115]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,441 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:77:1-78:113]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,460 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:81:1-82:125]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,462 [main] WARN  a.f.a.t.i.AnnotationExtractor - [typedefs:85:1-86:236]: Syntax error in annotation -- ';' expected but end of source found
+2026-04-23T15:02:50,718 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:02:50,718 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:02:50,718 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:02:50,718 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-23T15:02:50,881 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
+2026-04-23T15:02:50,881 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
+2026-04-23T15:02:50,881 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
+2026-04-23T15:02:50,917 [main] ERROR a.f.a.t.t.TypeCheckerTool - Parsing error in the alias annotation: PreAcceptOKMessage = { type: MessageType, sp: SHARD, p: PROC, sq: SHARD, q: PROC, body: {id: Int, tq: TIMESTAMP, Dq: Set(Int)} }
+2026-04-23T15:02:50,918 [main] DEBUG a.f.a.i.p.PassChainExecutor - Adapted exception intercepted: 
+at.forsyte.apalache.tla.typecheck.TypingInputException: Parser error in type alias of typedefs_aliases: alias name expected
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.parseOneTypeAlias(TypeCheckerTool.scala:134)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$4(TypeCheckerTool.scala:105)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$4$adapted(TypeCheckerTool.scala:102)
+	at scala.collection.immutable.List.foreach(List.scala:323)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$2(TypeCheckerTool.scala:102)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$2$adapted(TypeCheckerTool.scala:101)
+	at scala.Option.foreach(Option.scala:437)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$1(TypeCheckerTool.scala:101)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseAllTypeAliases$1$adapted(TypeCheckerTool.scala:100)
+	at scala.collection.immutable.List.foreach(List.scala:323)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.parseAllTypeAliases(TypeCheckerTool.scala:100)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.check(TypeCheckerTool.scala:36)
+	at at.forsyte.apalache.tla.passes.typecheck.EtcTypeCheckerPassImpl.execute(EtcTypeCheckerPassImpl.scala:54)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.exec(PassChainExecutor.scala:71)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.$anonfun$runPassOnModule$3(PassChainExecutor.scala:60)
+	at scala.util.Either.flatMap(Either.scala:360)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.$anonfun$runPassOnModule$1(PassChainExecutor.scala:58)
+	at scala.collection.LinearSeqOps.foldLeft(LinearSeq.scala:183)
+	at scala.collection.LinearSeqOps.foldLeft$(LinearSeq.scala:179)
+	at scala.collection.immutable.List.foldLeft(List.scala:79)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.runOnPasses(PassChainExecutor.scala:51)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.run(PassChainExecutor.scala:42)
+	at at.forsyte.apalache.tla.tooling.opt.CheckCmd.run(CheckCmd.scala:137)
+	at at.forsyte.apalache.tla.Tool$.runCommand(Tool.scala:139)
+	at at.forsyte.apalache.tla.Tool$.run(Tool.scala:119)
+	at at.forsyte.apalache.tla.Tool$.main(Tool.scala:40)
+	at at.forsyte.apalache.tla.Tool.main(Tool.scala)
+2026-04-23T15:02:51,003 [main] ERROR a.f.a.t.Tool$ - typedefs.tla:39:1-39:24: type input error: Parser error in type alias of typedefs_aliases: alias name expected
+2026-04-23T15:02:51,005 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  1 sec
+2026-04-23T15:02:51,005 [main] INFO  a.f.a.t.Tool$ - Total time: 1.341 sec

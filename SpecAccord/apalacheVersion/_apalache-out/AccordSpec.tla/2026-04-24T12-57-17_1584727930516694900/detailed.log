@@ -1,0 +1,37 @@
+2026-04-24T12:57:17,356 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-24T12:57:17,382 [main] INFO  a.f.a.t.t.o.CheckCmd - Tuning: search.outputTraces=false
+2026-04-24T12:57:17,597 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-24T12:57:18,435 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-24T12:57:18,436 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-24T12:57:18,437 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-24T12:57:18,437 [main] WARN  a.f.a.t.i.ModuleTranslator - WORKAROUND #130: labelling operator n as recursive, though SANY did not tell us so.
+2026-04-24T12:57:18,600 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
+2026-04-24T12:57:18,600 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
+2026-04-24T12:57:18,600 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
+2026-04-24T12:57:18,975 [main] ERROR a.f.a.t.t.TypeCheckerTool - Parsing error in the type annotation: Set($Message)
+2026-04-24T12:57:18,979 [main] DEBUG a.f.a.i.p.PassChainExecutor - Adapted exception intercepted: 
+at.forsyte.apalache.tla.typecheck.TypingInputException: Parser error in type annotation of msgs: type constant expected
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.$anonfun$parseTypeAnnotations$4(TypeCheckerTool.scala:159)
+	at scala.collection.StrictOptimizedIterableOps.map(StrictOptimizedIterableOps.scala:100)
+	at scala.collection.StrictOptimizedIterableOps.map$(StrictOptimizedIterableOps.scala:87)
+	at scala.collection.mutable.HashMap.map(HashMap.scala:35)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.parseTypeAnnotations(TypeCheckerTool.scala:145)
+	at at.forsyte.apalache.tla.typecheck.TypeCheckerTool.check(TypeCheckerTool.scala:37)
+	at at.forsyte.apalache.tla.passes.typecheck.EtcTypeCheckerPassImpl.execute(EtcTypeCheckerPassImpl.scala:54)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.exec(PassChainExecutor.scala:71)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.$anonfun$runPassOnModule$3(PassChainExecutor.scala:60)
+	at scala.util.Either.flatMap(Either.scala:360)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.$anonfun$runPassOnModule$1(PassChainExecutor.scala:58)
+	at scala.collection.LinearSeqOps.foldLeft(LinearSeq.scala:183)
+	at scala.collection.LinearSeqOps.foldLeft$(LinearSeq.scala:179)
+	at scala.collection.immutable.List.foldLeft(List.scala:79)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.runOnPasses(PassChainExecutor.scala:51)
+	at at.forsyte.apalache.infra.passes.PassChainExecutor.run(PassChainExecutor.scala:42)
+	at at.forsyte.apalache.tla.tooling.opt.CheckCmd.run(CheckCmd.scala:137)
+	at at.forsyte.apalache.tla.Tool$.runCommand(Tool.scala:139)
+	at at.forsyte.apalache.tla.Tool$.run(Tool.scala:119)
+	at at.forsyte.apalache.tla.Tool$.main(Tool.scala:40)
+	at at.forsyte.apalache.tla.Tool.main(Tool.scala)
+2026-04-24T12:57:19,080 [main] ERROR a.f.a.t.Tool$ - <unknown>: type input error: Parser error in type annotation of msgs: type constant expected
+2026-04-24T12:57:19,081 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  1 sec
+2026-04-24T12:57:19,082 [main] INFO  a.f.a.t.Tool$ - Total time: 1.720 sec

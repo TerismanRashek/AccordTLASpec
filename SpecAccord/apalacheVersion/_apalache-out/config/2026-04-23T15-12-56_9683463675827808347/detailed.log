@@ -1,0 +1,5 @@
+2026-04-23T15:12:56,138 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-23T15:12:56,141 [main] INFO  a.f.a.t.t.o.ConfigCmd - Configuring Apalache
+2026-04-23T15:12:56,142 [main] INFO  a.f.a.t.Tool$ - Configuration complete
+2026-04-23T15:12:56,149 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  0 sec
+2026-04-23T15:12:56,149 [main] INFO  a.f.a.t.Tool$ - Total time: 0.0 sec

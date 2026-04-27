@@ -1,0 +1,12 @@
+2026-04-24T11:19:55,336 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-24T11:19:55,347 [main] INFO  a.f.a.t.t.o.TypeCheckCmd - Type checking typedefs.tla
+2026-04-24T11:19:55,473 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-24T11:19:55,663 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
+2026-04-24T11:19:55,663 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
+2026-04-24T11:19:55,663 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
+2026-04-24T11:19:56,092 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Your types are purrfect!
+2026-04-24T11:19:56,093 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > All expressions are typed
+2026-04-24T11:19:56,093 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat [OK]
+2026-04-24T11:19:56,093 [main] INFO  a.f.a.t.Tool$ - Type checker [OK]
+2026-04-24T11:19:56,094 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  0 sec
+2026-04-24T11:19:56,094 [main] INFO  a.f.a.t.Tool$ - Total time: 0.755 sec

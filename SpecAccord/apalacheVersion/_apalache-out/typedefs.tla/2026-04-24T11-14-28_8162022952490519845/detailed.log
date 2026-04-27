@@ -1,0 +1,13 @@
+2026-04-24T11:14:28,227 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-24T11:14:28,238 [main] INFO  a.f.a.t.t.o.TypeCheckCmd - Type checking typedefs.tla
+2026-04-24T11:14:28,358 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-24T11:14:28,555 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
+2026-04-24T11:14:28,555 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
+2026-04-24T11:14:28,555 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
+2026-04-24T11:14:28,869 [main] ERROR a.f.a.t.p.t.LoggingTypeCheckerListener - [typedefs.tla:56:1-57:129]: Expected ((Int, Int, Int, Int, Int, Int, Set(Int)) => { body: { D0: Set(Int), id: Int, tx: Int }, p: Int, q: Int, sp: Int, sq: Int, type: Int }) in PreAcceptMsg. Found: ((Int, Int, Int, Int, Int, Int, Set(Int)) => { SHARDfrom: Int, SHARDto: Int, body: { D0: Set(Int), id: Int, tx: Int }, from: Int, to: Int, type: Int })
+2026-04-24T11:14:28,873 [main] ERROR a.f.a.t.p.t.LoggingTypeCheckerListener - [typedefs.tla:56:1-57:129]: Error when computing the type of PreAcceptMsg
+2026-04-24T11:14:28,875 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Snowcat asks you to fix the types. Meow.
+2026-04-24T11:14:28,898 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat [FAIL]
+2026-04-24T11:14:28,898 [main] INFO  a.f.a.t.Tool$ - Type checker [FAILED]
+2026-04-24T11:14:28,898 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  0 sec
+2026-04-24T11:14:28,898 [main] INFO  a.f.a.t.Tool$ - Total time: 0.668 sec

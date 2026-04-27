@@ -1,0 +1,15 @@
+2026-04-24T10:15:38,623 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-24T10:15:38,650 [main] INFO  a.f.a.t.t.o.CheckCmd - Tuning: search.outputTraces=false
+2026-04-24T10:15:38,842 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-24T10:15:38,997 [main] ERROR a.f.a.t.p.i.SanyParserPassImpl - Parsing error: *** Abort messages: 1
+
+Unknown location
+
+Cannot find source file for module Options imported in module typedefs.
+
+
+
+2026-04-24T10:15:39,019 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [FAIL]
+2026-04-24T10:15:39,020 [main] INFO  a.f.a.t.Tool$ - Checker has found an error
+2026-04-24T10:15:39,020 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  0 sec
+2026-04-24T10:15:39,020 [main] INFO  a.f.a.t.Tool$ - Total time: 0.393 sec

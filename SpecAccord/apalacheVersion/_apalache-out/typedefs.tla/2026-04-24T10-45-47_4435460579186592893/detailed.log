@@ -1,0 +1,15 @@
+2026-04-24T10:45:47,080 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-24T10:45:47,090 [main] INFO  a.f.a.t.t.o.TypeCheckCmd - Type checking typedefs.tla
+2026-04-24T10:45:47,244 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-24T10:45:47,327 [main] ERROR a.f.a.t.p.i.SanyParserPassImpl - Parsing error: *** Abort messages: 1
+
+In module typedefs
+
+Could not parse module typedefs from file /home/alexandre.siret/Accord/AccordTLASpec/SpecAccord/apalacheVersion/typedefs.tla
+
+
+
+2026-04-24T10:45:47,356 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [FAIL]
+2026-04-24T10:45:47,357 [main] INFO  a.f.a.t.Tool$ - Type checker [FAILED]
+2026-04-24T10:45:47,357 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  0 sec
+2026-04-24T10:45:47,357 [main] INFO  a.f.a.t.Tool$ - Total time: 0.274 sec
