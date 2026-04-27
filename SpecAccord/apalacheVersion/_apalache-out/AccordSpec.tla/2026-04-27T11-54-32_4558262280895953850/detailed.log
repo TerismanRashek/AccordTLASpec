@@ -1,0 +1,1698 @@
+2026-04-27T11:54:32,199 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-27T11:54:32,228 [main] INFO  a.f.a.i.p.o.OptionGroup$ -   > AccordSpec.cfg: Loading TLC configuration
+2026-04-27T11:54:32,307 [main] WARN  a.f.a.i.t.TlcConfigParserApalache$ - TLC config option CHECK_DEADLOCK true will be ignored
+2026-04-27T11:54:32,316 [main] INFO  a.f.a.i.p.o.OptionGroup$ -   > Using inv predicate(s) Agreement, Ordering from the TLC config
+2026-04-27T11:54:32,317 [main] INFO  a.f.a.t.t.o.CheckCmd - Tuning: search.outputTraces=false
+2026-04-27T11:54:32,540 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-27T11:54:33,212 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
+2026-04-27T11:54:33,213 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
+2026-04-27T11:54:33,213 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
+2026-04-27T11:54:42,274 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Your types are purrfect!
+2026-04-27T11:54:42,274 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > All expressions are typed
+2026-04-27T11:54:42,274 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat [OK]
+2026-04-27T11:54:42,276 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #2: ConfigurationPass
+2026-04-27T11:54:42,421 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > AccordSpec.cfg: Using SPECIFICATION Spec
+2026-04-27T11:54:42,422 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > AccordSpec.cfg: found INVARIANTS: Agreement, Ordering
+2026-04-27T11:54:42,424 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set the initialization predicate to Init
+2026-04-27T11:54:42,425 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set the transition predicate to Next
+2026-04-27T11:54:42,425 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set the constant initialization predicate to CInit
+2026-04-27T11:54:42,425 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set an invariant to Agreement
+2026-04-27T11:54:42,425 [main] INFO  a.f.a.t.p.p.ConfigurationPassImpl -   > Set an invariant to Ordering
+2026-04-27T11:54:42,432 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #2: ConfigurationPass [OK]
+2026-04-27T11:54:42,432 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #3: DesugarerPass
+2026-04-27T11:54:42,432 [main] INFO  a.f.a.t.p.p.DesugarerPassImpl -   > Desugaring...
+2026-04-27T11:54:42,458 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #3: DesugarerPass [OK]
+2026-04-27T11:54:42,458 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #4: InlinePass
+2026-04-27T11:54:42,458 [main] INFO  a.f.a.t.p.p.InlinePassImpl - Leaving only relevant operators: Agreement, CInit, CInitPrimed, Init, InitPrimed, Next, Ordering
+2026-04-27T11:54:42,719 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #4: InlinePass [OK]
+2026-04-27T11:54:42,720 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #5: TemporalPass
+2026-04-27T11:54:42,720 [main] INFO  a.f.a.t.p.p.TemporalPassImpl -   > Rewriting temporal operators...
+2026-04-27T11:54:42,720 [main] INFO  a.f.a.t.p.p.TemporalPassImpl -   > No temporal property specified, nothing to encode
+2026-04-27T11:54:42,721 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #5: TemporalPass [OK]
+2026-04-27T11:54:42,721 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #6: InlinePass
+2026-04-27T11:54:42,721 [main] INFO  a.f.a.t.p.p.InlinePassImpl - Leaving only relevant operators: Agreement, CInit, CInitPrimed, Init, InitPrimed, Next, Ordering
+2026-04-27T11:54:42,834 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #6: InlinePass [OK]
+2026-04-27T11:54:42,835 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #7: PrimingPass
+2026-04-27T11:54:42,839 [main] INFO  a.f.a.t.p.a.PrimingPassImpl -   > Introducing CInitPrimed for CInit'
+2026-04-27T11:54:42,841 [main] INFO  a.f.a.t.p.a.PrimingPassImpl -   > Introducing InitPrimed for Init'
+2026-04-27T11:54:42,842 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #7: PrimingPass [OK]
+2026-04-27T11:54:42,842 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #8: VCGen
+2026-04-27T11:54:42,843 [main] INFO  a.f.a.t.b.p.VCGenPassImpl -   > Producing verification conditions from the invariant Agreement
+2026-04-27T11:54:42,849 [main] INFO  a.f.a.t.b.VCGenerator -   > VCGen produced 1 verification condition(s)
+2026-04-27T11:54:42,851 [main] INFO  a.f.a.t.b.p.VCGenPassImpl -   > Producing verification conditions from the invariant Ordering
+2026-04-27T11:54:42,851 [main] INFO  a.f.a.t.b.VCGenerator -   > VCGen produced 1 verification condition(s)
+2026-04-27T11:54:42,852 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #8: VCGen [OK]
+2026-04-27T11:54:42,852 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #9: PreprocessingPass
+2026-04-27T11:54:42,853 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Before preprocessing: unique renaming
+2026-04-27T11:54:42,858 [main] INFO  a.f.a.t.p.p.PreproPassImpl -  > Applying standard transformations:
+2026-04-27T11:54:42,859 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > PrimePropagation
+2026-04-27T11:54:42,866 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Desugarer
+2026-04-27T11:54:42,877 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > UniqueRenamer
+2026-04-27T11:54:42,913 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Normalizer
+2026-04-27T11:54:42,949 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > Keramelizer
+2026-04-27T11:54:43,010 [main] INFO  a.f.a.t.p.p.PreproPassImpl -   > After preprocessing: UniqueRenamer
+2026-04-27T11:54:43,100 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #9: PreprocessingPass [OK]
+2026-04-27T11:54:43,100 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #10: TransitionFinderPass
+2026-04-27T11:54:43,160 [main] INFO  a.f.a.t.p.a.TransitionPassImpl -   > Found 1 initializing transitions
+2026-04-27T11:54:43,270 [main] INFO  a.f.a.t.p.a.TransitionPassImpl -   > Found 70 transitions
+2026-04-27T11:54:43,271 [main] INFO  a.f.a.t.p.a.TransitionPassImpl -   > Found constant initializer CInit
+2026-04-27T11:54:43,273 [main] INFO  a.f.a.t.p.a.TransitionPassImpl -   > Applying unique renaming
+2026-04-27T11:54:43,385 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #10: TransitionFinderPass [OK]
+2026-04-27T11:54:43,386 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #11: OptimizationPass
+2026-04-27T11:54:43,393 [main] INFO  a.f.a.t.p.p.OptPassImpl -  > Applying optimizations:
+2026-04-27T11:54:43,394 [main] INFO  a.f.a.t.p.p.OptPassImpl -   > ConstSimplifier
+2026-04-27T11:54:43,551 [main] INFO  a.f.a.t.p.p.OptPassImpl -   > ExprOptimizer
+2026-04-27T11:54:43,620 [main] INFO  a.f.a.t.p.p.OptPassImpl -   > SetMembershipSimplifier
+2026-04-27T11:54:43,634 [main] INFO  a.f.a.t.p.p.OptPassImpl -   > ConstSimplifier
+2026-04-27T11:54:43,732 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #11: OptimizationPass [OK]
+2026-04-27T11:54:43,733 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #12: AnalysisPass
+2026-04-27T11:54:43,735 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -  > Marking skolemizable existentials and sets to be expanded...
+2026-04-27T11:54:43,735 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Skolemization
+2026-04-27T11:54:43,744 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Expansion
+2026-04-27T11:54:43,777 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Remove unused let-in defs
+2026-04-27T11:54:43,808 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -  > Running analyzers...
+2026-04-27T11:54:43,814 [main] INFO  a.f.a.t.b.p.AnalysisPassImpl -   > Introduced expression grades
+2026-04-27T11:54:43,814 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #12: AnalysisPass [OK]
+2026-04-27T11:54:43,814 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #13: BoundedChecker
+2026-04-27T11:54:43,869 [main] DEBUG a.f.a.t.b.s.Z3SolverContext - Creating Z3 solver context 0
+2026-04-27T11:54:44,122 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Initializing CONSTANTS
+2026-04-27T11:54:44,178 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #0, transition #0
+2026-04-27T11:54:44,179 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,226 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 0: Transition #0. Is it enabled?
+2026-04-27T11:54:44,229 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 0: Transition #0 is enabled
+2026-04-27T11:54:44,230 [main] INFO  a.f.a.t.b.SeqModelChecker - State 0: Checking 2 state invariants
+2026-04-27T11:54:44,231 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 0: Checking state invariant 0
+2026-04-27T11:54:44,258 [main] INFO  a.f.a.t.b.SeqModelChecker - State 0: state invariant 0 holds.
+2026-04-27T11:54:44,260 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 0: Checking state invariant 1
+2026-04-27T11:54:44,279 [main] INFO  a.f.a.t.b.SeqModelChecker - State 0: state invariant 1 holds.
+2026-04-27T11:54:44,280 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 0: picking a transition out of 1 transition(s)
+2026-04-27T11:54:44,282 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #0
+2026-04-27T11:54:44,282 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,285 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #0. Is it enabled?
+2026-04-27T11:54:44,285 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #0 is disabled
+2026-04-27T11:54:44,286 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #1
+2026-04-27T11:54:44,286 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,288 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #1. Is it enabled?
+2026-04-27T11:54:44,289 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #1 is disabled
+2026-04-27T11:54:44,289 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #2
+2026-04-27T11:54:44,289 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,292 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #2. Is it enabled?
+2026-04-27T11:54:44,292 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #2 is disabled
+2026-04-27T11:54:44,292 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #3
+2026-04-27T11:54:44,293 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,293 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 3 produces partial assignment. Disabled.
+2026-04-27T11:54:44,293 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #4
+2026-04-27T11:54:44,293 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,293 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 4 produces partial assignment. Disabled.
+2026-04-27T11:54:44,293 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #5
+2026-04-27T11:54:44,293 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,294 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #5. Is it enabled?
+2026-04-27T11:54:44,295 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #5 is disabled
+2026-04-27T11:54:44,295 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #6
+2026-04-27T11:54:44,295 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,296 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #6. Is it enabled?
+2026-04-27T11:54:44,296 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #6 is disabled
+2026-04-27T11:54:44,296 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #7
+2026-04-27T11:54:44,296 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,297 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 7 produces partial assignment. Disabled.
+2026-04-27T11:54:44,297 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #8
+2026-04-27T11:54:44,297 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,297 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 8 produces partial assignment. Disabled.
+2026-04-27T11:54:44,297 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #9
+2026-04-27T11:54:44,297 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,298 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #9. Is it enabled?
+2026-04-27T11:54:44,298 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #9 is disabled
+2026-04-27T11:54:44,299 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #10
+2026-04-27T11:54:44,299 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,300 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #10. Is it enabled?
+2026-04-27T11:54:44,300 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #10 is disabled
+2026-04-27T11:54:44,300 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #11
+2026-04-27T11:54:44,300 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,301 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #11. Is it enabled?
+2026-04-27T11:54:44,301 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #11 is disabled
+2026-04-27T11:54:44,302 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #12
+2026-04-27T11:54:44,302 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,303 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #12. Is it enabled?
+2026-04-27T11:54:44,304 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #12 is disabled
+2026-04-27T11:54:44,304 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #13
+2026-04-27T11:54:44,304 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,306 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #13. Is it enabled?
+2026-04-27T11:54:44,307 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #13 is disabled
+2026-04-27T11:54:44,307 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #14
+2026-04-27T11:54:44,307 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,309 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #14. Is it enabled?
+2026-04-27T11:54:44,310 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #14 is disabled
+2026-04-27T11:54:44,310 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #15
+2026-04-27T11:54:44,310 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,312 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #15. Is it enabled?
+2026-04-27T11:54:44,312 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #15 is disabled
+2026-04-27T11:54:44,312 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #16
+2026-04-27T11:54:44,313 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,384 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #16. Is it enabled?
+2026-04-27T11:54:44,386 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #16 is enabled
+2026-04-27T11:54:44,386 [main] INFO  a.f.a.t.b.SeqModelChecker - State 1: Checking 2 state invariants
+2026-04-27T11:54:44,387 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 1: Checking state invariant 0
+2026-04-27T11:54:44,398 [main] INFO  a.f.a.t.b.SeqModelChecker - State 1: state invariant 0 holds.
+2026-04-27T11:54:44,399 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 1: Checking state invariant 1
+2026-04-27T11:54:44,425 [main] INFO  a.f.a.t.b.SeqModelChecker - State 1: state invariant 1 holds.
+2026-04-27T11:54:44,427 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #17
+2026-04-27T11:54:44,427 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,466 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #17. Is it enabled?
+2026-04-27T11:54:44,467 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #17 is disabled
+2026-04-27T11:54:44,468 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #18
+2026-04-27T11:54:44,468 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,477 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 18 produces partial assignment. Disabled.
+2026-04-27T11:54:44,478 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #19
+2026-04-27T11:54:44,478 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,485 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 19 produces partial assignment. Disabled.
+2026-04-27T11:54:44,485 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #20
+2026-04-27T11:54:44,485 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,491 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 20 produces partial assignment. Disabled.
+2026-04-27T11:54:44,492 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #21
+2026-04-27T11:54:44,492 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,528 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #21. Is it enabled?
+2026-04-27T11:54:44,529 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #21 is disabled
+2026-04-27T11:54:44,530 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #22
+2026-04-27T11:54:44,530 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,538 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 22 produces partial assignment. Disabled.
+2026-04-27T11:54:44,539 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #23
+2026-04-27T11:54:44,539 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,543 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 23 produces partial assignment. Disabled.
+2026-04-27T11:54:44,544 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #24
+2026-04-27T11:54:44,544 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,563 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #24. Is it enabled?
+2026-04-27T11:54:44,564 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #24 is disabled
+2026-04-27T11:54:44,565 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #25
+2026-04-27T11:54:44,565 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,567 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 25 produces partial assignment. Disabled.
+2026-04-27T11:54:44,568 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #26
+2026-04-27T11:54:44,568 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,582 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #26. Is it enabled?
+2026-04-27T11:54:44,583 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #26 is disabled
+2026-04-27T11:54:44,584 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #27
+2026-04-27T11:54:44,584 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,591 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #27. Is it enabled?
+2026-04-27T11:54:44,592 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #27 is disabled
+2026-04-27T11:54:44,592 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #28
+2026-04-27T11:54:44,592 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,633 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #28. Is it enabled?
+2026-04-27T11:54:44,634 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #28 is disabled
+2026-04-27T11:54:44,635 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #29
+2026-04-27T11:54:44,635 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,699 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #29. Is it enabled?
+2026-04-27T11:54:44,701 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #29 is disabled
+2026-04-27T11:54:44,702 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #30
+2026-04-27T11:54:44,703 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,786 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #30. Is it enabled?
+2026-04-27T11:54:44,790 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #30 is disabled
+2026-04-27T11:54:44,792 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #31
+2026-04-27T11:54:44,793 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,844 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #31. Is it enabled?
+2026-04-27T11:54:44,845 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #31 is disabled
+2026-04-27T11:54:44,846 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #32
+2026-04-27T11:54:44,846 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,877 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #32. Is it enabled?
+2026-04-27T11:54:44,879 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #32 is disabled
+2026-04-27T11:54:44,879 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #33
+2026-04-27T11:54:44,880 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,915 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #33. Is it enabled?
+2026-04-27T11:54:44,916 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #33 is disabled
+2026-04-27T11:54:44,917 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #34
+2026-04-27T11:54:44,917 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,960 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #34. Is it enabled?
+2026-04-27T11:54:44,961 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #34 is disabled
+2026-04-27T11:54:44,962 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #35
+2026-04-27T11:54:44,962 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,990 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #35. Is it enabled?
+2026-04-27T11:54:44,991 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #35 is disabled
+2026-04-27T11:54:44,992 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #36
+2026-04-27T11:54:44,992 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:44,994 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 36 produces partial assignment. Disabled.
+2026-04-27T11:54:44,994 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #37
+2026-04-27T11:54:44,994 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,010 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #37. Is it enabled?
+2026-04-27T11:54:45,010 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #37 is disabled
+2026-04-27T11:54:45,011 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #38
+2026-04-27T11:54:45,011 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,012 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 38 produces partial assignment. Disabled.
+2026-04-27T11:54:45,012 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #39
+2026-04-27T11:54:45,012 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,022 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #39. Is it enabled?
+2026-04-27T11:54:45,023 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #39 is disabled
+2026-04-27T11:54:45,024 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #40
+2026-04-27T11:54:45,024 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,025 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 40 produces partial assignment. Disabled.
+2026-04-27T11:54:45,025 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #41
+2026-04-27T11:54:45,025 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,032 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #41. Is it enabled?
+2026-04-27T11:54:45,033 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #41 is disabled
+2026-04-27T11:54:45,034 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #42
+2026-04-27T11:54:45,034 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,035 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 42 produces partial assignment. Disabled.
+2026-04-27T11:54:45,036 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #43
+2026-04-27T11:54:45,036 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,042 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #43. Is it enabled?
+2026-04-27T11:54:45,043 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #43 is disabled
+2026-04-27T11:54:45,043 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #44
+2026-04-27T11:54:45,043 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,053 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #44. Is it enabled?
+2026-04-27T11:54:45,054 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #44 is disabled
+2026-04-27T11:54:45,055 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #45
+2026-04-27T11:54:45,055 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,074 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #45. Is it enabled?
+2026-04-27T11:54:45,075 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #45 is disabled
+2026-04-27T11:54:45,075 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #46
+2026-04-27T11:54:45,076 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,102 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #46. Is it enabled?
+2026-04-27T11:54:45,103 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #46 is disabled
+2026-04-27T11:54:45,104 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #47
+2026-04-27T11:54:45,104 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,121 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #47. Is it enabled?
+2026-04-27T11:54:45,122 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #47 is disabled
+2026-04-27T11:54:45,122 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #48
+2026-04-27T11:54:45,123 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,181 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #48. Is it enabled?
+2026-04-27T11:54:45,184 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #48 is disabled
+2026-04-27T11:54:45,185 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #49
+2026-04-27T11:54:45,185 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,208 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #49. Is it enabled?
+2026-04-27T11:54:45,211 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #49 is disabled
+2026-04-27T11:54:45,212 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #50
+2026-04-27T11:54:45,212 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,221 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #50. Is it enabled?
+2026-04-27T11:54:45,222 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #50 is disabled
+2026-04-27T11:54:45,222 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #51
+2026-04-27T11:54:45,222 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,243 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #51. Is it enabled?
+2026-04-27T11:54:45,244 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #51 is disabled
+2026-04-27T11:54:45,245 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #52
+2026-04-27T11:54:45,245 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,271 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #52. Is it enabled?
+2026-04-27T11:54:45,272 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #52 is disabled
+2026-04-27T11:54:45,272 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #53
+2026-04-27T11:54:45,272 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,286 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #53. Is it enabled?
+2026-04-27T11:54:45,287 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #53 is disabled
+2026-04-27T11:54:45,287 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #54
+2026-04-27T11:54:45,287 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,297 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #54. Is it enabled?
+2026-04-27T11:54:45,297 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #54 is disabled
+2026-04-27T11:54:45,298 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #55
+2026-04-27T11:54:45,298 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,300 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 55 produces partial assignment. Disabled.
+2026-04-27T11:54:45,300 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #56
+2026-04-27T11:54:45,300 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,303 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #56. Is it enabled?
+2026-04-27T11:54:45,304 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #56 is disabled
+2026-04-27T11:54:45,304 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #57
+2026-04-27T11:54:45,304 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,306 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 57 produces partial assignment. Disabled.
+2026-04-27T11:54:45,306 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #58
+2026-04-27T11:54:45,306 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,308 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #58. Is it enabled?
+2026-04-27T11:54:45,309 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #58 is disabled
+2026-04-27T11:54:45,309 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #59
+2026-04-27T11:54:45,309 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,311 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 59 produces partial assignment. Disabled.
+2026-04-27T11:54:45,311 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #60
+2026-04-27T11:54:45,311 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,313 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #60. Is it enabled?
+2026-04-27T11:54:45,313 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #60 is disabled
+2026-04-27T11:54:45,314 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #61
+2026-04-27T11:54:45,314 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,318 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 61 produces partial assignment. Disabled.
+2026-04-27T11:54:45,319 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #62
+2026-04-27T11:54:45,320 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,329 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #62. Is it enabled?
+2026-04-27T11:54:45,330 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #62 is disabled
+2026-04-27T11:54:45,330 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #63
+2026-04-27T11:54:45,330 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,336 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #63. Is it enabled?
+2026-04-27T11:54:45,337 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #63 is disabled
+2026-04-27T11:54:45,337 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #64
+2026-04-27T11:54:45,337 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,342 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #64. Is it enabled?
+2026-04-27T11:54:45,343 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #64 is disabled
+2026-04-27T11:54:45,343 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #65
+2026-04-27T11:54:45,343 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,348 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #65. Is it enabled?
+2026-04-27T11:54:45,349 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #65 is disabled
+2026-04-27T11:54:45,349 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #66
+2026-04-27T11:54:45,349 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,373 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #66. Is it enabled?
+2026-04-27T11:54:45,374 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #66 is disabled
+2026-04-27T11:54:45,374 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #67
+2026-04-27T11:54:45,375 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,395 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #67. Is it enabled?
+2026-04-27T11:54:45,397 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #67 is disabled
+2026-04-27T11:54:45,397 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #68
+2026-04-27T11:54:45,397 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,404 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #68. Is it enabled?
+2026-04-27T11:54:45,405 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #68 is disabled
+2026-04-27T11:54:45,405 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #1, transition #69
+2026-04-27T11:54:45,405 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,409 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 1: Transition #69. Is it enabled?
+2026-04-27T11:54:45,409 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 1: Transition #69 is disabled
+2026-04-27T11:54:45,410 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 1: picking a transition out of 1 transition(s)
+2026-04-27T11:54:45,410 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #0
+2026-04-27T11:54:45,410 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,438 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #0. Is it enabled?
+2026-04-27T11:54:45,441 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #0 is disabled
+2026-04-27T11:54:45,442 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #1
+2026-04-27T11:54:45,442 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,458 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #1. Is it enabled?
+2026-04-27T11:54:45,460 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #1 is disabled
+2026-04-27T11:54:45,460 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #2
+2026-04-27T11:54:45,460 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,478 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #2. Is it enabled?
+2026-04-27T11:54:45,479 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #2 is disabled
+2026-04-27T11:54:45,480 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #3
+2026-04-27T11:54:45,480 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,483 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 3 produces partial assignment. Disabled.
+2026-04-27T11:54:45,483 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #4
+2026-04-27T11:54:45,483 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,486 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 4 produces partial assignment. Disabled.
+2026-04-27T11:54:45,486 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #5
+2026-04-27T11:54:45,486 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,499 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #5. Is it enabled?
+2026-04-27T11:54:45,501 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #5 is disabled
+2026-04-27T11:54:45,501 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #6
+2026-04-27T11:54:45,501 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,514 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #6. Is it enabled?
+2026-04-27T11:54:45,515 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #6 is disabled
+2026-04-27T11:54:45,515 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #7
+2026-04-27T11:54:45,515 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,518 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 7 produces partial assignment. Disabled.
+2026-04-27T11:54:45,518 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #8
+2026-04-27T11:54:45,518 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,520 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 8 produces partial assignment. Disabled.
+2026-04-27T11:54:45,520 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #9
+2026-04-27T11:54:45,520 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,533 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #9. Is it enabled?
+2026-04-27T11:54:45,534 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #9 is disabled
+2026-04-27T11:54:45,535 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #10
+2026-04-27T11:54:45,535 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,548 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #10. Is it enabled?
+2026-04-27T11:54:45,549 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #10 is disabled
+2026-04-27T11:54:45,549 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #11
+2026-04-27T11:54:45,549 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,557 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #11. Is it enabled?
+2026-04-27T11:54:45,558 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #11 is disabled
+2026-04-27T11:54:45,559 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #12
+2026-04-27T11:54:45,559 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,581 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #12. Is it enabled?
+2026-04-27T11:54:45,583 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #12 is disabled
+2026-04-27T11:54:45,583 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #13
+2026-04-27T11:54:45,583 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,612 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #13. Is it enabled?
+2026-04-27T11:54:45,614 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #13 is disabled
+2026-04-27T11:54:45,615 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #14
+2026-04-27T11:54:45,615 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,671 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #14. Is it enabled?
+2026-04-27T11:54:45,673 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #14 is disabled
+2026-04-27T11:54:45,674 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #15
+2026-04-27T11:54:45,674 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,697 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #15. Is it enabled?
+2026-04-27T11:54:45,699 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #15 is disabled
+2026-04-27T11:54:45,700 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #16
+2026-04-27T11:54:45,700 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,711 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #16. Is it enabled?
+2026-04-27T11:54:45,713 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #16 is disabled
+2026-04-27T11:54:45,713 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #17
+2026-04-27T11:54:45,713 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,727 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #17. Is it enabled?
+2026-04-27T11:54:45,728 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #17 is enabled
+2026-04-27T11:54:45,728 [main] INFO  a.f.a.t.b.SeqModelChecker - State 2: Checking 2 state invariants
+2026-04-27T11:54:45,728 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 2: Checking state invariant 0
+2026-04-27T11:54:45,731 [main] INFO  a.f.a.t.b.SeqModelChecker - State 2: state invariant 0 holds.
+2026-04-27T11:54:45,731 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 2: Checking state invariant 1
+2026-04-27T11:54:45,736 [main] INFO  a.f.a.t.b.SeqModelChecker - State 2: state invariant 1 holds.
+2026-04-27T11:54:45,736 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #18
+2026-04-27T11:54:45,736 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,743 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 18 produces partial assignment. Disabled.
+2026-04-27T11:54:45,744 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #19
+2026-04-27T11:54:45,744 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,750 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 19 produces partial assignment. Disabled.
+2026-04-27T11:54:45,751 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #20
+2026-04-27T11:54:45,751 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,758 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 20 produces partial assignment. Disabled.
+2026-04-27T11:54:45,759 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #21
+2026-04-27T11:54:45,759 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,788 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #21. Is it enabled?
+2026-04-27T11:54:45,790 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #21 is disabled
+2026-04-27T11:54:45,791 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #22
+2026-04-27T11:54:45,791 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,805 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 22 produces partial assignment. Disabled.
+2026-04-27T11:54:45,806 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #23
+2026-04-27T11:54:45,807 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,811 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 23 produces partial assignment. Disabled.
+2026-04-27T11:54:45,812 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #24
+2026-04-27T11:54:45,812 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,831 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #24. Is it enabled?
+2026-04-27T11:54:45,832 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #24 is disabled
+2026-04-27T11:54:45,833 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #25
+2026-04-27T11:54:45,833 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,835 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 25 produces partial assignment. Disabled.
+2026-04-27T11:54:45,835 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #26
+2026-04-27T11:54:45,835 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,845 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #26. Is it enabled?
+2026-04-27T11:54:45,846 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #26 is disabled
+2026-04-27T11:54:45,846 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #27
+2026-04-27T11:54:45,846 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,853 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #27. Is it enabled?
+2026-04-27T11:54:45,853 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #27 is disabled
+2026-04-27T11:54:45,854 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #28
+2026-04-27T11:54:45,854 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,874 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #28. Is it enabled?
+2026-04-27T11:54:45,875 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #28 is disabled
+2026-04-27T11:54:45,875 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #29
+2026-04-27T11:54:45,875 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,894 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #29. Is it enabled?
+2026-04-27T11:54:45,895 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #29 is disabled
+2026-04-27T11:54:45,895 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #30
+2026-04-27T11:54:45,895 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,915 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #30. Is it enabled?
+2026-04-27T11:54:45,917 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #30 is enabled
+2026-04-27T11:54:45,917 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #31
+2026-04-27T11:54:45,917 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,936 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #31. Is it enabled?
+2026-04-27T11:54:45,938 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #31 is disabled
+2026-04-27T11:54:45,939 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #32
+2026-04-27T11:54:45,939 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:45,977 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #32. Is it enabled?
+2026-04-27T11:54:45,978 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #32 is disabled
+2026-04-27T11:54:45,979 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #33
+2026-04-27T11:54:45,979 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,001 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #33. Is it enabled?
+2026-04-27T11:54:46,002 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #33 is disabled
+2026-04-27T11:54:46,002 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #34
+2026-04-27T11:54:46,002 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,043 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #34. Is it enabled?
+2026-04-27T11:54:46,046 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #34 is disabled
+2026-04-27T11:54:46,047 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #35
+2026-04-27T11:54:46,047 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,083 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #35. Is it enabled?
+2026-04-27T11:54:46,084 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #35 is disabled
+2026-04-27T11:54:46,085 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #36
+2026-04-27T11:54:46,085 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,091 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 36 produces partial assignment. Disabled.
+2026-04-27T11:54:46,092 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #37
+2026-04-27T11:54:46,092 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,105 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #37. Is it enabled?
+2026-04-27T11:54:46,106 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #37 is disabled
+2026-04-27T11:54:46,106 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #38
+2026-04-27T11:54:46,106 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,111 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 38 produces partial assignment. Disabled.
+2026-04-27T11:54:46,111 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #39
+2026-04-27T11:54:46,111 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,125 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #39. Is it enabled?
+2026-04-27T11:54:46,126 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #39 is disabled
+2026-04-27T11:54:46,126 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #40
+2026-04-27T11:54:46,126 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,130 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 40 produces partial assignment. Disabled.
+2026-04-27T11:54:46,130 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #41
+2026-04-27T11:54:46,130 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,155 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #41. Is it enabled?
+2026-04-27T11:54:46,156 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #41 is disabled
+2026-04-27T11:54:46,157 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #42
+2026-04-27T11:54:46,157 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,165 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 42 produces partial assignment. Disabled.
+2026-04-27T11:54:46,165 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #43
+2026-04-27T11:54:46,165 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,187 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #43. Is it enabled?
+2026-04-27T11:54:46,187 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #43 is disabled
+2026-04-27T11:54:46,188 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #44
+2026-04-27T11:54:46,188 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,203 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #44. Is it enabled?
+2026-04-27T11:54:46,204 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #44 is disabled
+2026-04-27T11:54:46,204 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #45
+2026-04-27T11:54:46,204 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,220 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #45. Is it enabled?
+2026-04-27T11:54:46,221 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #45 is disabled
+2026-04-27T11:54:46,221 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #46
+2026-04-27T11:54:46,221 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,237 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #46. Is it enabled?
+2026-04-27T11:54:46,238 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #46 is disabled
+2026-04-27T11:54:46,238 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #47
+2026-04-27T11:54:46,238 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,267 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #47. Is it enabled?
+2026-04-27T11:54:46,268 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #47 is disabled
+2026-04-27T11:54:46,269 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #48
+2026-04-27T11:54:46,269 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,287 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #48. Is it enabled?
+2026-04-27T11:54:46,289 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #48 is disabled
+2026-04-27T11:54:46,289 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #49
+2026-04-27T11:54:46,289 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,306 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #49. Is it enabled?
+2026-04-27T11:54:46,308 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #49 is disabled
+2026-04-27T11:54:46,308 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #50
+2026-04-27T11:54:46,308 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,323 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #50. Is it enabled?
+2026-04-27T11:54:46,324 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #50 is disabled
+2026-04-27T11:54:46,324 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #51
+2026-04-27T11:54:46,324 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,341 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #51. Is it enabled?
+2026-04-27T11:54:46,342 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #51 is disabled
+2026-04-27T11:54:46,343 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #52
+2026-04-27T11:54:46,343 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,360 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #52. Is it enabled?
+2026-04-27T11:54:46,361 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #52 is disabled
+2026-04-27T11:54:46,362 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #53
+2026-04-27T11:54:46,362 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,373 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #53. Is it enabled?
+2026-04-27T11:54:46,374 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #53 is disabled
+2026-04-27T11:54:46,374 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #54
+2026-04-27T11:54:46,374 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,385 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #54. Is it enabled?
+2026-04-27T11:54:46,386 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #54 is disabled
+2026-04-27T11:54:46,386 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #55
+2026-04-27T11:54:46,386 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,388 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 55 produces partial assignment. Disabled.
+2026-04-27T11:54:46,388 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #56
+2026-04-27T11:54:46,389 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,400 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #56. Is it enabled?
+2026-04-27T11:54:46,401 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #56 is disabled
+2026-04-27T11:54:46,401 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #57
+2026-04-27T11:54:46,401 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,403 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 57 produces partial assignment. Disabled.
+2026-04-27T11:54:46,403 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #58
+2026-04-27T11:54:46,403 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,422 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #58. Is it enabled?
+2026-04-27T11:54:46,423 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #58 is disabled
+2026-04-27T11:54:46,423 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #59
+2026-04-27T11:54:46,423 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,425 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 59 produces partial assignment. Disabled.
+2026-04-27T11:54:46,425 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #60
+2026-04-27T11:54:46,425 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,434 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #60. Is it enabled?
+2026-04-27T11:54:46,434 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #60 is disabled
+2026-04-27T11:54:46,435 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #61
+2026-04-27T11:54:46,435 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,437 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 61 produces partial assignment. Disabled.
+2026-04-27T11:54:46,437 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #62
+2026-04-27T11:54:46,437 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,445 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #62. Is it enabled?
+2026-04-27T11:54:46,445 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #62 is disabled
+2026-04-27T11:54:46,446 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #63
+2026-04-27T11:54:46,446 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,455 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #63. Is it enabled?
+2026-04-27T11:54:46,456 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #63 is disabled
+2026-04-27T11:54:46,456 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #64
+2026-04-27T11:54:46,456 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,467 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #64. Is it enabled?
+2026-04-27T11:54:46,468 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #64 is disabled
+2026-04-27T11:54:46,468 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #65
+2026-04-27T11:54:46,469 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,487 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #65. Is it enabled?
+2026-04-27T11:54:46,488 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #65 is disabled
+2026-04-27T11:54:46,488 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #66
+2026-04-27T11:54:46,488 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,502 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #66. Is it enabled?
+2026-04-27T11:54:46,503 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #66 is disabled
+2026-04-27T11:54:46,503 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #67
+2026-04-27T11:54:46,503 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,515 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #67. Is it enabled?
+2026-04-27T11:54:46,516 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #67 is disabled
+2026-04-27T11:54:46,516 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #68
+2026-04-27T11:54:46,516 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,528 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #68. Is it enabled?
+2026-04-27T11:54:46,528 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #68 is disabled
+2026-04-27T11:54:46,529 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #2, transition #69
+2026-04-27T11:54:46,529 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,544 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 2: Transition #69. Is it enabled?
+2026-04-27T11:54:46,545 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 2: Transition #69 is disabled
+2026-04-27T11:54:46,546 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 2: picking a transition out of 2 transition(s)
+2026-04-27T11:54:46,558 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #0
+2026-04-27T11:54:46,558 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,596 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #0. Is it enabled?
+2026-04-27T11:54:46,602 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #0 is disabled
+2026-04-27T11:54:46,603 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #1
+2026-04-27T11:54:46,603 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,636 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #1. Is it enabled?
+2026-04-27T11:54:46,640 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #1 is disabled
+2026-04-27T11:54:46,641 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #2
+2026-04-27T11:54:46,641 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,671 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #2. Is it enabled?
+2026-04-27T11:54:46,673 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #2 is disabled
+2026-04-27T11:54:46,674 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #3
+2026-04-27T11:54:46,674 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,679 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 3 produces partial assignment. Disabled.
+2026-04-27T11:54:46,680 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #4
+2026-04-27T11:54:46,680 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,685 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 4 produces partial assignment. Disabled.
+2026-04-27T11:54:46,686 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #5
+2026-04-27T11:54:46,686 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,708 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #5. Is it enabled?
+2026-04-27T11:54:46,710 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #5 is disabled
+2026-04-27T11:54:46,711 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #6
+2026-04-27T11:54:46,711 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,730 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #6. Is it enabled?
+2026-04-27T11:54:46,733 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #6 is disabled
+2026-04-27T11:54:46,734 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #7
+2026-04-27T11:54:46,734 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,739 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 7 produces partial assignment. Disabled.
+2026-04-27T11:54:46,740 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #8
+2026-04-27T11:54:46,740 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,744 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 8 produces partial assignment. Disabled.
+2026-04-27T11:54:46,745 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #9
+2026-04-27T11:54:46,745 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,766 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #9. Is it enabled?
+2026-04-27T11:54:46,769 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #9 is disabled
+2026-04-27T11:54:46,770 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #10
+2026-04-27T11:54:46,770 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,809 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #10. Is it enabled?
+2026-04-27T11:54:46,814 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #10 is disabled
+2026-04-27T11:54:46,815 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #11
+2026-04-27T11:54:46,815 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,837 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #11. Is it enabled?
+2026-04-27T11:54:46,839 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #11 is disabled
+2026-04-27T11:54:46,840 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #12
+2026-04-27T11:54:46,840 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,877 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #12. Is it enabled?
+2026-04-27T11:54:46,890 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #12 is disabled
+2026-04-27T11:54:46,892 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #13
+2026-04-27T11:54:46,892 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:46,983 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #13. Is it enabled?
+2026-04-27T11:54:46,993 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #13 is disabled
+2026-04-27T11:54:46,995 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #14
+2026-04-27T11:54:46,996 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,052 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #14. Is it enabled?
+2026-04-27T11:54:47,059 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #14 is disabled
+2026-04-27T11:54:47,060 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #15
+2026-04-27T11:54:47,060 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,102 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #15. Is it enabled?
+2026-04-27T11:54:47,109 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #15 is disabled
+2026-04-27T11:54:47,110 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #16
+2026-04-27T11:54:47,110 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,125 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #16. Is it enabled?
+2026-04-27T11:54:47,126 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #16 is disabled
+2026-04-27T11:54:47,126 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #17
+2026-04-27T11:54:47,126 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,151 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #17. Is it enabled?
+2026-04-27T11:54:47,153 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #17 is disabled
+2026-04-27T11:54:47,153 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #18
+2026-04-27T11:54:47,153 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,168 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 18 produces partial assignment. Disabled.
+2026-04-27T11:54:47,169 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #19
+2026-04-27T11:54:47,169 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,175 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 19 produces partial assignment. Disabled.
+2026-04-27T11:54:47,175 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #20
+2026-04-27T11:54:47,175 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,180 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 20 produces partial assignment. Disabled.
+2026-04-27T11:54:47,181 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #21
+2026-04-27T11:54:47,181 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,208 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #21. Is it enabled?
+2026-04-27T11:54:47,210 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #21 is disabled
+2026-04-27T11:54:47,211 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #22
+2026-04-27T11:54:47,211 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,229 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 22 produces partial assignment. Disabled.
+2026-04-27T11:54:47,230 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #23
+2026-04-27T11:54:47,230 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,234 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 23 produces partial assignment. Disabled.
+2026-04-27T11:54:47,234 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #24
+2026-04-27T11:54:47,234 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,250 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #24. Is it enabled?
+2026-04-27T11:54:47,252 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #24 is disabled
+2026-04-27T11:54:47,252 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #25
+2026-04-27T11:54:47,252 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,256 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 25 produces partial assignment. Disabled.
+2026-04-27T11:54:47,257 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #26
+2026-04-27T11:54:47,257 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,301 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #26. Is it enabled?
+2026-04-27T11:54:47,303 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #26 is disabled
+2026-04-27T11:54:47,304 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #27
+2026-04-27T11:54:47,304 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,323 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #27. Is it enabled?
+2026-04-27T11:54:47,324 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #27 is disabled
+2026-04-27T11:54:47,324 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #28
+2026-04-27T11:54:47,324 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,350 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #28. Is it enabled?
+2026-04-27T11:54:47,352 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #28 is disabled
+2026-04-27T11:54:47,353 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #29
+2026-04-27T11:54:47,353 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,389 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #29. Is it enabled?
+2026-04-27T11:54:47,391 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #29 is disabled
+2026-04-27T11:54:47,392 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #30
+2026-04-27T11:54:47,392 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,417 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #30. Is it enabled?
+2026-04-27T11:54:47,421 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #30 is enabled
+2026-04-27T11:54:47,422 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #31
+2026-04-27T11:54:47,422 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,446 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #31. Is it enabled?
+2026-04-27T11:54:47,449 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #31 is disabled
+2026-04-27T11:54:47,450 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #32
+2026-04-27T11:54:47,450 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,475 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #32. Is it enabled?
+2026-04-27T11:54:47,479 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #32 is disabled
+2026-04-27T11:54:47,481 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #33
+2026-04-27T11:54:47,481 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,528 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #33. Is it enabled?
+2026-04-27T11:54:47,532 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #33 is disabled
+2026-04-27T11:54:47,533 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #34
+2026-04-27T11:54:47,533 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,573 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #34. Is it enabled?
+2026-04-27T11:54:47,575 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #34 is disabled
+2026-04-27T11:54:47,576 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #35
+2026-04-27T11:54:47,576 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,607 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #35. Is it enabled?
+2026-04-27T11:54:47,610 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #35 is disabled
+2026-04-27T11:54:47,611 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #36
+2026-04-27T11:54:47,611 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,619 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 36 produces partial assignment. Disabled.
+2026-04-27T11:54:47,620 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #37
+2026-04-27T11:54:47,620 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,641 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #37. Is it enabled?
+2026-04-27T11:54:47,643 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #37 is disabled
+2026-04-27T11:54:47,644 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #38
+2026-04-27T11:54:47,644 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,652 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 38 produces partial assignment. Disabled.
+2026-04-27T11:54:47,653 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #39
+2026-04-27T11:54:47,653 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,674 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #39. Is it enabled?
+2026-04-27T11:54:47,676 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #39 is disabled
+2026-04-27T11:54:47,677 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #40
+2026-04-27T11:54:47,677 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,705 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 40 produces partial assignment. Disabled.
+2026-04-27T11:54:47,705 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #41
+2026-04-27T11:54:47,705 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,726 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #41. Is it enabled?
+2026-04-27T11:54:47,728 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #41 is disabled
+2026-04-27T11:54:47,729 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #42
+2026-04-27T11:54:47,729 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,737 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 42 produces partial assignment. Disabled.
+2026-04-27T11:54:47,738 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #43
+2026-04-27T11:54:47,738 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,759 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #43. Is it enabled?
+2026-04-27T11:54:47,761 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #43 is disabled
+2026-04-27T11:54:47,762 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #44
+2026-04-27T11:54:47,762 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,785 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #44. Is it enabled?
+2026-04-27T11:54:47,788 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #44 is disabled
+2026-04-27T11:54:47,789 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #45
+2026-04-27T11:54:47,789 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,813 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #45. Is it enabled?
+2026-04-27T11:54:47,815 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #45 is disabled
+2026-04-27T11:54:47,816 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #46
+2026-04-27T11:54:47,816 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,839 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #46. Is it enabled?
+2026-04-27T11:54:47,842 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #46 is disabled
+2026-04-27T11:54:47,842 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #47
+2026-04-27T11:54:47,842 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,865 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #47. Is it enabled?
+2026-04-27T11:54:47,868 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #47 is enabled
+2026-04-27T11:54:47,868 [main] INFO  a.f.a.t.b.SeqModelChecker - State 3: Checking 2 state invariants
+2026-04-27T11:54:47,868 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 3: Checking state invariant 0
+2026-04-27T11:54:47,870 [main] INFO  a.f.a.t.b.SeqModelChecker - State 3: state invariant 0 holds.
+2026-04-27T11:54:47,871 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 3: Checking state invariant 1
+2026-04-27T11:54:47,875 [main] INFO  a.f.a.t.b.SeqModelChecker - State 3: state invariant 1 holds.
+2026-04-27T11:54:47,876 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #48
+2026-04-27T11:54:47,876 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,913 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #48. Is it enabled?
+2026-04-27T11:54:47,915 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #48 is disabled
+2026-04-27T11:54:47,916 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #49
+2026-04-27T11:54:47,916 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,955 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #49. Is it enabled?
+2026-04-27T11:54:47,957 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #49 is disabled
+2026-04-27T11:54:47,958 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #50
+2026-04-27T11:54:47,958 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:47,991 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #50. Is it enabled?
+2026-04-27T11:54:47,995 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #50 is disabled
+2026-04-27T11:54:47,996 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #51
+2026-04-27T11:54:47,996 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,031 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #51. Is it enabled?
+2026-04-27T11:54:48,035 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #51 is disabled
+2026-04-27T11:54:48,036 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #52
+2026-04-27T11:54:48,036 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,063 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #52. Is it enabled?
+2026-04-27T11:54:48,067 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #52 is disabled
+2026-04-27T11:54:48,067 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #53
+2026-04-27T11:54:48,067 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,079 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #53. Is it enabled?
+2026-04-27T11:54:48,080 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #53 is disabled
+2026-04-27T11:54:48,081 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #54
+2026-04-27T11:54:48,081 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,091 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #54. Is it enabled?
+2026-04-27T11:54:48,092 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #54 is disabled
+2026-04-27T11:54:48,093 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #55
+2026-04-27T11:54:48,093 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,094 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 55 produces partial assignment. Disabled.
+2026-04-27T11:54:48,094 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #56
+2026-04-27T11:54:48,094 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,105 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #56. Is it enabled?
+2026-04-27T11:54:48,106 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #56 is disabled
+2026-04-27T11:54:48,106 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #57
+2026-04-27T11:54:48,106 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,108 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 57 produces partial assignment. Disabled.
+2026-04-27T11:54:48,108 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #58
+2026-04-27T11:54:48,108 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,128 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #58. Is it enabled?
+2026-04-27T11:54:48,129 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #58 is disabled
+2026-04-27T11:54:48,129 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #59
+2026-04-27T11:54:48,129 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,131 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 59 produces partial assignment. Disabled.
+2026-04-27T11:54:48,131 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #60
+2026-04-27T11:54:48,131 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,141 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #60. Is it enabled?
+2026-04-27T11:54:48,142 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #60 is disabled
+2026-04-27T11:54:48,142 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #61
+2026-04-27T11:54:48,142 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,144 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 61 produces partial assignment. Disabled.
+2026-04-27T11:54:48,144 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #62
+2026-04-27T11:54:48,144 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,154 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #62. Is it enabled?
+2026-04-27T11:54:48,155 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #62 is disabled
+2026-04-27T11:54:48,155 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #63
+2026-04-27T11:54:48,155 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,165 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #63. Is it enabled?
+2026-04-27T11:54:48,166 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #63 is disabled
+2026-04-27T11:54:48,167 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #64
+2026-04-27T11:54:48,167 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,182 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #64. Is it enabled?
+2026-04-27T11:54:48,184 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #64 is disabled
+2026-04-27T11:54:48,184 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #65
+2026-04-27T11:54:48,184 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,189 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #65. Is it enabled?
+2026-04-27T11:54:48,189 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #65 is disabled
+2026-04-27T11:54:48,189 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #66
+2026-04-27T11:54:48,189 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,200 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #66. Is it enabled?
+2026-04-27T11:54:48,201 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #66 is disabled
+2026-04-27T11:54:48,202 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #67
+2026-04-27T11:54:48,202 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,212 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #67. Is it enabled?
+2026-04-27T11:54:48,213 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #67 is disabled
+2026-04-27T11:54:48,214 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #68
+2026-04-27T11:54:48,214 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,225 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #68. Is it enabled?
+2026-04-27T11:54:48,226 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #68 is disabled
+2026-04-27T11:54:48,227 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #3, transition #69
+2026-04-27T11:54:48,227 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,242 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 3: Transition #69. Is it enabled?
+2026-04-27T11:54:48,243 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 3: Transition #69 is disabled
+2026-04-27T11:54:48,244 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 3: picking a transition out of 2 transition(s)
+2026-04-27T11:54:48,271 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #0
+2026-04-27T11:54:48,271 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,306 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #0. Is it enabled?
+2026-04-27T11:54:48,313 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #0 is disabled
+2026-04-27T11:54:48,315 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #1
+2026-04-27T11:54:48,315 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,348 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #1. Is it enabled?
+2026-04-27T11:54:48,355 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #1 is disabled
+2026-04-27T11:54:48,356 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #2
+2026-04-27T11:54:48,356 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,388 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #2. Is it enabled?
+2026-04-27T11:54:48,393 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #2 is disabled
+2026-04-27T11:54:48,395 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #3
+2026-04-27T11:54:48,395 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,402 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 3 produces partial assignment. Disabled.
+2026-04-27T11:54:48,403 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #4
+2026-04-27T11:54:48,403 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,410 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 4 produces partial assignment. Disabled.
+2026-04-27T11:54:48,411 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #5
+2026-04-27T11:54:48,411 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,439 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #5. Is it enabled?
+2026-04-27T11:54:48,446 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #5 is disabled
+2026-04-27T11:54:48,447 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #6
+2026-04-27T11:54:48,447 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,475 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #6. Is it enabled?
+2026-04-27T11:54:48,481 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #6 is disabled
+2026-04-27T11:54:48,482 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #7
+2026-04-27T11:54:48,482 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,490 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 7 produces partial assignment. Disabled.
+2026-04-27T11:54:48,491 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #8
+2026-04-27T11:54:48,491 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,498 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 8 produces partial assignment. Disabled.
+2026-04-27T11:54:48,499 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #9
+2026-04-27T11:54:48,499 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,528 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #9. Is it enabled?
+2026-04-27T11:54:48,533 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #9 is disabled
+2026-04-27T11:54:48,534 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #10
+2026-04-27T11:54:48,534 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,563 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #10. Is it enabled?
+2026-04-27T11:54:48,567 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #10 is disabled
+2026-04-27T11:54:48,569 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #11
+2026-04-27T11:54:48,569 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,592 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #11. Is it enabled?
+2026-04-27T11:54:48,598 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #11 is disabled
+2026-04-27T11:54:48,600 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #12
+2026-04-27T11:54:48,600 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,647 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #12. Is it enabled?
+2026-04-27T11:54:48,655 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #12 is disabled
+2026-04-27T11:54:48,657 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #13
+2026-04-27T11:54:48,657 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,699 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #13. Is it enabled?
+2026-04-27T11:54:48,710 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #13 is disabled
+2026-04-27T11:54:48,711 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #14
+2026-04-27T11:54:48,712 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,787 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #14. Is it enabled?
+2026-04-27T11:54:48,795 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #14 is disabled
+2026-04-27T11:54:48,797 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #15
+2026-04-27T11:54:48,797 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,841 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #15. Is it enabled?
+2026-04-27T11:54:48,851 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #15 is disabled
+2026-04-27T11:54:48,853 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #16
+2026-04-27T11:54:48,853 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,866 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #16. Is it enabled?
+2026-04-27T11:54:48,868 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #16 is disabled
+2026-04-27T11:54:48,868 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #17
+2026-04-27T11:54:48,868 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,907 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #17. Is it enabled?
+2026-04-27T11:54:48,914 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #17 is disabled
+2026-04-27T11:54:48,915 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #18
+2026-04-27T11:54:48,915 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,940 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 18 produces partial assignment. Disabled.
+2026-04-27T11:54:48,943 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #19
+2026-04-27T11:54:48,943 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,951 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 19 produces partial assignment. Disabled.
+2026-04-27T11:54:48,951 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #20
+2026-04-27T11:54:48,951 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,958 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 20 produces partial assignment. Disabled.
+2026-04-27T11:54:48,958 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #21
+2026-04-27T11:54:48,958 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:48,994 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #21. Is it enabled?
+2026-04-27T11:54:48,999 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #21 is disabled
+2026-04-27T11:54:49,000 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #22
+2026-04-27T11:54:49,000 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,024 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 22 produces partial assignment. Disabled.
+2026-04-27T11:54:49,026 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #23
+2026-04-27T11:54:49,026 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,031 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 23 produces partial assignment. Disabled.
+2026-04-27T11:54:49,031 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #24
+2026-04-27T11:54:49,031 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,073 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #24. Is it enabled?
+2026-04-27T11:54:49,078 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #24 is disabled
+2026-04-27T11:54:49,079 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #25
+2026-04-27T11:54:49,079 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,084 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 25 produces partial assignment. Disabled.
+2026-04-27T11:54:49,085 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #26
+2026-04-27T11:54:49,085 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,106 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #26. Is it enabled?
+2026-04-27T11:54:49,112 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #26 is enabled
+2026-04-27T11:54:49,112 [main] INFO  a.f.a.t.b.SeqModelChecker - State 4: Checking 2 state invariants
+2026-04-27T11:54:49,112 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 4: Checking state invariant 0
+2026-04-27T11:54:49,115 [main] INFO  a.f.a.t.b.SeqModelChecker - State 4: state invariant 0 holds.
+2026-04-27T11:54:49,116 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 4: Checking state invariant 1
+2026-04-27T11:54:49,120 [main] INFO  a.f.a.t.b.SeqModelChecker - State 4: state invariant 1 holds.
+2026-04-27T11:54:49,122 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #27
+2026-04-27T11:54:49,122 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,137 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #27. Is it enabled?
+2026-04-27T11:54:49,138 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #27 is disabled
+2026-04-27T11:54:49,139 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #28
+2026-04-27T11:54:49,139 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,157 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #28. Is it enabled?
+2026-04-27T11:54:49,160 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #28 is disabled
+2026-04-27T11:54:49,160 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #29
+2026-04-27T11:54:49,161 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,179 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #29. Is it enabled?
+2026-04-27T11:54:49,181 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #29 is disabled
+2026-04-27T11:54:49,182 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #30
+2026-04-27T11:54:49,182 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,203 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #30. Is it enabled?
+2026-04-27T11:54:49,213 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #30 is disabled
+2026-04-27T11:54:49,214 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #31
+2026-04-27T11:54:49,214 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,236 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #31. Is it enabled?
+2026-04-27T11:54:49,238 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #31 is disabled
+2026-04-27T11:54:49,239 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #32
+2026-04-27T11:54:49,239 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,259 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #32. Is it enabled?
+2026-04-27T11:54:49,262 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #32 is disabled
+2026-04-27T11:54:49,263 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #33
+2026-04-27T11:54:49,263 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,281 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #33. Is it enabled?
+2026-04-27T11:54:49,284 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #33 is disabled
+2026-04-27T11:54:49,286 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #34
+2026-04-27T11:54:49,286 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,306 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #34. Is it enabled?
+2026-04-27T11:54:49,309 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #34 is disabled
+2026-04-27T11:54:49,311 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #35
+2026-04-27T11:54:49,311 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,331 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #35. Is it enabled?
+2026-04-27T11:54:49,335 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #35 is disabled
+2026-04-27T11:54:49,335 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #36
+2026-04-27T11:54:49,335 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,347 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 36 produces partial assignment. Disabled.
+2026-04-27T11:54:49,348 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #37
+2026-04-27T11:54:49,348 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,395 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #37. Is it enabled?
+2026-04-27T11:54:49,399 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #37 is disabled
+2026-04-27T11:54:49,400 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #38
+2026-04-27T11:54:49,400 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,431 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 38 produces partial assignment. Disabled.
+2026-04-27T11:54:49,434 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #39
+2026-04-27T11:54:49,434 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,483 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #39. Is it enabled?
+2026-04-27T11:54:49,488 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #39 is disabled
+2026-04-27T11:54:49,489 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #40
+2026-04-27T11:54:49,489 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,504 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 40 produces partial assignment. Disabled.
+2026-04-27T11:54:49,505 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #41
+2026-04-27T11:54:49,505 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,550 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #41. Is it enabled?
+2026-04-27T11:54:49,559 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #41 is disabled
+2026-04-27T11:54:49,561 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #42
+2026-04-27T11:54:49,561 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,586 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 42 produces partial assignment. Disabled.
+2026-04-27T11:54:49,588 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #43
+2026-04-27T11:54:49,588 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,617 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #43. Is it enabled?
+2026-04-27T11:54:49,623 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #43 is disabled
+2026-04-27T11:54:49,624 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #44
+2026-04-27T11:54:49,625 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,654 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #44. Is it enabled?
+2026-04-27T11:54:49,662 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #44 is disabled
+2026-04-27T11:54:49,663 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #45
+2026-04-27T11:54:49,663 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,696 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #45. Is it enabled?
+2026-04-27T11:54:49,703 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #45 is disabled
+2026-04-27T11:54:49,704 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #46
+2026-04-27T11:54:49,704 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,735 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #46. Is it enabled?
+2026-04-27T11:54:49,742 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #46 is disabled
+2026-04-27T11:54:49,743 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #47
+2026-04-27T11:54:49,743 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,810 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #47. Is it enabled?
+2026-04-27T11:54:49,817 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #47 is disabled
+2026-04-27T11:54:49,818 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #48
+2026-04-27T11:54:49,819 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,854 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #48. Is it enabled?
+2026-04-27T11:54:49,859 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #48 is disabled
+2026-04-27T11:54:49,861 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #49
+2026-04-27T11:54:49,861 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,897 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #49. Is it enabled?
+2026-04-27T11:54:49,902 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #49 is disabled
+2026-04-27T11:54:49,903 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #50
+2026-04-27T11:54:49,903 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:49,960 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #50. Is it enabled?
+2026-04-27T11:54:49,970 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #50 is disabled
+2026-04-27T11:54:49,971 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #51
+2026-04-27T11:54:49,971 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,003 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #51. Is it enabled?
+2026-04-27T11:54:50,016 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #51 is disabled
+2026-04-27T11:54:50,017 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #52
+2026-04-27T11:54:50,017 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,048 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #52. Is it enabled?
+2026-04-27T11:54:50,056 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #52 is disabled
+2026-04-27T11:54:50,057 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #53
+2026-04-27T11:54:50,057 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,094 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #53. Is it enabled?
+2026-04-27T11:54:50,096 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #53 is disabled
+2026-04-27T11:54:50,096 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #54
+2026-04-27T11:54:50,096 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,107 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #54. Is it enabled?
+2026-04-27T11:54:50,108 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #54 is disabled
+2026-04-27T11:54:50,110 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #55
+2026-04-27T11:54:50,110 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,112 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 55 produces partial assignment. Disabled.
+2026-04-27T11:54:50,112 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #56
+2026-04-27T11:54:50,112 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,125 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #56. Is it enabled?
+2026-04-27T11:54:50,130 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #56 is disabled
+2026-04-27T11:54:50,131 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #57
+2026-04-27T11:54:50,131 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,140 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 57 produces partial assignment. Disabled.
+2026-04-27T11:54:50,141 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #58
+2026-04-27T11:54:50,141 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,172 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #58. Is it enabled?
+2026-04-27T11:54:50,176 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #58 is disabled
+2026-04-27T11:54:50,177 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #59
+2026-04-27T11:54:50,177 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,180 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 59 produces partial assignment. Disabled.
+2026-04-27T11:54:50,180 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #60
+2026-04-27T11:54:50,180 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,215 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #60. Is it enabled?
+2026-04-27T11:54:50,216 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #60 is disabled
+2026-04-27T11:54:50,217 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #61
+2026-04-27T11:54:50,217 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,219 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 61 produces partial assignment. Disabled.
+2026-04-27T11:54:50,219 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #62
+2026-04-27T11:54:50,219 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,263 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #62. Is it enabled?
+2026-04-27T11:54:50,268 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #62 is disabled
+2026-04-27T11:54:50,269 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #63
+2026-04-27T11:54:50,269 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,286 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #63. Is it enabled?
+2026-04-27T11:54:50,287 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #63 is disabled
+2026-04-27T11:54:50,288 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #64
+2026-04-27T11:54:50,288 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,303 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #64. Is it enabled?
+2026-04-27T11:54:50,305 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #64 is disabled
+2026-04-27T11:54:50,306 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #65
+2026-04-27T11:54:50,306 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,312 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #65. Is it enabled?
+2026-04-27T11:54:50,313 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #65 is disabled
+2026-04-27T11:54:50,314 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #66
+2026-04-27T11:54:50,314 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,325 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #66. Is it enabled?
+2026-04-27T11:54:50,327 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #66 is disabled
+2026-04-27T11:54:50,328 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #67
+2026-04-27T11:54:50,328 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,339 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #67. Is it enabled?
+2026-04-27T11:54:50,340 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #67 is disabled
+2026-04-27T11:54:50,340 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #68
+2026-04-27T11:54:50,340 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,353 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #68. Is it enabled?
+2026-04-27T11:54:50,355 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #68 is disabled
+2026-04-27T11:54:50,355 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #4, transition #69
+2026-04-27T11:54:50,355 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,370 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 4: Transition #69. Is it enabled?
+2026-04-27T11:54:50,372 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 4: Transition #69 is disabled
+2026-04-27T11:54:50,372 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 4: picking a transition out of 1 transition(s)
+2026-04-27T11:54:50,373 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #0
+2026-04-27T11:54:50,373 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,413 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #0. Is it enabled?
+2026-04-27T11:54:50,420 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #0 is disabled
+2026-04-27T11:54:50,422 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #1
+2026-04-27T11:54:50,422 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,458 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #1. Is it enabled?
+2026-04-27T11:54:50,465 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #1 is disabled
+2026-04-27T11:54:50,466 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #2
+2026-04-27T11:54:50,467 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,505 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #2. Is it enabled?
+2026-04-27T11:54:50,513 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #2 is disabled
+2026-04-27T11:54:50,515 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #3
+2026-04-27T11:54:50,515 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,525 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 3 produces partial assignment. Disabled.
+2026-04-27T11:54:50,527 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #4
+2026-04-27T11:54:50,527 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,535 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 4 produces partial assignment. Disabled.
+2026-04-27T11:54:50,536 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #5
+2026-04-27T11:54:50,536 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,569 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #5. Is it enabled?
+2026-04-27T11:54:50,574 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #5 is disabled
+2026-04-27T11:54:50,576 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #6
+2026-04-27T11:54:50,576 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,608 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #6. Is it enabled?
+2026-04-27T11:54:50,613 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #6 is disabled
+2026-04-27T11:54:50,615 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #7
+2026-04-27T11:54:50,615 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,624 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 7 produces partial assignment. Disabled.
+2026-04-27T11:54:50,625 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #8
+2026-04-27T11:54:50,625 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,634 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 8 produces partial assignment. Disabled.
+2026-04-27T11:54:50,635 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #9
+2026-04-27T11:54:50,635 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,669 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #9. Is it enabled?
+2026-04-27T11:54:50,674 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #9 is disabled
+2026-04-27T11:54:50,676 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #10
+2026-04-27T11:54:50,676 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,764 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #10. Is it enabled?
+2026-04-27T11:54:50,773 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #10 is disabled
+2026-04-27T11:54:50,775 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #11
+2026-04-27T11:54:50,775 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,819 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #11. Is it enabled?
+2026-04-27T11:54:50,824 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #11 is disabled
+2026-04-27T11:54:50,825 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #12
+2026-04-27T11:54:50,825 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,875 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #12. Is it enabled?
+2026-04-27T11:54:50,886 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #12 is disabled
+2026-04-27T11:54:50,888 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #13
+2026-04-27T11:54:50,888 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:50,992 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #13. Is it enabled?
+2026-04-27T11:54:51,007 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #13 is disabled
+2026-04-27T11:54:51,011 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #14
+2026-04-27T11:54:51,011 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,092 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #14. Is it enabled?
+2026-04-27T11:54:51,102 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #14 is disabled
+2026-04-27T11:54:51,104 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #15
+2026-04-27T11:54:51,104 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,156 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #15. Is it enabled?
+2026-04-27T11:54:51,166 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #15 is disabled
+2026-04-27T11:54:51,168 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #16
+2026-04-27T11:54:51,168 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,182 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #16. Is it enabled?
+2026-04-27T11:54:51,184 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #16 is disabled
+2026-04-27T11:54:51,184 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #17
+2026-04-27T11:54:51,184 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,229 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #17. Is it enabled?
+2026-04-27T11:54:51,233 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #17 is disabled
+2026-04-27T11:54:51,234 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #18
+2026-04-27T11:54:51,234 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,264 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 18 produces partial assignment. Disabled.
+2026-04-27T11:54:51,267 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #19
+2026-04-27T11:54:51,267 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,276 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 19 produces partial assignment. Disabled.
+2026-04-27T11:54:51,277 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #20
+2026-04-27T11:54:51,277 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,285 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 20 produces partial assignment. Disabled.
+2026-04-27T11:54:51,286 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #21
+2026-04-27T11:54:51,286 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,390 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #21. Is it enabled?
+2026-04-27T11:54:51,395 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #21 is disabled
+2026-04-27T11:54:51,396 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #22
+2026-04-27T11:54:51,396 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,445 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 22 produces partial assignment. Disabled.
+2026-04-27T11:54:51,448 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #23
+2026-04-27T11:54:51,448 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,455 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 23 produces partial assignment. Disabled.
+2026-04-27T11:54:51,456 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #24
+2026-04-27T11:54:51,456 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,481 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #24. Is it enabled?
+2026-04-27T11:54:51,482 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #24 is disabled
+2026-04-27T11:54:51,483 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #25
+2026-04-27T11:54:51,483 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,489 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 25 produces partial assignment. Disabled.
+2026-04-27T11:54:51,489 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #26
+2026-04-27T11:54:51,489 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,514 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #26. Is it enabled?
+2026-04-27T11:54:51,516 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #26 is disabled
+2026-04-27T11:54:51,517 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #27
+2026-04-27T11:54:51,517 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,538 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #27. Is it enabled?
+2026-04-27T11:54:51,546 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #27 is enabled
+2026-04-27T11:54:51,547 [main] INFO  a.f.a.t.b.SeqModelChecker - State 5: Checking 2 state invariants
+2026-04-27T11:54:51,547 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 5: Checking state invariant 0
+2026-04-27T11:54:51,549 [main] INFO  a.f.a.t.b.SeqModelChecker - State 5: state invariant 0 holds.
+2026-04-27T11:54:51,550 [main] DEBUG a.f.a.t.b.SeqModelChecker - State 5: Checking state invariant 1
+2026-04-27T11:54:51,554 [main] INFO  a.f.a.t.b.SeqModelChecker - State 5: state invariant 1 holds.
+2026-04-27T11:54:51,556 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #28
+2026-04-27T11:54:51,556 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,576 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #28. Is it enabled?
+2026-04-27T11:54:51,579 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #28 is disabled
+2026-04-27T11:54:51,580 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #29
+2026-04-27T11:54:51,581 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,600 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #29. Is it enabled?
+2026-04-27T11:54:51,602 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #29 is disabled
+2026-04-27T11:54:51,603 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #30
+2026-04-27T11:54:51,603 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,623 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #30. Is it enabled?
+2026-04-27T11:54:51,629 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #30 is disabled
+2026-04-27T11:54:51,630 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #31
+2026-04-27T11:54:51,630 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,651 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #31. Is it enabled?
+2026-04-27T11:54:51,653 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #31 is disabled
+2026-04-27T11:54:51,654 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #32
+2026-04-27T11:54:51,654 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,674 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #32. Is it enabled?
+2026-04-27T11:54:51,676 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #32 is disabled
+2026-04-27T11:54:51,677 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #33
+2026-04-27T11:54:51,677 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,698 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #33. Is it enabled?
+2026-04-27T11:54:51,700 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #33 is disabled
+2026-04-27T11:54:51,701 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #34
+2026-04-27T11:54:51,701 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,744 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #34. Is it enabled?
+2026-04-27T11:54:51,746 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #34 is disabled
+2026-04-27T11:54:51,748 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #35
+2026-04-27T11:54:51,748 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,771 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #35. Is it enabled?
+2026-04-27T11:54:51,774 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #35 is disabled
+2026-04-27T11:54:51,775 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #36
+2026-04-27T11:54:51,775 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,790 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 36 produces partial assignment. Disabled.
+2026-04-27T11:54:51,791 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #37
+2026-04-27T11:54:51,791 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,829 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #37. Is it enabled?
+2026-04-27T11:54:51,832 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #37 is disabled
+2026-04-27T11:54:51,834 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #38
+2026-04-27T11:54:51,834 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,849 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 38 produces partial assignment. Disabled.
+2026-04-27T11:54:51,850 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #39
+2026-04-27T11:54:51,850 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,889 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #39. Is it enabled?
+2026-04-27T11:54:51,894 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #39 is disabled
+2026-04-27T11:54:51,895 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #40
+2026-04-27T11:54:51,895 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,912 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 40 produces partial assignment. Disabled.
+2026-04-27T11:54:51,914 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #41
+2026-04-27T11:54:51,914 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,973 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #41. Is it enabled?
+2026-04-27T11:54:51,976 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #41 is disabled
+2026-04-27T11:54:51,978 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #42
+2026-04-27T11:54:51,978 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:51,994 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 42 produces partial assignment. Disabled.
+2026-04-27T11:54:51,995 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #43
+2026-04-27T11:54:51,995 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,035 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #43. Is it enabled?
+2026-04-27T11:54:52,040 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #43 is disabled
+2026-04-27T11:54:52,041 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #44
+2026-04-27T11:54:52,041 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,109 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #44. Is it enabled?
+2026-04-27T11:54:52,116 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #44 is disabled
+2026-04-27T11:54:52,118 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #45
+2026-04-27T11:54:52,118 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,185 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #45. Is it enabled?
+2026-04-27T11:54:52,194 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #45 is disabled
+2026-04-27T11:54:52,195 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #46
+2026-04-27T11:54:52,195 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,239 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #46. Is it enabled?
+2026-04-27T11:54:52,242 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #46 is disabled
+2026-04-27T11:54:52,243 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #47
+2026-04-27T11:54:52,243 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,281 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #47. Is it enabled?
+2026-04-27T11:54:52,286 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #47 is disabled
+2026-04-27T11:54:52,287 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #48
+2026-04-27T11:54:52,287 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,338 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #48. Is it enabled?
+2026-04-27T11:54:52,342 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #48 is disabled
+2026-04-27T11:54:52,344 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #49
+2026-04-27T11:54:52,344 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,393 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #49. Is it enabled?
+2026-04-27T11:54:52,400 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #49 is disabled
+2026-04-27T11:54:52,401 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #50
+2026-04-27T11:54:52,401 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,466 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #50. Is it enabled?
+2026-04-27T11:54:52,477 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #50 is disabled
+2026-04-27T11:54:52,479 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #51
+2026-04-27T11:54:52,479 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,556 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #51. Is it enabled?
+2026-04-27T11:54:52,560 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #51 is disabled
+2026-04-27T11:54:52,561 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #52
+2026-04-27T11:54:52,561 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,642 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #52. Is it enabled?
+2026-04-27T11:54:52,652 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #52 is disabled
+2026-04-27T11:54:52,654 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #53
+2026-04-27T11:54:52,654 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,669 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #53. Is it enabled?
+2026-04-27T11:54:52,671 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #53 is disabled
+2026-04-27T11:54:52,671 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #54
+2026-04-27T11:54:52,672 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,682 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #54. Is it enabled?
+2026-04-27T11:54:52,683 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #54 is disabled
+2026-04-27T11:54:52,684 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #55
+2026-04-27T11:54:52,684 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,686 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 55 produces partial assignment. Disabled.
+2026-04-27T11:54:52,686 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #56
+2026-04-27T11:54:52,686 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,699 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #56. Is it enabled?
+2026-04-27T11:54:52,701 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #56 is disabled
+2026-04-27T11:54:52,702 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #57
+2026-04-27T11:54:52,702 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,704 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 57 produces partial assignment. Disabled.
+2026-04-27T11:54:52,704 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #58
+2026-04-27T11:54:52,704 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,719 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #58. Is it enabled?
+2026-04-27T11:54:52,721 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #58 is disabled
+2026-04-27T11:54:52,722 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #59
+2026-04-27T11:54:52,722 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,723 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 59 produces partial assignment. Disabled.
+2026-04-27T11:54:52,723 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #60
+2026-04-27T11:54:52,723 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,735 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #60. Is it enabled?
+2026-04-27T11:54:52,736 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #60 is disabled
+2026-04-27T11:54:52,737 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #61
+2026-04-27T11:54:52,737 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,739 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 61 produces partial assignment. Disabled.
+2026-04-27T11:54:52,739 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #62
+2026-04-27T11:54:52,739 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,751 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #62. Is it enabled?
+2026-04-27T11:54:52,752 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #62 is disabled
+2026-04-27T11:54:52,753 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #63
+2026-04-27T11:54:52,753 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,767 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #63. Is it enabled?
+2026-04-27T11:54:52,769 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #63 is disabled
+2026-04-27T11:54:52,770 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #64
+2026-04-27T11:54:52,770 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,787 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #64. Is it enabled?
+2026-04-27T11:54:52,789 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #64 is disabled
+2026-04-27T11:54:52,790 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #65
+2026-04-27T11:54:52,790 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,796 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #65. Is it enabled?
+2026-04-27T11:54:52,797 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #65 is disabled
+2026-04-27T11:54:52,798 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #66
+2026-04-27T11:54:52,798 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,811 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #66. Is it enabled?
+2026-04-27T11:54:52,812 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #66 is disabled
+2026-04-27T11:54:52,813 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #67
+2026-04-27T11:54:52,813 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,824 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #67. Is it enabled?
+2026-04-27T11:54:52,824 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #67 is disabled
+2026-04-27T11:54:52,826 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #68
+2026-04-27T11:54:52,826 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,852 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #68. Is it enabled?
+2026-04-27T11:54:52,854 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #68 is disabled
+2026-04-27T11:54:52,855 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #5, transition #69
+2026-04-27T11:54:52,855 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,873 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 5: Transition #69. Is it enabled?
+2026-04-27T11:54:52,875 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 5: Transition #69 is disabled
+2026-04-27T11:54:52,877 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 5: picking a transition out of 1 transition(s)
+2026-04-27T11:54:52,877 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #0
+2026-04-27T11:54:52,877 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,947 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #0. Is it enabled?
+2026-04-27T11:54:52,955 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #0 is disabled
+2026-04-27T11:54:52,958 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #1
+2026-04-27T11:54:52,958 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:52,998 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #1. Is it enabled?
+2026-04-27T11:54:53,006 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #1 is disabled
+2026-04-27T11:54:53,008 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #2
+2026-04-27T11:54:53,008 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,088 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #2. Is it enabled?
+2026-04-27T11:54:53,095 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #2 is disabled
+2026-04-27T11:54:53,097 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #3
+2026-04-27T11:54:53,097 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,107 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 3 produces partial assignment. Disabled.
+2026-04-27T11:54:53,108 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #4
+2026-04-27T11:54:53,109 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,118 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 4 produces partial assignment. Disabled.
+2026-04-27T11:54:53,120 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #5
+2026-04-27T11:54:53,120 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,155 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #5. Is it enabled?
+2026-04-27T11:54:53,162 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #5 is disabled
+2026-04-27T11:54:53,164 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #6
+2026-04-27T11:54:53,164 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,200 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #6. Is it enabled?
+2026-04-27T11:54:53,206 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #6 is disabled
+2026-04-27T11:54:53,208 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #7
+2026-04-27T11:54:53,208 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,218 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 7 produces partial assignment. Disabled.
+2026-04-27T11:54:53,219 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #8
+2026-04-27T11:54:53,219 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,228 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 8 produces partial assignment. Disabled.
+2026-04-27T11:54:53,230 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #9
+2026-04-27T11:54:53,230 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,266 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #9. Is it enabled?
+2026-04-27T11:54:53,273 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #9 is disabled
+2026-04-27T11:54:53,275 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #10
+2026-04-27T11:54:53,275 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,311 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #10. Is it enabled?
+2026-04-27T11:54:53,317 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #10 is disabled
+2026-04-27T11:54:53,319 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #11
+2026-04-27T11:54:53,319 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,351 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #11. Is it enabled?
+2026-04-27T11:54:53,356 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #11 is disabled
+2026-04-27T11:54:53,358 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #12
+2026-04-27T11:54:53,358 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,413 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #12. Is it enabled?
+2026-04-27T11:54:53,424 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #12 is disabled
+2026-04-27T11:54:53,426 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #13
+2026-04-27T11:54:53,427 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,481 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #13. Is it enabled?
+2026-04-27T11:54:53,494 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #13 is disabled
+2026-04-27T11:54:53,497 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #14
+2026-04-27T11:54:53,497 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,569 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #14. Is it enabled?
+2026-04-27T11:54:53,579 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #14 is disabled
+2026-04-27T11:54:53,581 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #15
+2026-04-27T11:54:53,581 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,672 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #15. Is it enabled?
+2026-04-27T11:54:53,682 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #15 is disabled
+2026-04-27T11:54:53,684 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #16
+2026-04-27T11:54:53,684 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,697 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #16. Is it enabled?
+2026-04-27T11:54:53,699 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #16 is disabled
+2026-04-27T11:54:53,700 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #17
+2026-04-27T11:54:53,700 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,765 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #17. Is it enabled?
+2026-04-27T11:54:53,770 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #17 is disabled
+2026-04-27T11:54:53,772 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #18
+2026-04-27T11:54:53,772 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,798 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 18 produces partial assignment. Disabled.
+2026-04-27T11:54:53,801 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #19
+2026-04-27T11:54:53,801 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,811 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 19 produces partial assignment. Disabled.
+2026-04-27T11:54:53,812 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #20
+2026-04-27T11:54:53,812 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,822 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 20 produces partial assignment. Disabled.
+2026-04-27T11:54:53,822 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #21
+2026-04-27T11:54:53,822 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,931 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #21. Is it enabled?
+2026-04-27T11:54:53,936 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #21 is disabled
+2026-04-27T11:54:53,938 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #22
+2026-04-27T11:54:53,938 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:53,999 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 22 produces partial assignment. Disabled.
+2026-04-27T11:54:54,004 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #23
+2026-04-27T11:54:54,004 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,010 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 23 produces partial assignment. Disabled.
+2026-04-27T11:54:54,011 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #24
+2026-04-27T11:54:54,011 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,076 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #24. Is it enabled?
+2026-04-27T11:54:54,078 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #24 is disabled
+2026-04-27T11:54:54,079 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #25
+2026-04-27T11:54:54,079 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,091 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 25 produces partial assignment. Disabled.
+2026-04-27T11:54:54,091 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #26
+2026-04-27T11:54:54,091 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,140 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #26. Is it enabled?
+2026-04-27T11:54:54,142 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #26 is disabled
+2026-04-27T11:54:54,143 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #27
+2026-04-27T11:54:54,143 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,185 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #27. Is it enabled?
+2026-04-27T11:54:54,186 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #27 is disabled
+2026-04-27T11:54:54,187 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #28
+2026-04-27T11:54:54,187 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,215 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #28. Is it enabled?
+2026-04-27T11:54:54,218 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #28 is disabled
+2026-04-27T11:54:54,219 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #29
+2026-04-27T11:54:54,219 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,240 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #29. Is it enabled?
+2026-04-27T11:54:54,243 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #29 is disabled
+2026-04-27T11:54:54,245 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #30
+2026-04-27T11:54:54,245 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,267 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #30. Is it enabled?
+2026-04-27T11:54:54,278 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #30 is disabled
+2026-04-27T11:54:54,280 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #31
+2026-04-27T11:54:54,281 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,302 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #31. Is it enabled?
+2026-04-27T11:54:54,305 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #31 is disabled
+2026-04-27T11:54:54,306 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #32
+2026-04-27T11:54:54,306 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,326 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #32. Is it enabled?
+2026-04-27T11:54:54,329 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #32 is disabled
+2026-04-27T11:54:54,330 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #33
+2026-04-27T11:54:54,330 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,351 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #33. Is it enabled?
+2026-04-27T11:54:54,354 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #33 is disabled
+2026-04-27T11:54:54,356 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #34
+2026-04-27T11:54:54,356 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,376 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #34. Is it enabled?
+2026-04-27T11:54:54,379 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #34 is disabled
+2026-04-27T11:54:54,380 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #35
+2026-04-27T11:54:54,380 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,399 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #35. Is it enabled?
+2026-04-27T11:54:54,402 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #35 is disabled
+2026-04-27T11:54:54,403 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #36
+2026-04-27T11:54:54,403 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,420 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 36 produces partial assignment. Disabled.
+2026-04-27T11:54:54,422 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #37
+2026-04-27T11:54:54,422 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,463 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #37. Is it enabled?
+2026-04-27T11:54:54,467 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #37 is disabled
+2026-04-27T11:54:54,468 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #38
+2026-04-27T11:54:54,468 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,486 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 38 produces partial assignment. Disabled.
+2026-04-27T11:54:54,487 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #39
+2026-04-27T11:54:54,488 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,542 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #39. Is it enabled?
+2026-04-27T11:54:54,545 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #39 is disabled
+2026-04-27T11:54:54,547 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #40
+2026-04-27T11:54:54,547 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,590 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 40 produces partial assignment. Disabled.
+2026-04-27T11:54:54,592 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #41
+2026-04-27T11:54:54,592 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,633 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #41. Is it enabled?
+2026-04-27T11:54:54,637 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #41 is disabled
+2026-04-27T11:54:54,638 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #42
+2026-04-27T11:54:54,639 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,658 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 42 produces partial assignment. Disabled.
+2026-04-27T11:54:54,659 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #43
+2026-04-27T11:54:54,659 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,701 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #43. Is it enabled?
+2026-04-27T11:54:54,707 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #43 is disabled
+2026-04-27T11:54:54,709 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #44
+2026-04-27T11:54:54,709 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,755 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #44. Is it enabled?
+2026-04-27T11:54:54,759 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #44 is disabled
+2026-04-27T11:54:54,760 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #45
+2026-04-27T11:54:54,761 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,806 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #45. Is it enabled?
+2026-04-27T11:54:54,812 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #45 is disabled
+2026-04-27T11:54:54,814 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #46
+2026-04-27T11:54:54,814 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,860 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #46. Is it enabled?
+2026-04-27T11:54:54,863 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #46 is disabled
+2026-04-27T11:54:54,865 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #47
+2026-04-27T11:54:54,865 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:54,927 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #47. Is it enabled?
+2026-04-27T11:54:54,933 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #47 is disabled
+2026-04-27T11:54:54,935 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #48
+2026-04-27T11:54:54,935 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,014 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #48. Is it enabled?
+2026-04-27T11:54:55,019 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #48 is disabled
+2026-04-27T11:54:55,021 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #49
+2026-04-27T11:54:55,021 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,078 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #49. Is it enabled?
+2026-04-27T11:54:55,085 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #49 is disabled
+2026-04-27T11:54:55,087 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #50
+2026-04-27T11:54:55,087 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,139 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #50. Is it enabled?
+2026-04-27T11:54:55,152 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #50 is disabled
+2026-04-27T11:54:55,155 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #51
+2026-04-27T11:54:55,155 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,202 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #51. Is it enabled?
+2026-04-27T11:54:55,206 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #51 is disabled
+2026-04-27T11:54:55,208 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #52
+2026-04-27T11:54:55,208 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,255 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #52. Is it enabled?
+2026-04-27T11:54:55,268 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #52 is disabled
+2026-04-27T11:54:55,271 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #53
+2026-04-27T11:54:55,271 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,286 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #53. Is it enabled?
+2026-04-27T11:54:55,288 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #53 is disabled
+2026-04-27T11:54:55,289 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #54
+2026-04-27T11:54:55,289 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,301 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #54. Is it enabled?
+2026-04-27T11:54:55,302 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #54 is disabled
+2026-04-27T11:54:55,303 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #55
+2026-04-27T11:54:55,303 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,304 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 55 produces partial assignment. Disabled.
+2026-04-27T11:54:55,305 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #56
+2026-04-27T11:54:55,305 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,318 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #56. Is it enabled?
+2026-04-27T11:54:55,319 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #56 is disabled
+2026-04-27T11:54:55,320 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #57
+2026-04-27T11:54:55,320 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,322 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 57 produces partial assignment. Disabled.
+2026-04-27T11:54:55,322 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #58
+2026-04-27T11:54:55,322 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,361 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #58. Is it enabled?
+2026-04-27T11:54:55,363 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #58 is disabled
+2026-04-27T11:54:55,364 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #59
+2026-04-27T11:54:55,365 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,366 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 59 produces partial assignment. Disabled.
+2026-04-27T11:54:55,367 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #60
+2026-04-27T11:54:55,367 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,380 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #60. Is it enabled?
+2026-04-27T11:54:55,382 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #60 is disabled
+2026-04-27T11:54:55,383 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #61
+2026-04-27T11:54:55,383 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,386 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 61 produces partial assignment. Disabled.
+2026-04-27T11:54:55,386 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #62
+2026-04-27T11:54:55,386 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,398 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #62. Is it enabled?
+2026-04-27T11:54:55,400 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #62 is disabled
+2026-04-27T11:54:55,401 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #63
+2026-04-27T11:54:55,401 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,414 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #63. Is it enabled?
+2026-04-27T11:54:55,416 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #63 is disabled
+2026-04-27T11:54:55,417 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #64
+2026-04-27T11:54:55,417 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,434 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #64. Is it enabled?
+2026-04-27T11:54:55,436 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #64 is disabled
+2026-04-27T11:54:55,438 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #65
+2026-04-27T11:54:55,438 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,444 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #65. Is it enabled?
+2026-04-27T11:54:55,445 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #65 is disabled
+2026-04-27T11:54:55,447 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #66
+2026-04-27T11:54:55,447 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,460 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #66. Is it enabled?
+2026-04-27T11:54:55,461 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #66 is disabled
+2026-04-27T11:54:55,462 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #67
+2026-04-27T11:54:55,462 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,483 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #67. Is it enabled?
+2026-04-27T11:54:55,485 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #67 is disabled
+2026-04-27T11:54:55,488 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #68
+2026-04-27T11:54:55,488 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,509 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #68. Is it enabled?
+2026-04-27T11:54:55,511 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #68 is disabled
+2026-04-27T11:54:55,513 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #6, transition #69
+2026-04-27T11:54:55,513 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-27T11:54:55,531 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 6: Transition #69. Is it enabled?
+2026-04-27T11:54:55,533 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 6: Transition #69 is disabled
+2026-04-27T11:54:55,830 [main] INFO  a.f.a.t.b.DumpFilesModelCheckerListener$ - Check the trace in: /home/alexandre.siret/Accord/AccordTLASpec/SpecAccord/apalacheVersion/_apalache-out/AccordSpec.tla/2026-04-27T11-54-32_4558262280895953850/violation0.tla, /home/alexandre.siret/Accord/AccordTLASpec/SpecAccord/apalacheVersion/_apalache-out/AccordSpec.tla/2026-04-27T11-54-32_4558262280895953850/MCviolation0.out, /home/alexandre.siret/Accord/AccordTLASpec/SpecAccord/apalacheVersion/_apalache-out/AccordSpec.tla/2026-04-27T11-54-32_4558262280895953850/violation0.json, /home/alexandre.siret/Accord/AccordTLASpec/SpecAccord/apalacheVersion/_apalache-out/AccordSpec.tla/2026-04-27T11-54-32_4558262280895953850/violation0.itf.json
+2026-04-27T11:54:55,830 [main] ERROR a.f.a.t.b.SeqModelChecker - Found a deadlock.
+2026-04-27T11:54:55,831 [main] DEBUG a.f.a.t.b.s.Z3SolverContext - Disposing Z3 solver context 0
+2026-04-27T11:54:55,865 [main] INFO  a.f.a.t.b.p.BoundedCheckerPassImpl - The outcome is: Deadlock
+2026-04-27T11:54:55,896 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #13: BoundedChecker [FAIL]
+2026-04-27T11:54:55,896 [main] INFO  a.f.a.t.Tool$ - Checker has found an error
+2026-04-27T11:54:55,896 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min 23 sec
+2026-04-27T11:54:55,896 [main] INFO  a.f.a.t.Tool$ - Total time: 23.694 sec

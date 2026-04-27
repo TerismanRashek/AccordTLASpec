@@ -1,0 +1,18 @@
+2026-04-27T11:42:07,222 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
+2026-04-27T11:42:07,238 [main] INFO  a.f.a.i.p.o.OptionGroup$ -   > AccordSpec.cfg: Loading TLC configuration
+2026-04-27T11:42:07,282 [main] WARN  a.f.a.i.t.TlcConfigParserApalache$ - TLC config option CHECK_DEADLOCK true will be ignored
+2026-04-27T11:42:07,288 [main] WARN  a.f.a.i.p.o.OptionGroup$ -   >  inv is set in TLC config but overridden via `inv` cli option or apalache.cfg; using Agreement
+2026-04-27T11:42:07,289 [main] INFO  a.f.a.t.t.o.CheckCmd - Tuning: search.outputTraces=false
+2026-04-27T11:42:07,463 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
+2026-04-27T11:42:07,540 [main] ERROR a.f.a.t.p.i.SanyParserPassImpl - Parsing error: *** Abort messages: 1
+
+In module AccordSpec
+
+Could not parse module AccordSpec from file /home/alexandre.siret/Accord/AccordTLASpec/SpecAccord/apalacheVersion/AccordSpec.tla
+
+
+
+2026-04-27T11:42:07,556 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [FAIL]
+2026-04-27T11:42:07,556 [main] INFO  a.f.a.t.Tool$ - Checker has found an error
+2026-04-27T11:42:07,557 [main] INFO  a.f.a.t.Tool$ - It took me 0 days  0 hours  0 min  0 sec
+2026-04-27T11:42:07,557 [main] INFO  a.f.a.t.Tool$ - Total time: 0.332 sec

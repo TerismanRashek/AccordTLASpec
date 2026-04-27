@@ -1,0 +1,2446 @@
+{
+  "#meta": {
+    "format": "ITF",
+    "varTypes": {
+      "phase": "(Int -> (Int -> Int))",
+      "abal": "(Int -> (Int -> Int))",
+      "initTimestamp": "Seq({ id: Int, t: Int })",
+      "bal": "(Int -> (Int -> Int))",
+      "txn": "(Int -> (Int -> Int))",
+      "postWaitingFlag": "(Int -> (Int -> Bool))",
+      "Wvar": "(Int -> (Int -> Set(<<Int, Int>>)))",
+      "dep": "(Int -> (Int -> Set(Int)))",
+      "recoveryAttemptBal": "(Int -> (Int -> Int))",
+      "submitted": "Set(Int)",
+      "Dvar": "(Int -> (Int -> Set(Int)))",
+      "msgs": "Set(AcceptMessage({ body: { D: Set(Int), b: Int, id: Int, t: { id: Int, t: Int }, tx: Int }, from: Int, to: Int }) | AcceptOKMessage({ body: { Dq: Set(Int), b: Int, id: Int }, from: Int, to: Int }) | CommitMessage({ body: { D: Set(Int), b: Int, id: Int, pathSpeed: SPEED, t: { id: Int, t: Int }, tx: Int }, from: Int, to: Int }) | CommitOKMessage({ body: { b: Int, id: Int }, from: Int, to: Int }) | PreAcceptMessage({ body: { D0: Set(Int), id: Int, tx: Int }, from: Int, to: Int }) | PreAcceptOKMessage({ body: { Dq: Set(Int), id: Int, tq: { id: Int, t: Int } }, from: Int, to: Int }) | RecoverMessage({ body: { b: Int, id: Int, tx: Int }, from: Int, to: Int }) | RecoverOKMessage({ body: { WPq: Set(Int), Wq: Set(<<Int, Int>>), abalq: Int, b: Int, depq: Set(Int), id: Int, phaseq: Int, rejectq: Bool, tq: { id: Int, t: Int }, txq: Int }, from: Int, to: Int }) | StableMessage({ body: { b: Int, id: Int }, from: Int, to: Int }))",
+      "Qvar": "(Int -> (Int -> Set(Int)))",
+      "ts": "(Int -> (Int -> { id: Int, t: Int }))",
+      "TXvar": "(Int -> (Int -> Int))",
+      "recovered": "(Int -> (Int -> Int))",
+      "initCoord": "(Int -> Int)"
+    },
+    "format-description": "https://apalache-mc.org/docs/adr/015adr-trace.html",
+    "description": "Created by Apalache on Mon Apr 27 11:54:55 CEST 2026"
+  },
+  "params": [
+    "Id",
+    "NoProc",
+    "E",
+    "F",
+    "NumberOfRecoveryAttempts",
+    "Bottom",
+    "Proc",
+    "Nop"
+  ],
+  "vars": [
+    "phase",
+    "abal",
+    "initTimestamp",
+    "bal",
+    "txn",
+    "postWaitingFlag",
+    "Wvar",
+    "dep",
+    "recoveryAttemptBal",
+    "submitted",
+    "Dvar",
+    "msgs",
+    "Qvar",
+    "ts",
+    "TXvar",
+    "recovered",
+    "initCoord"
+  ],
+  "states": [
+    {
+      "#meta": {
+        "index": 0
+      },
+      "Bottom": {
+        "#bigint": "99"
+      },
+      "Dvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "E": {
+        "#bigint": "0"
+      },
+      "F": {
+        "#bigint": "0"
+      },
+      "Id": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "NoProc": {
+        "#bigint": "0"
+      },
+      "Nop": {
+        "#bigint": "0"
+      },
+      "NumberOfRecoveryAttempts": {
+        "#bigint": "1"
+      },
+      "Proc": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "Qvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "TXvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "99"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "Wvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "abal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "bal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "dep": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "initCoord": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#bigint": "0"
+            }
+          ]
+        ]
+      },
+      "initTimestamp": [
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "0"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "2"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "1"
+          }
+        }
+      ],
+      "msgs": {
+        "#set": []
+      },
+      "phase": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "postWaitingFlag": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  false
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recovered": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recoveryAttemptBal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "submitted": {
+        "#set": []
+      },
+      "ts": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "id": {
+                      "#bigint": "0"
+                    },
+                    "t": {
+                      "#bigint": "0"
+                    }
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "txn": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "99"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 1
+      },
+      "Bottom": {
+        "#bigint": "99"
+      },
+      "Dvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "E": {
+        "#bigint": "0"
+      },
+      "F": {
+        "#bigint": "0"
+      },
+      "Id": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "NoProc": {
+        "#bigint": "0"
+      },
+      "Nop": {
+        "#bigint": "0"
+      },
+      "NumberOfRecoveryAttempts": {
+        "#bigint": "1"
+      },
+      "Proc": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "Qvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "TXvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "99"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "Wvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "abal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "bal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "dep": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "initCoord": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#bigint": "1"
+            }
+          ]
+        ]
+      },
+      "initTimestamp": [
+        {
+          "id": {
+            "#bigint": "1"
+          },
+          "t": {
+            "#bigint": "0"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "2"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "1"
+          }
+        }
+      ],
+      "msgs": {
+        "#set": [
+          {
+            "tag": "PreAcceptOKMessage",
+            "value": {
+              "body": {
+                "Dq": {
+                  "#set": []
+                },
+                "id": {
+                  "#bigint": "1"
+                },
+                "tq": {
+                  "id": {
+                    "#bigint": "1"
+                  },
+                  "t": {
+                    "#bigint": "0"
+                  }
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          }
+        ]
+      },
+      "phase": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "2"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "postWaitingFlag": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  false
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recovered": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recoveryAttemptBal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "submitted": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "ts": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "id": {
+                      "#bigint": "1"
+                    },
+                    "t": {
+                      "#bigint": "0"
+                    }
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "txn": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 2
+      },
+      "Bottom": {
+        "#bigint": "99"
+      },
+      "Dvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "E": {
+        "#bigint": "0"
+      },
+      "F": {
+        "#bigint": "0"
+      },
+      "Id": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "NoProc": {
+        "#bigint": "0"
+      },
+      "Nop": {
+        "#bigint": "0"
+      },
+      "NumberOfRecoveryAttempts": {
+        "#bigint": "1"
+      },
+      "Proc": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "Qvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "TXvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "99"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "Wvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "abal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "bal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "dep": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "initCoord": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#bigint": "1"
+            }
+          ]
+        ]
+      },
+      "initTimestamp": [
+        {
+          "id": {
+            "#bigint": "1"
+          },
+          "t": {
+            "#bigint": "0"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "2"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "1"
+          }
+        }
+      ],
+      "msgs": {
+        "#set": [
+          {
+            "tag": "PreAcceptOKMessage",
+            "value": {
+              "body": {
+                "Dq": {
+                  "#set": []
+                },
+                "id": {
+                  "#bigint": "1"
+                },
+                "tq": {
+                  "id": {
+                    "#bigint": "1"
+                  },
+                  "t": {
+                    "#bigint": "0"
+                  }
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          },
+          {
+            "tag": "RecoverOKMessage",
+            "value": {
+              "body": {
+                "WPq": {
+                  "#set": []
+                },
+                "Wq": {
+                  "#set": []
+                },
+                "abalq": {
+                  "#bigint": "0"
+                },
+                "b": {
+                  "#bigint": "1"
+                },
+                "depq": {
+                  "#set": []
+                },
+                "id": {
+                  "#bigint": "1"
+                },
+                "phaseq": {
+                  "#bigint": "2"
+                },
+                "rejectq": false,
+                "tq": {
+                  "id": {
+                    "#bigint": "1"
+                  },
+                  "t": {
+                    "#bigint": "0"
+                  }
+                },
+                "txq": {
+                  "#bigint": "1"
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          }
+        ]
+      },
+      "phase": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "2"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "postWaitingFlag": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  false
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recovered": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recoveryAttemptBal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "submitted": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "ts": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "id": {
+                      "#bigint": "1"
+                    },
+                    "t": {
+                      "#bigint": "0"
+                    }
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "txn": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 3
+      },
+      "Bottom": {
+        "#bigint": "99"
+      },
+      "Dvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "E": {
+        "#bigint": "0"
+      },
+      "F": {
+        "#bigint": "0"
+      },
+      "Id": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "NoProc": {
+        "#bigint": "0"
+      },
+      "Nop": {
+        "#bigint": "0"
+      },
+      "NumberOfRecoveryAttempts": {
+        "#bigint": "1"
+      },
+      "Proc": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "Qvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "TXvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "99"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "Wvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "abal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "bal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "dep": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "initCoord": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#bigint": "1"
+            }
+          ]
+        ]
+      },
+      "initTimestamp": [
+        {
+          "id": {
+            "#bigint": "1"
+          },
+          "t": {
+            "#bigint": "0"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "2"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "1"
+          }
+        }
+      ],
+      "msgs": {
+        "#set": [
+          {
+            "tag": "AcceptOKMessage",
+            "value": {
+              "body": {
+                "Dq": {
+                  "#set": []
+                },
+                "b": {
+                  "#bigint": "1"
+                },
+                "id": {
+                  "#bigint": "1"
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          },
+          {
+            "tag": "PreAcceptOKMessage",
+            "value": {
+              "body": {
+                "Dq": {
+                  "#set": []
+                },
+                "id": {
+                  "#bigint": "1"
+                },
+                "tq": {
+                  "id": {
+                    "#bigint": "1"
+                  },
+                  "t": {
+                    "#bigint": "0"
+                  }
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          }
+        ]
+      },
+      "phase": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "3"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "postWaitingFlag": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  false
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recovered": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recoveryAttemptBal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "submitted": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "ts": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "id": {
+                      "#bigint": "1"
+                    },
+                    "t": {
+                      "#bigint": "0"
+                    }
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "txn": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 4
+      },
+      "Bottom": {
+        "#bigint": "99"
+      },
+      "Dvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "E": {
+        "#bigint": "0"
+      },
+      "F": {
+        "#bigint": "0"
+      },
+      "Id": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "NoProc": {
+        "#bigint": "0"
+      },
+      "Nop": {
+        "#bigint": "0"
+      },
+      "NumberOfRecoveryAttempts": {
+        "#bigint": "1"
+      },
+      "Proc": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "Qvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "TXvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "99"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "Wvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "abal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "bal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "dep": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "initCoord": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#bigint": "1"
+            }
+          ]
+        ]
+      },
+      "initTimestamp": [
+        {
+          "id": {
+            "#bigint": "1"
+          },
+          "t": {
+            "#bigint": "0"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "2"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "1"
+          }
+        }
+      ],
+      "msgs": {
+        "#set": [
+          {
+            "tag": "CommitOKMessage",
+            "value": {
+              "body": {
+                "b": {
+                  "#bigint": "1"
+                },
+                "id": {
+                  "#bigint": "1"
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          },
+          {
+            "tag": "PreAcceptOKMessage",
+            "value": {
+              "body": {
+                "Dq": {
+                  "#set": []
+                },
+                "id": {
+                  "#bigint": "1"
+                },
+                "tq": {
+                  "id": {
+                    "#bigint": "1"
+                  },
+                  "t": {
+                    "#bigint": "0"
+                  }
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          }
+        ]
+      },
+      "phase": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "4"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "postWaitingFlag": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  false
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recovered": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recoveryAttemptBal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "submitted": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "ts": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "id": {
+                      "#bigint": "1"
+                    },
+                    "t": {
+                      "#bigint": "0"
+                    }
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "txn": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "#meta": {
+        "index": 5
+      },
+      "Bottom": {
+        "#bigint": "99"
+      },
+      "Dvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "E": {
+        "#bigint": "0"
+      },
+      "F": {
+        "#bigint": "0"
+      },
+      "Id": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "NoProc": {
+        "#bigint": "0"
+      },
+      "Nop": {
+        "#bigint": "0"
+      },
+      "NumberOfRecoveryAttempts": {
+        "#bigint": "1"
+      },
+      "Proc": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "Qvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "TXvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "99"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "Wvar": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "abal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "bal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "dep": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#set": []
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "initCoord": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#bigint": "1"
+            }
+          ]
+        ]
+      },
+      "initTimestamp": [
+        {
+          "id": {
+            "#bigint": "1"
+          },
+          "t": {
+            "#bigint": "0"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "2"
+          }
+        },
+        {
+          "id": {
+            "#bigint": "0"
+          },
+          "t": {
+            "#bigint": "1"
+          }
+        }
+      ],
+      "msgs": {
+        "#set": [
+          {
+            "tag": "PreAcceptOKMessage",
+            "value": {
+              "body": {
+                "Dq": {
+                  "#set": []
+                },
+                "id": {
+                  "#bigint": "1"
+                },
+                "tq": {
+                  "id": {
+                    "#bigint": "1"
+                  },
+                  "t": {
+                    "#bigint": "0"
+                  }
+                }
+              },
+              "from": {
+                "#bigint": "1"
+              },
+              "to": {
+                "#bigint": "1"
+              }
+            }
+          }
+        ]
+      },
+      "phase": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "5"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "postWaitingFlag": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  false
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recovered": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "1"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "recoveryAttemptBal": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "submitted": {
+        "#set": [
+          {
+            "#bigint": "1"
+          }
+        ]
+      },
+      "ts": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "id": {
+                      "#bigint": "1"
+                    },
+                    "t": {
+                      "#bigint": "0"
+                    }
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      },
+      "txn": {
+        "#map": [
+          [
+            {
+              "#bigint": "1"
+            },
+            {
+              "#map": [
+                [
+                  {
+                    "#bigint": "1"
+                  },
+                  {
+                    "#bigint": "0"
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}

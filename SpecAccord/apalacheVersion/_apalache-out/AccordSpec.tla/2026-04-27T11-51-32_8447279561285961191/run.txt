@@ -1,0 +1,1 @@
+ check --inv=Agreement --config=AccordSpec.cfg --length=30 AccordSpec.tla
