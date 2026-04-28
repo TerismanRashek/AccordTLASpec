@@ -33,7 +33,7 @@ EXTENDS Variants
 \* recoverOKMessage inner record.
 \* @typeAlias: recoverOKMessage = { from: Int, to: Int, body: {id: Int, b: Int, abalq: Int, txq: Int, tq: $timestamp, depq: Set(Int), phaseq: Int, rejectq: Bool, Wq: Set(<<Int,Int>>), WPq: Set(Int)} };
 \*
-\* The top-level message variant — each tag wraps its typed inner record.
+\* Message type uses Variants module.
 \* @typeAlias: message =
 \*     PreAcceptMessage($preAcceptMessage)
 \*   | PreAcceptOKMessage($preAcceptOKMessage)
@@ -46,12 +46,6 @@ EXTENDS Variants
 \*   | RecoverOKMessage($recoverOKMessage);
 
 TypeAliases == TRUE
-
-\* ---------------------------------------------------------------------------
-\* Message constructors — each returns a $message variant.
-\* Note: 'from' is the sender (p), 'to' is the receiver (q).
-\* The type: Int fields have been removed — use VariantTag to identify type.
-\* ---------------------------------------------------------------------------
 
 \* @type: (Int, Int, Int, Int, Set(Int)) => $message;
 PreAcceptMsg(p, q, id, tx, D0) ==
