@@ -33888,3 +33888,16 @@
 2026-04-29T09:09:16,315 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #13, transition #34
 2026-04-29T09:09:16,315 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
 2026-04-29T09:09:16,465 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 13: Transition #34. Is it enabled?
+2026-04-29T09:09:35,928 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 13: Transition #34 is disabled
+2026-04-29T09:09:35,955 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #13, transition #25
+2026-04-29T09:09:35,955 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-29T09:09:36,007 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Transition 25 produces partial assignment. Disabled.
+2026-04-29T09:09:36,021 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #13, transition #13
+2026-04-29T09:09:36,021 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-29T09:09:36,363 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 13: Transition #13. Is it enabled?
+2026-04-29T09:09:47,928 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 13: Transition #13 is enabled
+2026-04-29T09:09:47,981 [main] INFO  a.f.a.t.b.SeqModelChecker - Step 13: randomly picked transition #13
+2026-04-29T09:09:47,981 [main] INFO  a.f.a.t.b.t.TransitionExecutorImpl - Step 13: picking a transition out of 1 transition(s)
+2026-04-29T09:09:47,985 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Step #14, transition #11
+2026-04-29T09:09:47,985 [main] DEBUG a.f.a.t.b.t.TransitionExecutorImpl - Translating to SMT
+2026-04-29T09:09:48,096 [main] DEBUG a.f.a.t.b.SeqModelChecker - Step 14: Transition #11. Is it enabled?
