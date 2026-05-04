@@ -94,8 +94,8 @@ AcceptMsg(sp, p, sq, q, b, id, t, D, tx, pathSpeed) ==
 AcceptOKMsg(sp, p, sq, q, b, id, Dq, pathSpeed) ==
     Message(TypeAcceptOK, sp, p, sq, q, [id |-> id, b |-> b, Dq |-> Dq, pathSpeed |-> pathSpeed])
 
-CommitMsg(sp, p, sq, q, b, id, t, D, fastOrSlow, tx) ==
-    Message(TypeCommit, sp, p, sq, q, [id |-> id, b |-> b, t |-> t, D |-> D, fastOrSlow |-> fastOrSlow, tx |-> tx])
+CommitMsg(sp, p, sq, q, b, id, t, D, pathSpeed, tx) ==
+    Message(TypeCommit, sp, p, sq, q, [id |-> id, b |-> b, t |-> t, D |-> D, pathSpeed |-> pathSpeed, tx |-> tx])
 
 CommitOkMsg(sp, p, sq, q, b, id) ==
     Message(TypeCommitOK, sp, p, sq, q, [id |-> id, b |-> b])
@@ -167,7 +167,7 @@ Init ==
     /\ abal = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
     /\ msgs = {}
     /\ submitted = {}
-    /\ initCoord = [id \in Id |-> <<0, NoProc>>]
+    /\ initCoord = [id \in Id |-> {}]
     /\ recovered = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> 0]]]
     /\ Wvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> {}]]]
     /\ TXvar = [s \in Shards |-> [p \in Proc |-> [id \in Id |-> Bottom]]]
@@ -234,7 +234,13 @@ initCoordInQuorum(id, Q) ==
     \E coord \in initCoord[id] :
         coord \in Q
 
+IsPartitionCoord(s, p, id) ==
+    [proc |-> p, s |-> s] \in initCoord[id] 
 
+initPartitionCoord(id, s) ==
+    IF \E coord \in initCoord[id] : coord.shard = s
+    THEN CHOOSE coord \in initCoord[id] : coord.shard = s
+    ELSE [proc |-> NoProc, shard |-> 0]
 
 (***************************************************************************)
 (* State-changing Actions                                                  *)
@@ -337,18 +343,18 @@ ApplyRecover(sp, p, b, id, tx) ==
 Submit(s, p, id) ==
     /\  id \notin submitted
     /\  s \in idToShard[id] 
-    /\  LET initCoords == { [id |-> id, shard |-> shard] : shard \in idToShard[id]}
-            earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initCoord[id1] = <<s,p>> /\ LessThanTs(initTimestamp[id], initTimestamp[id1])}}
+    /\  LET initCoords == { [proc |-> p, shard |-> shard] : shard \in idToShard[id]}
+            earlierInitTimestamps == {initTimestamp[id2] : id2 \in {id1 \in Id : initPartitionCoord(id1, s) = [shard |-> s, proc |-> p] /\ LessThanTs(initTimestamp[id], initTimestamp[id1])}}
         IN 
         \* making sure that this process has not already submitted a command with a greater timestamp than the one we are currently submitting.
         LET initTimestampVal == IF earlierInitTimestamps = {} THEN initTimestamp[id].t ELSE MaxTsInSet(earlierInitTimestamps).t + 1
         IN
-        LET newInitTimestamp == [id |-> <<s,p>>, t |-> initTimestampVal]
+        LET newInitTimestamp == [id |-> <<s,p>>, t |-> initTimestamp[id].t]
         IN
         /\  initTimestamp' = [initTimestamp EXCEPT ![id] = newInitTimestamp]
         /\  submitted' = submitted \cup {id}
         /\  initCoord' = [initCoord EXCEPT ![id] = initCoords]
-        /\  msgs' = msgs \cup { SubmitMsg(s, p, coord.shard, coord.id, id) : coord \in initCoords }
+        /\  msgs' = msgs \cup { SubmitMsg(s, p, coord.shard, coord.proc, id) : coord \in initCoords }
     /\  UNCHANGED <<bal, abal, txn, phase, ts, dep, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs>> 
 
 HandleSubmit(m) ==
@@ -359,11 +365,13 @@ HandleSubmit(m) ==
             q  == m.from
             id == m.body.id
         IN 
+        (* /\  \A id2 \in Id : 
+            (phase[s][p][id2] = InitialPhase /\ Conflicts(id, id2)) => LessThanTs(ts[s][p][id2], initTimestamp[id]) *)
         /\  LET computations == PreAcceptComputations(s, p, s, p, id, initTimestamp[id])
                 tx == id \* we use the id as command payload since it does not matter
             IN
             /\  ApplyPreAccept(s, p, id, tx, computations.finalTs, computations.D) \* slightly confusing here but computations.D is D0 here since this is the self addressed message.
-            /\  msgs' = (msgs \ {m}) \cup { PreAcceptMsg(sq, q, s, to, id, tx, computations.D) : to \in Proc \ {p} } \* sq and q in params here so the recipient will answer back to the original initcoord.
+            /\  msgs' = (msgs \ {m}) \cup { PreAcceptMsg(sq, q, s, to, id, tx, computations.D) : to \in Proc \ {p} } 
                                      \cup { PreAcceptOKMsg(sq, q, s, p, id, computations.finalTs, computations.D) }
     /\  UNCHANGED <<initTimestamp, submitted, initCoord, bal, abal, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, consumedMsgs>> 
 
@@ -408,8 +416,10 @@ HandlePreAcceptOK(s, p, id) ==
                     LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in largestFastQuorum }
                     IN
                     /\  ApplyCommit(s, p, 0, id, initTimestamp[id], D, txn[s][p][id], TRUE)              
-                    /\  msgs' = (msgs \ largestFastQuorum) \cup { CommitMsg(s, p, to[1], to[2], 0, id, initTimestamp[id], D, Fast, txn[s][p][id]) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
-                                                           \cup { StableMsg(s, p, to[1], to[2], 0, id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                    /\  msgs' = (msgs \ largestFastQuorum) \cup { CommitMsg(s, p, coord.shard, coord.proc, 0, id, initTimestamp[id], D, Fast, txn[s][p][id]) : coord \in initCoord[id] }
+                                                           \cup { StableMsg(s, p, coord.shard, coord.proc, 0, id) : coord \in initCoord[id] }
+                                                           \cup { CommitMsg(s, p, s, q, 0, id, initTimestamp[id], D, Fast, txn[s][p][id]) : q \in Proc \ {p} }
+                                                           \cup { StableMsg(s, p, s, q, 0, id) : q \in Proc \ {p} }
                     /\  consumedMsgs' = consumedMsgs \cup largestFastQuorum 
                     /\  UNCHANGED bal
             ELSE IF IsQuorum(largestFastQuorum, id) THEN
@@ -501,11 +511,15 @@ HandleCommit(m) ==
             id == m.body.id
             tx  == m.body.tx
             D  == m.body.D
-            fastOrSlow == m.body.fastOrSlow
+            pathSpeed == m.body.pathSpeed
             t == m.body.t
         IN
         /\  ApplyCommit(s, p, b, id, t, D, tx, FALSE)
-        /\  IF fastOrSlow = Slow THEN msgs' = (msgs \ {m}) \cup { CommitOkMsg(s, p, sq, q, b, id) } ELSE msgs' = msgs \ {m}
+        /\  IF (pathSpeed = Fast /\ b = 0 /\ IsPartitionCoord(s, p, id)) THEN 
+            msgs' = (msgs \ {m}) \cup { CommitMsg(sq, q, s, to, 0, id, initTimestamp[id], D, Fast, txn[s][p][id]) : to \in Proc \ {p} }
+                                 \cup { StableMsg(sq, q, s, to, 0, id) : to \in Proc \ {p} } 
+            ELSE IF pathSpeed = Slow THEN msgs' = (msgs \ {m}) \cup { CommitOkMsg(s, p, sq, q, b, id) } 
+            ELSE msgs' = msgs \ {m}
         /\  consumedMsgs' = consumedMsgs \cup {m}
         /\  UNCHANGED <<bal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar,  executed, executeWaitingFlag, relation, initTimestamp>>
 
@@ -540,7 +554,7 @@ HandleStable(m) ==
             b  == m.body.b
             id == m.body.id
         IN
-        /\  ApplyStable(sp, p, b, id)
+        /\  ApplyStable(s, p, b, id)
         /\  msgs' = msgs \ {m}
         /\  consumedMsgs' = consumedMsgs \cup {m}
         /\  UNCHANGED <<bal, submitted, initCoord, dep, abal, txn, ts, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
@@ -618,7 +632,7 @@ HandleRecoverOK(s, p, id) ==
             }
         IN
         /\  IsQuorum(quorumOfMessages, id) 
-        /\  LET Q == { [shard |-> m.shardfrom, id |-> m.from] : m \in quorumOfMessages }
+        /\  LET Q == { [shard |-> m.shardfrom, proc |-> m.from] : m \in quorumOfMessages }
                 Abals == { m.body.abalq : m \in quorumOfMessages }
                 bmax == CHOOSE val \in Abals : \A val2 \in Abals : val >= val2
                 U == { m \in quorumOfMessages : m.body.abalq = bmax }
@@ -678,7 +692,7 @@ HandleRecoverOK(s, p, id) ==
                             \/  (\E shard \in idToShard[id] :
                                     LET shardQuorum == {n \in quorumOfMessages : n.shardfrom = shard}
                                     IN ((Cardinality({m \in shardQuorum : m.body.phaseq = PreAcceptedPhase /\ m.body.tq = initTimestamp[id]}) = Cardinality(shardQuorum ) - E)
-                                        /\ \E id2 \in UNION { m.body.WPq : m \in shardQuorum } : initCoord[id2] \notin Q )
+                                        /\ \E id2 \in UNION { m.body.WPq : m \in shardQuorum } : initPartitionCoord(id2, shard) \notin Q )
                                 )
                            )   
                         THEN 
@@ -691,7 +705,7 @@ HandleRecoverOK(s, p, id) ==
                             /\  UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
                         ELSE 
                             LET n == CHOOSE n \in quorumOfMessages : n.body.phaseq = PreAcceptedPhase
-                                Wall == UNION { (m.body.Wq \cup {<<id1, 0>> : id1 \in {id2 \in m.body.WPq : <<m.shardfrom,m.from>> = initCoord[id2]}}) : m \in quorumOfMessages }
+                                Wall == UNION { (m.body.Wq \cup {<<id1, 0>> : id1 \in {id2 \in m.body.WPq : [shard |-> m.shardfrom, proc |-> m.from] = initPartitionCoord(id2, m.shardfrom)}}) : m \in quorumOfMessages }
                             IN
                             LET tx == n.body.txq
                                 W == { <<id1, bal1>> \in Wall : \A <<id2, bal2>> \in Wall : bal2 <= bal1 }
@@ -751,8 +765,8 @@ HandlePostWaiting(s, p, id) ==
                     /\  m.body.b = b
                     /\  m.body.id = id
                     /\  m.to = p
-                    /\  <<m.shardfrom,m.from>> \notin Q
-                    /\  (m.body.phaseq \in {StablePhase, CommittedPhase, AcceptedPhase} \/ <<m.shardfrom,m.from>> = initCoord[id])
+                    /\  [shard |-> m.shardfrom, proc |-> m.from] \notin Q
+                    /\  (m.body.phaseq \in {StablePhase, CommittedPhase, AcceptedPhase} \/ [shard |-> m.shardfrom, proc |-> m.from] = initPartitionCoord(id, m.shardfrom))
                 )
         IN 
         \/  /\  Case1
@@ -777,8 +791,8 @@ HandlePostWaiting(s, p, id) ==
                     /\  m.body.b = b
                     /\  m.body.id = id
                     /\  m.to = p
-                    /\  <<m.shardfrom,m.from>> \notin Q
-                    /\  (m.body.phaseq \in {StablePhase, CommittedPhase, AcceptedPhase} \/ <<m.shardfrom,m.from>>  = initCoord[id])
+                    /\  [shard |-> m.shardfrom, proc |-> m.from] \notin Q
+                    /\  (m.body.phaseq \in {StablePhase, CommittedPhase, AcceptedPhase} \/ [shard |-> m.shardfrom, proc |-> m.from]  = initPartitionCoord(id, m.shardfrom))
                     /\  IF (m.body.phaseq = StablePhase) THEN
                             /\  ApplyCommit(s, p, b, id, m.body.tq, m.body.depq, m.body.txq, FALSE)
                             /\  ApplyStable(s, p, b, id)               
@@ -820,7 +834,7 @@ HandlePostWaiting(s, p, id) ==
 
 (* StartExecute (lines 92-95) *)
 StartExecute(s, p, id) ==
-    /\  <<s,p>> = initCoord[id]
+    /\  [shard |-> s, proc |-> p] \in initCoord[id]
     /\  id \notin  executed[s][p]
     /\  phase[s][p][id] = StablePhase
     /\  txn[s][p][id] # Nop
@@ -916,7 +930,37 @@ Reach(i, j) ==
 
 Acyclicity ==
     \A i \in Id : ~Reach(i, i)
-    
+
+
+AllCommandsStable ==
+    \A id \in Id :
+        \A shard \in idToShard[id] :
+            \A p \in Proc :
+                phase[shard][p][id] = StablePhase
+
+WitnessAllStable == ~AllCommandsStable
+
+SomeCommandStable ==
+    \E id \in Id :
+        \E shard \in idToShard[id] :
+            \E p \in Proc :
+                phase[shard][p][id] = StablePhase
+
+WitnessSomeStable == ~SomeCommandStable
+
+CommandSubmitted ==
+    \E id \in Id : id \in submitted
+
+WitnessSubmitted == ~CommandSubmitted 
+
+W_PreAcceptMsgInFlight ==
+    ~\E m \in msgs : m.type = TypePreAccept
+
+W_SomePreAccepted ==
+    ~\E id \in Id : \E s \in Shards : \E p \in Proc :
+        phase[s][p][id] = PreAcceptedPhase
+
+
 Invariant3 == 
     \A id \in Id :
         ( \E m \in msgs :
@@ -939,21 +983,24 @@ Invariant3 ==
                     IN IsQuorum(setOfPreAcceptOKs, id)
         )
 
+
+
 (* Invariant4a == 
         ( \E m \in msgs :
             /\  m.type = TypeCommit
-            /\  m.body.fastOrSlow \in {Fast}
+            /\  m.body.pathSpeed \in {Fast}
         )
         =>
         (\E m \in msgs :
             /\  m.type = TypeCommit
-            /\  m.body.fastOrSlow \in {Fast}
+            /\  m.body.pathSpeed \in {Fast}
             /\  LET 
         ) *)
 
 
 Next ==
     \/  \E m \in msgs :
+        \/  HandleSubmit(m)
         \/  HandlePreAccept(m) 
         \/  HandleAccept(m)
         \/  HandleCommit(m)
