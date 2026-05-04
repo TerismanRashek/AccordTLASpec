@@ -765,15 +765,46 @@ Reach(i, j) ==
 
 Acyclicity ==
     \A i \in Id : ~Reach(i, i)
-    
-        
+
+
+
+HandlePreAcceptWrapper(p, id) == 
+    \E m \in msgs : 
+            /\ m.to = p 
+            /\ m.body.id = id
+            /\ HandlePreAccept(m)
+
+HandleAcceptWrapper(p, id) == 
+    \E m \in msgs : 
+            /\ m.to = p 
+            /\ m.body.id = id
+            /\ HandleAccept(m)
+
+HandleCommitWrapper(p, id) == 
+    \E m \in msgs : 
+            /\ m.to = p 
+            /\ m.body.id = id
+            /\ HandleCommit(m)
+
+HandleStableWrapper(p, id) == 
+    \E m \in msgs : 
+            /\ m.to = p 
+            /\ m.body.id = id
+            /\ HandleStable(m)
+            
+HandleRecoverWrapper(p, id) == 
+    \E m \in msgs : 
+            /\ m.to = p 
+            /\ m.body.id = id
+            /\ HandleRecover(m)
+ 
 Next ==
-    \/ \E m \in msgs :
+(*     \/ \E m \in msgs :
         \/ HandlePreAccept(m) 
         \/ HandleAccept(m)
         \/ HandleCommit(m)
         \/ HandleStable(m)
-        \/ HandleRecover(m)
+        \/ HandleRecover(m) *)
 
     \/ \E p \in Proc, id \in Id :
         \/ Submit(p, id)
@@ -783,6 +814,12 @@ Next ==
         \/ StartRecover(p, id)
         \/ HandleRecoverOK(p, id)
         \/ HandlePostWaiting(p, id)
+
+        \/ HandlePreAcceptWrapper(p, id) 
+        \/ HandleAcceptWrapper(p, id)
+        \/ HandleCommitWrapper(p, id)
+        \/ HandleStableWrapper(p, id)
+        \/ HandleRecoverWrapper(p, id)
 
         \/ Execute(p, id) 
 
