@@ -1,0 +1,1 @@
+ simulate --config=AccordSpec.cfg --length=10 AccordSpec.tla
