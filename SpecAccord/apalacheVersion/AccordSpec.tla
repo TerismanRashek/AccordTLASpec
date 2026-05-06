@@ -251,7 +251,7 @@ RecoverComputations(p, id) ==
                                              /\ LessThanTs(initTimestamp[id], initTimestamp[id2]) /\ id \notin dep[p][id2] 
               }
     IN
-    [D |-> dep[p][id], S |-> S, W |-> W, WP |-> WP]
+    [D |-> D, S |-> S, W |-> W, WP |-> WP]
 
 ApplyRecover(p, b, id, tx) ==
     /\  bal[p][id] < b
