@@ -7,7 +7,8 @@ EXTENDS Naturals, Sequences, typedefs
 \* Conflict relation
 \* @type: Set(<<Int, Int>>);
 ConflictPairs == {
-    <<1, 2>>
+    <<1, 2>>,
+    <<1, 3>>
 }
 
 \* Initial timestamp values

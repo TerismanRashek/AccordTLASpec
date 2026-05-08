@@ -1,1 +1,0 @@
- check --inv=Agreement --no-deadlock --length=20 AccordSpec.tla

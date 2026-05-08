@@ -1,9 +1,0 @@
-2026-05-07T10:14:46,244 [main] INFO  a.f.a.t.Tool$ - # APALACHE version: 0.56.1 | build: 70cdaf4
-2026-05-07T10:14:46,263 [main] INFO  a.f.a.i.p.o.OptionGroup$ -   > AccordSpec.cfg: Loading TLC configuration
-2026-05-07T10:14:46,336 [main] WARN  a.f.a.i.t.TlcConfigParserApalache$ - TLC config option CHECK_DEADLOCK true will be ignored
-2026-05-07T10:14:46,346 [main] INFO  a.f.a.i.p.o.OptionGroup$ -   > Using inv predicate(s) Agreement, Ordering from the TLC config
-2026-05-07T10:14:46,347 [main] INFO  a.f.a.t.t.o.CheckCmd - Tuning: search.outputTraces=false
-2026-05-07T10:14:46,633 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser
-2026-05-07T10:14:47,313 [main] DEBUG a.f.a.i.p.PassChainExecutor - PASS #0: SanyParser [OK]
-2026-05-07T10:14:47,314 [main] INFO  a.f.a.i.p.PassChainExecutor - PASS #1: TypeCheckerSnowcat
-2026-05-07T10:14:47,314 [main] INFO  a.f.a.t.p.t.EtcTypeCheckerPassImpl -  > Running Snowcat .::.
