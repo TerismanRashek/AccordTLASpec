@@ -471,7 +471,7 @@ HandlePreCommit(m) ==
         /\  ApplyPreCommit(s, p, id, D)
         /\  msgs' = (msgs \ {m}) \cup { PreCommitOKMsg(s, p, sq, q, id) }
         /\  consumedMsgs' = consumedMsgs \cup {m}
-    /\  UNCHANGED <<bal, abal, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
+    /\  UNCHANGED <<bal, abal, txn, submitted, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, initTimestamp, Qvar, executed, executeWaitingFlag, relation>>
 
 HandlePreCommitOK(s, p, id) ==
     /\  phase[s][p][id] = PreCommittedPhase
