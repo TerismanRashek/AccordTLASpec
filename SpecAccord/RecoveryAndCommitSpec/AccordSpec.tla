@@ -320,6 +320,7 @@ ApplyCommit(sp, p, b, id, t, D, tx, stable) ==
 \* no local computations when receiving a stable message
 
 ApplyStable(sp, p, b, id) ==
+    /\ abal[sp][p][id] = b
     /\ bal[sp][p][id] = b
     /\ phase[sp][p][id] = CommittedPhase
     /\ phase' = [phase EXCEPT ![sp][p][id] = StablePhase]
@@ -691,8 +692,7 @@ HandleRecoverOK(s, p, id) ==
                         /\  LET n == CHOOSE n \in U :
                                         n.body.phaseq = StablePhase
                             IN
-                            /\  ApplyCommit(s, p, bal[s][p][id], id, n.body.tq, n.body.depq, n.body.txq, FALSE)
-                            /\  ApplyStable(s, p, bal[s][p][id], id)
+                            /\  ApplyCommit(s, p, bal[s][p][id], id, n.body.tq, n.body.depq, n.body.txq, TRUE)
                             /\  msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, n.body.tq, n.body.depq, Fast, n.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                                                                   \cup { StableMsg(s, p, to[1], to[2], bal[s][p][id], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                             /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
@@ -843,8 +843,7 @@ HandlePostWaiting(s, p, id) ==
                     /\  [shard |-> m.shardfrom, proc |-> m.from] \notin Q
                     /\  (m.body.phaseq \in {StablePhase, CommittedPhase, AcceptedPhase} \/ [shard |-> m.shardfrom, proc |-> m.from] = initPartitionCoord(id, m.shardfrom))
                     /\  IF (m.body.phaseq = StablePhase) THEN
-                            /\  ApplyCommit(s, p, b, id, m.body.tq, m.body.depq, m.body.txq, FALSE)
-                            /\  ApplyStable(s, p, b, id)               
+                            /\  ApplyCommit(s, p, b, id, m.body.tq, m.body.depq, m.body.txq, TRUE)              
                             /\  msgs' = msgs \cup { CommitMsg(s, p, to[1], to[2], b, id, m.body.tq, m.body.depq, Fast, m.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                                              \cup { StableMsg(s, p, to[1], to[2], b, id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                             /\  postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
