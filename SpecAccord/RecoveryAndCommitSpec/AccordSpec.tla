@@ -893,6 +893,7 @@ StartExecute(s, p, id) ==
     
 (* HandleRead (lines 99-101) *)
 HandleRead(m) ==
+    /\  m.type = TypeRead
     /\  LET s == m.shardto
             p  == m.to
             sq == m.shardfrom
@@ -923,26 +924,27 @@ HandleReadOk(s, p, id) ==
             
 (* HandleApply (lines 102-105) *)
 HandleApply(m) == 
-    LET s == m.shardto
-        p  == m.to
-        sq == m.shardfrom
-        q  == m.from
-        id == m.body.id
-    IN
-    /\  id \notin executed[s][p]
-    /\  phase[s][p][id] = StablePhase
-    /\  \A id2 \in dep[s][p][id] : id2 \in executed[s][p]
-    /\  msgs' = msgs \ {m}
-    /\  consumedMsgs' = consumedMsgs \cup {m}
-    /\  executed' = [executed EXCEPT ![s][p] = executed[s][p] \cup {id}]
-    /\  relation' =
-        [id1 \in Id |-> 
-            [id2 \in Id |->
-            IF id1 = id /\ (Conflicts(id, id2) \/ id2 \notin submitted) /\ relation[id1][id2] = 0 THEN 1
-            ELSE IF id2 = id /\ (Conflicts(id1, id) \/ id1 \notin submitted) /\ relation[id1][id2] = 0 THEN 2
-            ELSE relation[id1][id2]
+    /\  m.type = TypeApply
+    /\  LET s == m.shardto
+            p  == m.to
+            sq == m.shardfrom
+            q  == m.from
+            id == m.body.id
+        IN
+        /\  id \notin executed[s][p]
+        /\  phase[s][p][id] = StablePhase
+        /\  \A id2 \in dep[s][p][id] : id2 \in executed[s][p]
+        /\  msgs' = msgs \ {m}
+        /\  consumedMsgs' = consumedMsgs \cup {m}
+        /\  executed' = [executed EXCEPT ![s][p] = executed[s][p] \cup {id}]
+        /\  relation' =
+            [id1 \in Id |-> 
+                [id2 \in Id |->
+                IF id1 = id /\ (Conflicts(id, id2) \/ id2 \notin submitted) /\ relation[id1][id2] = 0 THEN 1
+                ELSE IF id2 = id /\ (Conflicts(id1, id) \/ id1 \notin submitted) /\ relation[id1][id2] = 0 THEN 2
+                ELSE relation[id1][id2]
+                ]
             ]
-        ]
     /\  UNCHANGED <<bal, phase, txn, dep, ts, abal, submitted, initTimestamp, initCoord, recovered, Wvar, postWaitingFlag, recoveryAttemptBal, TXvar, Dvar, Qvar, executeWaitingFlag>>
 
 (***************************************************************************)
