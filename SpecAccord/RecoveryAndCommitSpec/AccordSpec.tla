@@ -288,7 +288,7 @@ AcceptComputations(s, p, id, t) ==
 
 ApplyAccept(sp, p, b, id, t, D, tx) ==
     /\  bal[sp][p][id] <= b
-    /\  bal[sp][p][id] = b => phase[sp][p][id] \notin {CommittedPhase, StablePhase}
+    /\  abal[sp][p][id] = b => phase[sp][p][id] \notin {CommittedPhase, StablePhase}
     /\  (b = 0 => phase[sp][p][id] = PreAcceptedPhase)
     /\  IF b > 0 THEN txn'  = [txn  EXCEPT ![sp][p][id] = tx] ELSE UNCHANGED txn
     /\  bal'   = [bal   EXCEPT ![sp][p][id] = b]
