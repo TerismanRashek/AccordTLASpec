@@ -5,9 +5,8 @@ EXTENDS Naturals, Sequences
 
 \* Command to shards relation
 idToShard == [i \in {1, 2} |->
-                  CASE i = 1 -> {1, 2}
-                    [] i = 2 -> {1}
-                    ]
+                  CASE i = 1 -> {1}
+                    [] i = 2 -> {1}]
 
 \* Conflict relation
 ConflictPairs == {
