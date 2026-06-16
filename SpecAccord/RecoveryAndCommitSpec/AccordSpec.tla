@@ -725,10 +725,10 @@ HandleRecoverOK(s, p, id) ==
                             /\  UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>> 
                 ELSE IF (initCoordInQuorum(id, Q))
                 THEN 
-                        LET computations == AcceptComputations(s, p, id, ts[s][p][id])
+                        LET computations == AcceptComputations(s, p, id, initTimestamp[id])
                         IN 
-                        /\  ApplyAccept(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop)            
-                        /\  msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
+                        /\  ApplyAccept(s, p, bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop)            
+                        /\  msgs' = (msgs \ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                               \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) } 
                         /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                         /\  UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
@@ -750,10 +750,10 @@ HandleRecoverOK(s, p, id) ==
                                 )
                            )   
                         THEN 
-                            LET computations == AcceptComputations(s, p, id, ts[s][p][id])
+                            LET computations == AcceptComputations(s, p, id, initTimestamp[id])
                             IN 
-                            /\  ApplyAccept(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop)                    
-                            /\  msgs' = (msgs\ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
+                            /\  ApplyAccept(s, p, bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop)                    
+                            /\  msgs' = (msgs\ quorumOfMessages) \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                                  \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) } 
                             /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\  UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
@@ -775,10 +775,10 @@ HandleRecoverOK(s, p, id) ==
                             /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\  UNCHANGED <<bal, txn, abal, ts, dep, phase>>
                 ELSE  
-                    LET computations == AcceptComputations(s, p, id, ts[s][p][id])
+                    LET computations == AcceptComputations(s, p, id, initTimestamp[id])
                     IN 
-                    /\  ApplyAccept(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop)
-                    /\  msgs' =   (msgs \ quorumOfMessages)  \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
+                    /\  ApplyAccept(s, p, bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop)
+                    /\  msgs' =   (msgs \ quorumOfMessages)  \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                              \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) } 
                     /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                     /\  UNCHANGED <<TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>   
@@ -824,10 +824,10 @@ HandlePostWaiting(s, p, id) ==
                 )
         IN 
         \/  /\  Case1
-            /\  LET computations == AcceptComputations(s, p, id, ts[s][p][id])
+            /\  LET computations == AcceptComputations(s, p, id, initTimestamp[id])
                 IN
-                /\  ApplyAccept(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop) 
-                /\  msgs' = msgs \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, ts[s][p][id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
+                /\  ApplyAccept(s, p, bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop) 
+                /\  msgs' = msgs \cup { AcceptMsg(s, p, to[1], to[2], bal[s][p][id], id, initTimestamp[id], dep[s][p][id], Nop, Slow) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                                  \cup { AcceptOKMsg(s, p, s, p, bal[s][p][id], id, computations.Dq, Slow) }
                 /\  postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
 
