@@ -390,8 +390,8 @@ HandleSubmit(m) ==
             q  == m.from
             id == m.body.id
         IN 
-        (* /\  \A id2 \in Id : 
-            (phase[s][p][id2] = InitialPhase /\ Conflicts(id, id2)) => LessThanTs(ts[s][p][id2], initTimestamp[id]) *) \* Removed precondition
+        /\  \A id2 \in Id : 
+            (phase[s][p][id2] = InitialPhase /\ Conflicts(id, id2)) => LessThanTs(ts[s][p][id2], initTimestamp[id]) \* agressive  precondition
         /\  LET computations == PreAcceptComputations(s, p, s, p, id, initTimestamp[id])
                 tx == id \* we use the id as command payload since it does not matter
             IN
