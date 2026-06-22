@@ -1,0 +1,116 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Warning: Please run the Java VM which executes TLC with a throughput optimized garbage collector by passing the "-XX:+UseParallelGC" property.
+(Use the -nowarning option to disable this warning.)
+Running Random Simulation with seed 1487203126537719953 with 50 workers on 72 cores with 30688MB heap and 64MB offheap memory [pid: 2855829] (Linux 6.12.90+deb13.1-cloud-amd64 amd64, Debian 21.0.11 x86_64).
+Parsing file /home/alexandre.siret/AccordTLASpec/SpecAccord/RecoveryAndCommitSpec/AccordSpec.tla
+Parsing file /tmp/TLC.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/Sequences.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /home/alexandre.siret/AccordTLASpec/SpecAccord/RecoveryAndCommitSpec/ExtraConfiguration.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module ExtraConfiguration
+Semantic processing of module AccordSpec
+Starting... (2026-06-22 10:46:54)
+Implied-temporal checking--satisfiability problem has 1 branches.
+Computed 1 initial states...
+Progress: 1426866 states checked.
+Progress: 2936704 states checked.
+Progress: 4437372 states checked.
+Progress: 5933526 states checked.
+Progress: 7413322 states checked.
+Progress: 8894484 states checked.
+Progress: 10377483 states checked.
+Progress: 11855441 states checked.
+Progress: 13331303 states checked.
+Progress: 14815757 states checked.
+Progress: 16296534 states checked.
+Progress: 17785569 states checked.
+Progress: 19270451 states checked.
+Progress: 20755291 states checked.
+Progress: 22236424 states checked.
+Progress: 23732429 states checked.
+Progress: 25242060 states checked.
+Progress: 26721953 states checked.
+Progress: 28200379 states checked.
+Progress: 29684739 states checked.
+Progress: 31173652 states checked.
+Progress: 32659600 states checked.
+Progress: 34154939 states checked.
+Progress: 35647048 states checked.
+Progress: 37129698 states checked.
+Progress: 38613250 states checked.
+Progress: 40097943 states checked.
+Progress: 41582369 states checked.
+Progress: 43075717 states checked.
+Progress: 44558613 states checked.
+Progress: 46043394 states checked.
+Progress: 47529633 states checked.
+Progress: 49012490 states checked.
+Progress: 50494675 states checked.
+Progress: 51983829 states checked.
+Progress: 53472998 states checked.
+Progress: 54954575 states checked.
+Progress: 56443063 states checked.
+Progress: 57923649 states checked.
+Progress: 59409488 states checked.
+Progress: 60900575 states checked.
+Progress: 62386986 states checked.
+Progress: 63861438 states checked.
+Progress: 65342693 states checked.
+Progress: 66831245 states checked.
+Progress: 68327643 states checked.
+Progress: 69818742 states checked.
+Progress: 71314545 states checked.
+Progress: 72802045 states checked.
+Progress: 74291464 states checked.
+Progress: 75783395 states checked.
+Progress: 77282736 states checked.
+Progress: 78779535 states checked.
+Progress: 80267462 states checked.
+Progress: 81760250 states checked.
+Progress: 83257308 states checked.
+Progress: 84748551 states checked.
+Progress: 86244569 states checked.
+Progress: 87739911 states checked.
+Progress: 89238885 states checked.
+Progress: 90733794 states checked.
+Progress: 92244709 states checked.
+Progress: 93747643 states checked.
+Progress: 95256157 states checked.
+Progress: 96757923 states checked.
+Progress: 98262637 states checked.
+Progress: 99768916 states checked.
+Progress: 101264199 states checked.
+Progress: 102762421 states checked.
+Progress: 104259873 states checked.
+Progress: 105755093 states checked.
+Progress: 107249808 states checked.
+Progress: 108738785 states checked.
+Progress: 110216242 states checked.
+Progress: 111697611 states checked.
+Progress: 113184913 states checked.
+Progress: 114677005 states checked.
+Progress: 116172800 states checked.
+Progress: 117663082 states checked.
+Progress: 119154924 states checked.
+Progress: 120644028 states checked.
+Progress: 122138050 states checked.
+Progress: 123626100 states checked.
+Progress: 125125317 states checked.
+Progress: 126616042 states checked.
+Progress: 128115374 states checked.
+Progress: 129606745 states checked.
+Progress: 131109783 states checked.
+Progress: 132598419 states checked.
+Progress: 134086156 states checked.
+Progress: 135573845 states checked.
+Progress: 137071516 states checked.
+Progress: 138571752 states checked.
+Progress: 140073413 states checked.
+Progress: 141585905 states checked.
+Progress: 143087155 states checked.
+Progress: 144589362 states checked.
