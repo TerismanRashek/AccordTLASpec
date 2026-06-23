@@ -287,7 +287,7 @@ ApplyPreAccept(sp, p, id, tx, finalTs, D0) ==
     /\  dep'   = [dep   EXCEPT ![sp][p][id] = D0]
 
 AcceptComputations(s, p, id, t) ==
-    LET Dq == { id2 \in SeenIds(s, p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], t)) }
+    LET Dq == IF t = initTimestamp[id] THEN {} ELSE { id2 \in SeenIds(s, p) : (Conflicts(id, id2) /\ LessThanTs(initTimestamp[id2], t)) }
     IN
     [Dq |-> Dq] 
 
