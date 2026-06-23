@@ -695,19 +695,19 @@ HandleRecoverOK(s, p, id) ==
                                                                   \cup { StableMsg(s, p, to[1], to[2], bal[s][p][id], id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                             /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                             /\  UNCHANGED <<bal, TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>> 
-                ELSE IF (\E n \in U : n.body.phaseq \in {CommittedPhase, FastAcceptedPhase})
+                ELSE IF (\E n \in U : n.body.phaseq = CommittedPhase)
                 THEN
-                        LET n == CHOOSE n \in U : n.body.phaseq \in {CommittedPhase, FastAcceptedPhase}
+                        LET n == CHOOSE n \in U : n.body.phaseq = CommittedPhase
                         IN
                         /\  ApplyCommit(s, p, bal[s][p][id], id, n.body.tq, n.body.depq, n.body.txq, FALSE)
                         /\  msgs' = (msgs \ quorumOfMessages) \cup { CommitMsg(s, p, to[1], to[2], bal[s][p][id], id, n.body.tq, n.body.depq, Slow, n.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                                               \cup { CommitOKMsg(s, p, s, p, bal[s][p][id], id) }
                         /\  consumedMsgs' = consumedMsgs \cup quorumOfMessages
                         /\  UNCHANGED <<bal, TXvar, Wvar, Dvar, recoveryAttemptBal, postWaitingFlag, Qvar>>  
-                ELSE IF (\E n \in U : n.body.phaseq = AcceptedPhase)
+                ELSE IF (\E n \in U : n.body.phaseq \in {AcceptedPhase,FastAcceptedPhase})
                 THEN    
                         /\  LET n == CHOOSE n \in U :
-                                n.body.phaseq = AcceptedPhase
+                                n.body.phaseq \in {AcceptedPhase,FastAcceptedPhase}
                             IN
                             LET computations == AcceptComputations(s, p, id, n.body.tq)
                             IN  
@@ -846,13 +846,13 @@ HandlePostWaiting(s, p, id) ==
                                              \cup { StableMsg(s, p, to[1], to[2], b, id) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } }
                             /\  postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
                             /\  UNCHANGED bal
-                        ELSE IF (m.body.phaseq \in {FastAcceptedPhase, CommittedPhase}) THEN   
+                        ELSE IF (m.body.phaseq = CommittedPhase) THEN   
                             /\  ApplyCommit(s, p, b, id, m.body.tq, m.body.depq, m.body.txq, FALSE)
                             /\  msgs' = msgs \cup { CommitMsg(s, p, to[1], to[2], b, id, m.body.tq, m.body.depq, Slow, m.body.txq) : to \in { <<sq, q>> : sq \in idToShard[id], q \in Proc } \ { <<s, p>> } } 
                                              \cup { CommitOKMsg(s, p, s, p, b, id) }
                             /\  postWaitingFlag' = [postWaitingFlag EXCEPT ![s][p][id] = FALSE]
                             /\  UNCHANGED bal
-                        ELSE IF (m.body.phaseq = AcceptedPhase) THEN 
+                        ELSE IF (m.body.phaseq \in {AcceptedPhase,FastAcceptedPhase}) THEN 
                             LET computations == AcceptComputations(s, p, id, m.body.tq)
                             IN 
                             /\  ApplyAccept(s, p, b, id, m.body.tq, m.body.depq, m.body.txq)
