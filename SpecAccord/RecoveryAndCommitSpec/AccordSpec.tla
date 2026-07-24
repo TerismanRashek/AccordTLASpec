@@ -1056,8 +1056,8 @@ Next ==
         
         \/  HandleRecover(m)
 
-(*         \/  HandleRead(m)
-        \/  HandleApply(m) *)
+        \/  HandleRead(m)
+        \/  HandleApply(m)
 
     \/  \E s \in Shards, p \in Proc, id \in Id :
         \/  Submit(s, p, id)
@@ -1070,8 +1070,8 @@ Next ==
         \/  HandleRecoverOK(s, p, id)
         \/  HandlePostWaiting(s, p, id) 
 
-(*         \/  StartExecute(s, p, id)
-        \/  HandleReadOk(s, p, id) *)
+        \/  StartExecute(s, p, id)
+        \/  HandleReadOk(s, p, id) 
 
 
 Fairness == WF_vars(Next)
