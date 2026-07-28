@@ -525,7 +525,6 @@ HandleAcceptOK(s, p, id) ==
         IN
         /\  IsQuorum(quorumOfMessages, id)
         /\  LET D == dep[s][p][id] \cup UNION { m.body.Dq : m \in quorumOfMessages }
-                n == CHOOSE m \in quorumOfMessages : TRUE
             IN
             IF  ts[s][p][id] = initTimestamp[id] THEN 
                 /\  ApplyCommit(s, p, bal[s][p][id], id, ts[s][p][id], dep[s][p][id], UNION { m.body.Dq : m \in quorumOfMessages }, txn[s][p][id], TRUE)             
