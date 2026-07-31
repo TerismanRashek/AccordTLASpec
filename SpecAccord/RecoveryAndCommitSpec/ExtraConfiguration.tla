@@ -5,7 +5,7 @@ EXTENDS Naturals, Sequences
 
 \* Command to shards relation
 idToShard == [i \in {1, 2, 3} |->
-                  CASE i = 1 -> {1, 2}
+                  CASE i = 1 -> {1}
                     [] i = 2 -> {1}
                     [] i = 3 -> {1, 2}]
 		   
@@ -17,6 +17,6 @@ ConflictPairs == {
 }
 
 \* Initial timestamp values
-initTimestampConstant == <<[id |-> <<0, 0>>, t |-> 1], [id |-> <<0, 0>>, t |-> 2], [id |-> <<0, 0>> , t |-> 3]>>
+initTimestampConstantArray == <<[id |-> <<0, 0>>, t |-> 0], [id |-> <<0, 0>>, t |-> 2], [id |-> <<0, 0>> , t |-> 1]>>
 
 =============================================================================
