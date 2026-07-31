@@ -1,0 +1,37 @@
+To run the model checker :
+
+Prerequisites :
+-You need the specification ( .tla file), the configuration ( .cfg file ), and the ExtraConfiguration.tla file in the same place.
+-You need the tla2tools.jar file somewhere in your system. You can download it TLA+ GitHub or grab it from my git Accord spec, it's in there.
+-Java installed openjdk version "21.0.11" is what I have, I think it works with any version above java 11
+
+
+Basic command to run in the folder where the spec files are :
+
+		java -cp $PATH to the tla2tools.jar$ tlc2.TLC  AccordSpec.tla
+
+In my git :	java -cp ../tla2tools.jar tlc2.TLC  AccordSpec.tla  
+
+
+
+Simulate mode and extra flags : 
+-simulate is a flag and enables simulate mode
+-depth N sets the max depth of the executions explored, 100 by default might want to increase it on larger cfgs.
+-workers N for more parallel threads speeds up siginficantly, match it to the amount of cores on the machine.
+
+example Command : java -cp ../tla2tools.jar tlc2.TLC  -workers 10 -simulate -depth 100 AccordSpec.tla
+
+to run on some server in the background.
+
+nohup java -cp ../tla2tools.jar tlc2.TLC  -workers 20 -simulate -depth 100 AccordSpec.tla > outputfile &
+
+to look at progress : tail -f outputfile
+
+to stop the run : ps aux | grep java then kill -9 the pid.
+
+
+To change the configuration you are testing, manually change the .cfg file and ExtraConfiguration files. There is no need to change anything in the spec file.
+
+
+
+
